@@ -2,14 +2,24 @@
 <html>
 <head>
     <title>UDP Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="./media/TrackIt.png" alt="Logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <h1>Tracking location data</h1>
     <p>Latitude: <span id="latitude">N/A</span></p>
     <p>Longitude: <span id="longitude">N/A</span></p>
@@ -17,29 +27,8 @@
     <p>Time: <span id="time">N/A</span></p>
     <p>Provider: <span id="provider">N/A</span></p>
 
-    <script>
-        const ws = new WebSocket('ws://trackit1.ddns.net:80');
+    <div id="map"></div>
 
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            document.getElementById('latitude').textContent = data.latitude;
-            document.getElementById('longitude').textContent = data.longitude;
-            document.getElementById('date').textContent = data.date;
-            document.getElementById('time').textContent = data.time;
-            document.getElementById('provider').textContent = data.provider;
-        };
-
-        ws.onopen = () => {
-            console.log('WebSocket connection opened');
-        };
-
-        ws.onclose = () => {
-            console.log('WebSocket connection closed');
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-    </script>
+    <script src="index.js"></script>
 </body>
 </html>
