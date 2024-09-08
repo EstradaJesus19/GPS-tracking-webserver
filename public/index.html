@@ -5,30 +5,36 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBfR9jDwzDxxoWFoMGV2gjVrdl-reexug&callback=console.debug&libraries=maps,marker&v=beta"></script> -->
+
 </head>
 <body>
     <header>
-        <div class="logo">
-            <a href="index.html">
-                <img src="./media/TrackIt.png" alt="Logo">
-            </a>
-        </div>
+        <a href="index.html"><img src="media/TrackIt.png" alt="Logo del grupo estudiantil" id="logo"></a>
         <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
+            <ul id="menu">
+                <li><a href="index.html" class="active main">Inicio</a></li>
             </ul>
         </nav>
     </header>
-
-    <h1>Tracking location data</h1>
-    <p>Latitude: <span id="latitude">N/A</span></p>
-    <p>Longitude: <span id="longitude">N/A</span></p>
-    <p>Date: <span id="date">N/A</span></p>
-    <p>Time: <span id="time">N/A</span></p>
-    <p>Provider: <span id="provider">N/A</span></p>
-
-    <div id="map"></div>
-
+    <main>
+        <div class="content-wrapper">
+            <div class="location-info">
+                <h1>Tracking location data</h1>
+                <p>Latitude: <span id="latitude">N/A</span></p>
+                <p>Longitude: <span id="longitude">N/A</span></p>
+                <p>Date: <span id="date">N/A</span></p>
+                <p>Time: <span id="time">N/A</span></p>
+                <p>Provider: <span id="provider">N/A</span></p>
+            </div>
+            <div class="map-container">
+                <!-- <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID">
+                    <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker>
+                </gmp-map> -->
+                <div id="map"></div>
+            </div>
+        </div>
+    </main>
     <script src="index.js"></script>
 </body>
 </html>
