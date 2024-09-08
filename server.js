@@ -1,11 +1,14 @@
 const dgram = require('dgram');
 const express = require('express');
 const http = require('http');
+const https = require('https');
 const WebSocket = require('ws');
 const mysql = require('mysql2');
-const path = require('path'); // Necesitamos el módulo path para trabajar con rutas
+const path = require('path'); 
+const fs = require('fs'); 
 const app = express();
-const port = 80;
+const httpPort = 80; 
+const httpsPort = 443; 
 const udpPort = 60001;
 
 let data = {
@@ -16,7 +19,6 @@ let data = {
     provider: 'N/A'
 };
 
-// Configuración de conexión a MySQL
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -40,11 +42,14 @@ db.query('TRUNCATE TABLE location_data', (err) => {
     }
 });
 
-// HTTP Server
-const server = http.createServer(app);
+const credentials = {
+    key: fs.readFileSync('/etc/letsencrypt/live/trackit03.ddns.net/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/trackit03.ddns.net/fullchain.pem')
+};
 
-// WebSocket Server
-const wss = new WebSocket.Server({ server });
+const httpsServer = https.createServer(credentials, app);
+
+const wss = new WebSocket.Server({ server: httpsServer });
 
 wss.on('connection', (ws) => {
     console.log('New WebSocket connection');
@@ -53,7 +58,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-// UDP Server
 const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
@@ -81,7 +85,6 @@ udpServer.on('message', (msg) => {
             }
         );
 
-        // Enviar los datos más recientes a todos los clientes WebSocket
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(data));
@@ -94,10 +97,18 @@ udpServer.on('message', (msg) => {
 
 udpServer.bind(udpPort);
 
-// Sirviendo archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Iniciar el servidor HTTP
-server.listen(port, '0.0.0.0', () => {
-    console.log(`HTTP Server running at http://localhost:${port}`);
+httpsServer.listen(httpsPort, '0.0.0.0', () => {
+    console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
+});
+
+const httpApp = express();
+httpApp.use((req, res) => {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+});
+
+const httpServer = http.createServer(httpApp);
+httpServer.listen(httpPort, '0.0.0.0', () => {
+    console.log(`HTTP Server running at http://localhost:${httpPort} and redirecting to HTTPS`);
 });
