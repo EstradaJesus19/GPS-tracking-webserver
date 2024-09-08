@@ -8,7 +8,6 @@ body {
 }
 
 /* Header */
-
 header {
     display: flex;
     justify-content: space-between;
@@ -33,7 +32,6 @@ header {
 nav {
     display: flex;
     align-items: center;
-    position: relative;
 }
 
 nav ul {
@@ -45,6 +43,7 @@ nav ul {
 
 nav li {
     margin-right: 15px;
+    font-size: 1.25em;
 }
 
 nav a {
@@ -59,10 +58,10 @@ nav a.active {
 }
 
 nav a.main {
-    color: #841eff;
+    color: #530aa8;
 }
 
-/*Main*/
+/* Main */
 main {
     padding: 150px 50px 50px 50px;
 }
@@ -74,6 +73,11 @@ main {
     border-radius: 32px;
     padding: 40px;
     align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-wrapper:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Aumenta la sombra */
 }
 
 .location-info {
@@ -82,7 +86,7 @@ main {
 }
 
 .location-info h1 {
-    color: #8e44ff;
+    color: #530aa8;
     font-size: 2.5em;
 }
 
@@ -99,7 +103,7 @@ main {
     flex-basis: 70%;
 }
 
-#map { 
-    height: 720px; 
+#map {
+    height: 720px;
     border-radius: 20px;
 }
