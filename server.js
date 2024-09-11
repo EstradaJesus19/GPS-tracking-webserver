@@ -12,11 +12,11 @@ const httpsPort = 443;
 const udpPort = 60001;
 
 let data = {
-    latitude: 'N/A',
-    longitude: 'N/A',
-    date: 'N/A',
-    time: 'N/A',
-    provider: 'N/A'
+    latitude: 'NA',
+    longitude: 'NA',
+    date: 'NA',
+    time: 'NA',
+    provider: 'NA'
 };
 
 const db = mysql.createConnection({
