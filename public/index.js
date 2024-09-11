@@ -1,6 +1,6 @@
 let map;
 let marker;
-const ws = new WebSocket('wss://trackit1.ddns.net');
+const ws = new WebSocket('wss://trackit03.ddns.net');
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
