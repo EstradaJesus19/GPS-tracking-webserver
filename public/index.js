@@ -9,7 +9,6 @@ function loadGoogleMapsApi(apiKey) {
     document.head.appendChild(script);
 }
 
-// Solicitar la API Key al servidor
 fetch('/api/getApiKey')
   .then(response => response.json())
   .then(data => {
