@@ -49,7 +49,6 @@ ws.onmessage = (event) => {
     document.getElementById('date').textContent = data.date;
     document.getElementById('time').textContent = data.time;
     document.getElementById('provider').textContent = data.provider;
-    document.getElementById('owner').textContent = data.owner;
 
     updateMap(data.latitude, data.longitude);
 };

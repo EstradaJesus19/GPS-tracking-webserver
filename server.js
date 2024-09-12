@@ -18,8 +18,7 @@ let data = {
     longitude: 'N/A',
     date: 'N/A',
     time: 'N/A',
-    provider: 'N/A',
-    owner: process.env.owner
+    provider: 'N/A'
 };
 
 const db = mysql.createConnection({
