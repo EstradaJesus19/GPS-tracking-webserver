@@ -74,8 +74,7 @@ udpServer.on('message', (msg) => {
             longitude: match[2] || 'N/A',
             date: match[3] || 'N/A',
             time: match[4] || 'N/A',
-            provider: match[5] || 'N/A',
-            owner: process.env.owner
+            provider: match[5] || 'N/A'
         };
 
         db.query('INSERT INTO location_data (latitude, longitude, date, time, provider) VALUES (?, ?, ?, ?, ?)', 
