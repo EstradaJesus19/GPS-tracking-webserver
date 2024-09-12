@@ -120,4 +120,8 @@ main {
     .map-container {
         flex-basis: 100%;
     }
+    .location-info {
+        flex-basis: 100%;
+        padding-right: 20px;
+    }
 }
