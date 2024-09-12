@@ -112,20 +112,3 @@ main {
     height: 720px;
     border-radius: 20px;
 }
-
-@media (max-width: 1200px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-    .map-container {
-        flex-basis: 100%;
-    }
-    .location-info {
-        flex-basis: 100%;
-        padding-right: 20px;
-    }
-    #map {
-        height: 400px; 
-        z-index: 2;
-    }
-}
