@@ -81,12 +81,6 @@ main {
     width: 95%;
 }
 
-@media (max-width: 1200px) {
-    .content-wrapper {
-        flex-direction: column;
-    }
-}
-
 .content-wrapper:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Aumenta la sombra */
 }
@@ -117,4 +111,13 @@ main {
 #map {
     height: 720px;
     border-radius: 20px;
+}
+
+@media (max-width: 1200px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .map-container {
+        flex-basis: 100%;
+    }
 }
