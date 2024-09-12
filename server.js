@@ -18,7 +18,8 @@ let data = {
     longitude: 'N/A',
     date: 'N/A',
     time: 'N/A',
-    provider: 'N/A'
+    provider: 'N/A',
+    owner: process.env.owner
 };
 
 const db = mysql.createConnection({
@@ -73,7 +74,8 @@ udpServer.on('message', (msg) => {
             longitude: match[2] || 'N/A',
             date: match[3] || 'N/A',
             time: match[4] || 'N/A',
-            provider: match[5] || 'N/A'
+            provider: match[5] || 'N/A',
+            owner: process.env.owner
         };
 
         db.query('INSERT INTO location_data (latitude, longitude, date, time, provider) VALUES (?, ?, ?, ?, ?)', 
