@@ -1,6 +1,23 @@
 let map;
 let marker;
-const ws = new WebSocket('ws://trackit1.ddns.net:443');
+const ws = new WebSocket('wss://trackit01.ddns.net');
+
+function loadGoogleMapsApi(apiKey) {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
+    script.async = true;
+    document.head.appendChild(script);
+}
+
+// Solicitar la API Key al servidor
+fetch('/api/getApiKey')
+  .then(response => response.json())
+  .then(data => {
+    loadGoogleMapsApi(data.apiKey);
+  })
+  .catch(error => {
+    console.error('Error al obtener la API Key:', error);
+  });
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -8,6 +25,7 @@ function initMap() {
         zoom: 13,
     });
 }
+
 function updateMap(lat, lng) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
@@ -22,11 +40,8 @@ function updateMap(lat, lng) {
     });
 
     map.setCenter(position);
-    map.setZoom(13); 
+    map.setZoom(13);
 }
-
-initMap()
-
 
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
@@ -37,7 +52,6 @@ ws.onmessage = (event) => {
     document.getElementById('time').textContent = data.time;
     document.getElementById('provider').textContent = data.provider;
 
-    // Actualizar el mapa con la nueva ubicación
     updateMap(data.latitude, data.longitude);
 };
 

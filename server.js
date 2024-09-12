@@ -11,6 +11,8 @@ const httpPort = 80;
 const httpsPort = 443; 
 const udpPort = 60001;
 
+require('dotenv').config();
+
 let data = {
     latitude: 'N/A',
     longitude: 'N/A',
@@ -20,10 +22,10 @@ let data = {
 };
 
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Tr4ckIt_01',
-    database: 'tracking_app_db'
+    host: process.env.db_host,
+    user: process.env.db_user,
+    password: process.env.db_password,
+    database: process.env.db_name
 });
 
 db.connect((err) => {
@@ -43,8 +45,8 @@ db.query('TRUNCATE TABLE location_data', (err) => {
 });
 
 const credentials = {
-    key: fs.readFileSync('/etc/letsencrypt/live/trackit03.ddns.net/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/trackit03.ddns.net/fullchain.pem')
+    key: fs.readFileSync( process.env.https_key ),
+    cert: fs.readFileSync( process.env.https_cert )
 };
 
 const httpsServer = https.createServer(credentials, app);
@@ -98,6 +100,10 @@ udpServer.on('message', (msg) => {
 udpServer.bind(udpPort);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/api/getApiKey', (req, res) => {
+    res.json({ apiKey: process.env.api_key });
+});
 
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
