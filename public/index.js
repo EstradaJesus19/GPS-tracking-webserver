@@ -28,7 +28,7 @@ function initMap() {
     polyline = new google.maps.Polyline({
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
-        strokeWeight: 2,
+        strokeWeight: 5,
     });
     polyline.setMap(map);
 
@@ -50,7 +50,7 @@ function initMap() {
         })
         .catch(error => console.error('Error fetching data:', error));
 
-    setInterval(fetchLatestData, 5000);
+    setInterval(fetchLatestData, 50);
 }
 
 function fetchLatestData() {
