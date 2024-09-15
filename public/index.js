@@ -59,7 +59,6 @@ function updateMap(lat, lng) {
         position,
         map,
         title: `Lat: ${lat}, Lng: ${lng}`,
-        icon: 'media/favicon.svg',
     });
 
     map.setCenter(position);
