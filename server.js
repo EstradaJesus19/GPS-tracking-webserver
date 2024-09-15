@@ -78,6 +78,12 @@ udpServer.on('message', (msg) => {
                 }
             }
         );
+
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(data));
+            }
+        });
     } else {
         console.error('Error parsing message:', message);
     }
