@@ -97,6 +97,10 @@ app.get('/api/getApiKey', (req, res) => {
     res.json({ apiKey: process.env.api_key });
 });
 
+app.get('/api/getOwner', (req, res) => {
+    res.json({ owner: process.env.server_owner });
+});
+
 app.get('/api/getAllData', (req, res) => {
     db.query('SELECT latitude, longitude, date, time, provider FROM location_data', (err, results) => {
         if (err) {

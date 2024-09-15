@@ -49,6 +49,13 @@ function initMap() {
         .catch(error => console.error('Error fetching data:', error));
 
     setInterval(fetchLatestData, 100); 
+
+    fetch('/api/getOwner')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('owner').textContent = data.owner;
+        })
+        .catch(error => console.error('Error fetching owner:', error));
 }
 
 function fetchLatestData() {
