@@ -26,9 +26,9 @@ function initMap() {
     });
 
     polyline = new google.maps.Polyline({
-        strokeColor: '#FF0000',
+        strokeColor: '#6309CE',
         strokeOpacity: 1.0,
-        strokeWeight: 2,
+        strokeWeight: 10,
     });
     polyline.setMap(map);
 
@@ -82,10 +82,17 @@ function updateMarkerAndInfo(lat, lng, data) {
         marker.setMap(null); 
     }
 
+    const icon = {
+        url: 'media/favicon.svg', 
+        scaledSize: new google.maps.Size(30, 30), 
+        anchor: new google.maps.Point(15, 15) 
+    };
+
     marker = new google.maps.Marker({
         position,
         map,
         title: `Lat: ${lat}, Lng: ${lng}`,
+        icon: icon
     });
 
     map.setCenter(position);
