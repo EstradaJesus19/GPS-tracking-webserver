@@ -28,7 +28,7 @@ function initMap() {
     polyline = new google.maps.Polyline({
         strokeColor: '#6309CE',
         strokeOpacity: 1.0,
-        strokeWeight: 10,
+        strokeWeight: 5,
     });
     polyline.setMap(map);
 
@@ -84,8 +84,8 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     const icon = {
         url: 'media/favicon.svg', 
-        scaledSize: new google.maps.Size(45, 45), 
-        anchor: new google.maps.Point(15, 15) 
+        scaledSize: new google.maps.Size(60, 60), 
+        anchor: new google.maps.Point(0, 0) 
     };
 
     marker = new google.maps.Marker({
