@@ -98,7 +98,7 @@ app.get('/api/getApiKey', (req, res) => {
 });
 
 app.get('/api/getAllData', (req, res) => {
-    db.query('SELECT latitude, longitude FROM location_data', (err, results) => {
+    db.query('SELECT latitude, longitude, time FROM location_data', (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
