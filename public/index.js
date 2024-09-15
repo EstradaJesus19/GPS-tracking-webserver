@@ -36,22 +36,19 @@ function initMap() {
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
-                // Dibuja la ruta inicial con todos los puntos
                 path = data.map(point => ({
                     lat: parseFloat(point.latitude),
                     lng: parseFloat(point.longitude)
                 }));
                 polyline.setPath(path);
 
-                // Actualiza el marcador y la información con el último dato
                 const latestData = data[data.length - 1];
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 
-    // Inicia la función de actualización periódica
-    setInterval(fetchLatestData, 5000); // Actualiza cada 5 segundos
+    setInterval(fetchLatestData, 100); 
 }
 
 function fetchLatestData() {
@@ -61,7 +58,6 @@ function fetchLatestData() {
             if (data.length > 0) {
                 const latestData = data[data.length - 1];
 
-                // Verifica si hay nuevos datos comparados con los últimos almacenados
                 const lastPosition = path.length > 0 ? path[path.length - 1] : null;
                 if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
                     const position = {
@@ -69,11 +65,9 @@ function fetchLatestData() {
                         lng: parseFloat(latestData.longitude)
                     };
 
-                    // Añade el nuevo punto a la polyline y al path
                     path.push(position);
                     polyline.setPath(path);
 
-                    // Actualiza el marcador y la información con el último dato
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 }
             }
@@ -96,10 +90,12 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     map.setCenter(position);
 
-    // Actualiza la información en la página
+    const date = new Date(data.date);
+    const formattedDate = date.toISOString().split('T')[0]; 
+
     document.getElementById('latitude').textContent = data.latitude;
     document.getElementById('longitude').textContent = data.longitude;
-    document.getElementById('date').textContent = data.date;
+    document.getElementById('date').textContent = formattedDate;
     document.getElementById('time').textContent = data.time;
     document.getElementById('provider').textContent = data.provider;
 }
