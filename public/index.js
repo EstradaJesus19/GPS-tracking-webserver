@@ -1,8 +1,7 @@
 let map;
 let marker;
 let polyline;
-
-const ws = new WebSocket('wss://trackit01.ddns.net');
+let lastData = null;
 
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
@@ -27,29 +26,60 @@ function initMap() {
     });
 
     polyline = new google.maps.Polyline({
-        strokeColor: '#6309CE',
+        strokeColor: '#FF0000',
         strokeOpacity: 1.0,
-        strokeWeight: 5,
+        strokeWeight: 2,
     });
     polyline.setMap(map);
 
     fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
-            const path = data.map(point => ({
-                lat: parseFloat(point.latitude),
-                lng: parseFloat(point.longitude)
-            }));
-            polyline.setPath(path);
+            if (data.length > 0) {
+                const path = data.map(point => ({
+                    lat: parseFloat(point.latitude),
+                    lng: parseFloat(point.longitude)
+                }));
+                polyline.setPath(path);
+
+                const latestData = data[data.length - 1];
+                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+
+                lastData = latestData;
+            }
         })
         .catch(error => console.error('Error fetching data:', error));
+
+    setInterval(fetchLatestData, 5000);
 }
 
-function updateMap(lat, lng) {
-    const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
+function fetchLatestData() {
+    fetch('/api/getAllData')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const latestData = data[data.length - 1];
 
-    const path = polyline.getPath();
-    path.push(position);
+                if (lastData === null || latestData.date !== lastData.date || latestData.time !== lastData.time) {
+                    const position = {
+                        lat: parseFloat(latestData.latitude),
+                        lng: parseFloat(latestData.longitude)
+                    };
+
+                    const path = polyline.getPath();
+                    path.push(position);
+
+                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+
+                    lastData = latestData;
+                }
+            }
+        })
+        .catch(error => console.error('Error fetching latest data:', error));
+}
+
+function updateMarkerAndInfo(lat, lng, data) {
+    const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
     if (marker) {
         marker.setMap(null); 
@@ -62,28 +92,10 @@ function updateMap(lat, lng) {
     });
 
     map.setCenter(position);
-}
-
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
 
     document.getElementById('latitude').textContent = data.latitude;
     document.getElementById('longitude').textContent = data.longitude;
     document.getElementById('date').textContent = data.date;
     document.getElementById('time').textContent = data.time;
     document.getElementById('provider').textContent = data.provider;
-
-    updateMap(data.latitude, data.longitude);
-};
-
-ws.onopen = () => {
-    console.log('WebSocket connection opened');
-};
-
-ws.onclose = () => {
-    console.log('WebSocket connection closed');
-};
-
-ws.onerror = (error) => {
-    console.error('WebSocket error:', error);
-};
+}
