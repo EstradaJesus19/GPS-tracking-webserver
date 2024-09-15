@@ -36,6 +36,14 @@ db.connect((err) => {
     console.log('Connected to MySQL');
 });
 
+db.query('TRUNCATE TABLE location_data', (err) => {
+    if (err) {
+        console.error('Error truncating table:', err);
+    } else {
+        console.log('Table truncated');
+    }
+});
+
 const credentials = {
     key: fs.readFileSync( process.env.https_key ),
     cert: fs.readFileSync( process.env.https_cert )
@@ -95,17 +103,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/getApiKey', (req, res) => {
     res.json({ apiKey: process.env.api_key });
-});
-
-app.get('/api/getAllData', (req, res) => {
-    db.query('SELECT latitude, longitude FROM location_data', (err, results) => {
-        if (err) {
-            console.error('Error fetching data:', err);
-            res.status(500).json({ error: 'Error fetching data' });
-        } else {
-            res.json(results);
-        }
-    });
 });
 
 httpsServer.listen(httpsPort, '0.0.0.0', () => {

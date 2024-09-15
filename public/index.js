@@ -1,6 +1,6 @@
 let map;
 let marker;
-let polyline;
+const ws = new WebSocket('wss://trackit01.ddns.net');
 
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
@@ -23,31 +23,10 @@ function initMap() {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
     });
-
-    polyline = new google.maps.Polyline({
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-    });
-    polyline.setMap(map);
-
-    fetch('/api/getAllData')
-        .then(response => response.json())
-        .then(data => {
-            const path = data.map(point => ({
-                lat: parseFloat(point.latitude),
-                lng: parseFloat(point.longitude)
-            }));
-            polyline.setPath(path);
-        })
-        .catch(error => console.error('Error fetching data:', error));
 }
 
 function updateMap(lat, lng) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-    const path = polyline.getPath();
-    path.push(position);
 
     if (marker) {
         marker.setMap(null); 
