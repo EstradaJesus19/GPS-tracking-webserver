@@ -85,7 +85,7 @@ function updateMarkerAndInfo(lat, lng, data) {
     const icon = {
         url: 'media/favicon.svg', 
         scaledSize: new google.maps.Size(40, 40), 
-        anchor: new google.maps.Point(20, 40) 
+        anchor: new google.maps.Point(20, 35) 
     };
 
     marker = new google.maps.Marker({
