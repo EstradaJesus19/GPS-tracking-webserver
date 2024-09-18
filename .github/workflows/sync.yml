@@ -1,0 +1,50 @@
+name: Deploy to EC2 Instances
+
+on:
+  push:   #on merge al main
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Deploy to EC2 Instance 1
+      - name: Deploy to EC2 Instance 1
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.EC2_HOST_1 }}  # DNS Public IP: ec2-xx-xxx-xxx-xxx.us-west-2.compute.amazonaws.com
+          username: ${{ secrets.EC2_USER_1 }} # ubuntu
+          key: ${{secrets.EC2_KEY_1 }}  #.pem key
+          script: |
+            cd GPS-tracking-webserver  # Change to project directory on the EC2 instance
+            git pull origin main      # Pull the latest code from the main branch
+            sudo pm2 restart Trackit     # Restart the server (use PM2 process manager)
+
+      # Deploy to EC2 Instance 2
+      - name: Deploy to EC2 Instance 2
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.EC2_HOST_2 }}
+          username: ${{ secrets.EC2_USER_2 }}
+          key: ${{ secrets.EC2_KEY_2 }}
+          script: |
+            cd GPS-tracking-webserver  # Change to project directory on the EC2 instance
+            git pull origin main      # Pull the latest code from the main branch
+            sudo pm2 restart Trackit     # Restart the server (use PM2 process manager)
+
+      # Deploy to EC2 Instance 3
+      - name: Deploy to EC2 Instance 3
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.EC2_HOST_3 }}
+          username: ${{ secrets.EC2_USER_3 }}
+          key: ${{ secrets.EC2_KEY_3 }}
+          script: |
+            cd GPS-tracking-webserver  # Change to project directory on the EC2 instance
+            git pull origin main      # Pull the latest code from the main branch
+            sudo pm2 restart Trackit     # Restart the server (use PM2 process manager)
