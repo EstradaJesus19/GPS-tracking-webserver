@@ -12,7 +12,7 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 20px 20%;
-    background-color: #1bda47;
+    background-color: #0ade0a;
     border: 1px solid #dddddd;
     border-radius: 25px;
     position: fixed;
@@ -48,7 +48,7 @@ nav li {
 
 nav a {
     text-decoration: none;
-    color: #000;
+    color: #e01515;
     font-weight: bold;
 }
 
