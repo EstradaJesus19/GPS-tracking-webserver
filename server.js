@@ -66,7 +66,7 @@ udpServer.on('message', (msg) => {
             time: match[4] || 'N/A'
         };
 
-        const tableName = process.env.db_table; // Obtén el nombre de la tabla desde .env
+        const tableName = process.env.db_table; 
 
         db.query(`INSERT INTO ?? (latitude, longitude, date, time) VALUES (?, ?, ?, ?)`, 
             [tableName, data.latitude, data.longitude, data.date, data.time], 
@@ -102,8 +102,8 @@ app.get('/api/getOwner', (req, res) => {
 });
 
 app.get('/api/getAllData', (req, res) => {
-    const tableName = process.env.db_table; // Obtén el nombre de la tabla desde .env
-    db.query('SELECT latitude, longitude, date, time, provider FROM ??', [tableName], (err, results) => {
+    const tableName = process.env.db_table;
+    db.query('SELECT latitude, longitude, date, time FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
