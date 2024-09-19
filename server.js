@@ -103,7 +103,7 @@ app.get('/api/getOwner', (req, res) => {
 
 app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table; // Obtén el nombre de la tabla desde .env
-    db.query('SELECT latitude, longitude, date, time, provider FROM ??', [tableName], (err, results) => {
+    db.query('SELECT latitude, longitude, date, time FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
