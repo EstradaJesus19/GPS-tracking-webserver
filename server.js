@@ -55,7 +55,7 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Provider: (.+)/;
+    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+)/;
     const match = message.match(regex);
 
     if (match) {
