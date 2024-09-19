@@ -1,6 +1,8 @@
 let map;
 let marker;
 let polyline;
+let directionsService;
+let directionsRenderer;
 let path = [];
 
 function loadGoogleMapsApi(apiKey) {
@@ -19,36 +21,34 @@ fetch('/api/getApiKey')
     console.error('Error al obtener la API Key:', error);
   });
 
-function initMap() {
+  function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
     });
 
-    polyline = new google.maps.Polyline({
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map,
+        suppressMarkers: true,
     });
-    polyline.setMap(map);
 
-    fetch('/api/getAllData')
+    fetch('/api/getLatestData')
         .then(response => response.json())
         .then(data => {
-            if (data.length > 0) {
-                path = data.map(point => ({
-                    lat: parseFloat(point.latitude),
-                    lng: parseFloat(point.longitude)
-                }));
-                polyline.setPath(path);
+            if (data) {
+                const position = {
+                    lat: parseFloat(data.latitude),
+                    lng: parseFloat(data.longitude)
+                };
 
-                const latestData = data[data.length - 1];
-                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                path.push(position);
+                updateMarkerAndInfo(data.latitude, data.longitude, data);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 
-    setInterval(fetchLatestData, 100); 
+    setInterval(fetchLatestData, 100);
 
     fetch('/api/getOwner')
         .then(response => response.json())
@@ -59,27 +59,43 @@ function initMap() {
 }
 
 function fetchLatestData() {
-    fetch('/api/getAllData')
+    fetch('/api/getLatestData')
         .then(response => response.json())
         .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
+            if (data) {
+                const position = {
+                    lat: parseFloat(data.latitude),
+                    lng: parseFloat(data.longitude)
+                };
 
                 const lastPosition = path.length > 0 ? path[path.length - 1] : null;
-                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
-                    const position = {
-                        lat: parseFloat(latestData.latitude),
-                        lng: parseFloat(latestData.longitude)
-                    };
-
+                if (!lastPosition || lastPosition.lat !== position.lat || lastPosition.lng !== position.lng) {
                     path.push(position);
-                    polyline.setPath(path);
-
-                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                    updateMarkerAndInfo(data.latitude, data.longitude, data);
+                    smoothPolyline(path);
                 }
             }
         })
         .catch(error => console.error('Error fetching latest data:', error));
+}
+
+function smoothPolyline(path) {
+    if (path.length < 2) return;
+
+    const start = path[path.length - 2];
+    const end = path[path.length - 1];
+
+    directionsService.route({
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING,
+    }, (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(result);
+        } else {
+            console.error('Error fetching directions:', status);
+        }
+    });
 }
 
 function updateMarkerAndInfo(lat, lng, data) {
