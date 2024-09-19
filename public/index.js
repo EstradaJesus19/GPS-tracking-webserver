@@ -11,13 +11,13 @@ function loadGoogleMapsApi(apiKey) {
 }
 
 fetch('/api/getApiKey')
-  .then(response => response.json())
-  .then(data => {
-    loadGoogleMapsApi(data.apiKey);
-  })
-  .catch(error => {
-    console.error('Error al obtener la API Key:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+        loadGoogleMapsApi(data.apiKey);
+    })
+    .catch(error => {
+        console.error('Error al obtener la API Key:', error);
+    });
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -36,19 +36,20 @@ function initMap() {
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
-                path = data.map(point => ({
-                    lat: parseFloat(point.latitude),
-                    lng: parseFloat(point.longitude)
-                }));
+                const latestData = data[data.length - 1];
+                const initialPosition = {
+                    lat: parseFloat(latestData.latitude),
+                    lng: parseFloat(latestData.longitude)
+                };
+                path.push(initialPosition);
                 polyline.setPath(path);
 
-                const latestData = data[data.length - 1];
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 
-    setInterval(fetchLatestData, 100); 
+    setInterval(fetchLatestData, 100);
 
     fetch('/api/getOwner')
         .then(response => response.json())
@@ -73,7 +74,7 @@ function fetchLatestData() {
                     };
 
                     path.push(position);
-                    polyline.setPath(path);
+                    polyline.setPath(path); // Actualizar directamente la polilínea con los datos recibidos.
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 }
@@ -86,13 +87,13 @@ function updateMarkerAndInfo(lat, lng, data) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
     if (marker) {
-        marker.setMap(null); 
+        marker.setMap(null);
     }
 
     const icon = {
-        url: 'media/favicon.svg', 
-        scaledSize: new google.maps.Size(40, 40), 
-        anchor: new google.maps.Point(20, 35) 
+        url: 'media/favicon.svg',
+        scaledSize: new google.maps.Size(40, 40),
+        anchor: new google.maps.Point(20, 35)
     };
 
     marker = new google.maps.Marker({
@@ -105,7 +106,7 @@ function updateMarkerAndInfo(lat, lng, data) {
     map.setCenter(position);
 
     const date = new Date(data.date);
-    const formattedDate = date.toISOString().split('T')[0]; 
+    const formattedDate = date.toISOString().split('T')[0];
 
     document.getElementById('latitude').textContent = data.latitude;
     document.getElementById('longitude').textContent = data.longitude;
