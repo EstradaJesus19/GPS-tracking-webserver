@@ -111,5 +111,4 @@ function updateMarkerAndInfo(lat, lng, data) {
     document.getElementById('longitude').textContent = data.longitude;
     document.getElementById('date').textContent = formattedDate;
     document.getElementById('time').textContent = data.time;
-    document.getElementById('provider').textContent = data.provider;
 }
