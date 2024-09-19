@@ -55,7 +55,7 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Provider: (.+)/;
+    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+)/;
     const match = message.match(regex);
 
     if (match) {
@@ -68,7 +68,7 @@ udpServer.on('message', (msg) => {
 
         const tableName = process.env.db_table; // Obtén el nombre de la tabla desde .env
 
-        db.query(`INSERT INTO ?? (latitude, longitude, date, time) VALUES (?, ?, ?, ?, ?)`, 
+        db.query(`INSERT INTO ?? (latitude, longitude, date, time) VALUES (?, ?, ?, ?)`, 
             [tableName, data.latitude, data.longitude, data.date, data.time], 
             (err) => {
                 if (err) {
