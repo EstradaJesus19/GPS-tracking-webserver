@@ -89,22 +89,26 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
-    e.preventDefault(); 
+    e.preventDefault(); // Evita el envío del formulario
 
     const startTime = startInput.value;
     const endTime = endInput.value;
 
+    // Realizar la solicitud a la API para filtrar los datos
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
+            // Borrar la polilínea anterior
             polyline.setMap(null);
-            path = [];
+            path = []; // Reiniciar el path
 
             if (data.length > 0) {
+                // Construir la nueva polilínea
                 data.forEach(point => {
                     path.push({ lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) });
                 });
 
+                // Dibujar la nueva polilínea
                 polyline = new google.maps.Polyline({
                     path: path,
                     strokeColor: '#6309CE',
@@ -113,28 +117,35 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 });
                 polyline.setMap(map);
             } else {
+                // Mostrar SweetAlert si no se encuentran datos
                 Swal.fire({
                     text: 'No se encontraron datos en el rango de tiempo especificado.',
                     icon: 'info',
+                    iconColor: '#6309CE', // Cambia el color del ícono de información a morado
                     confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#6309CE', 
+                    confirmButtonColor: '#6309CE', // Color del botón morado
                     customClass: {
-                        popup: 'swal2-no-title' 
+                        popup: 'swal2-custom-font', // Clase CSS personalizada para la fuente
+                        icon: 'swal2-icon-info-custom' // Clase personalizada para cambiar el color del ícono
                     }
                 });
             }
         })
         .catch(error => {
+            // Borrar la polilínea anterior
             polyline.setMap(null);
-            path = []; 
+            path = []; // Reiniciar el path
 
+            // Mostrar SweetAlert en caso de error
             Swal.fire({
                 text: 'Error al obtener los datos filtrados: ' + error,
                 icon: 'error',
+                iconColor: '#6309CE', // Cambia el color del ícono de error a morado
                 confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#6309CE', 
+                confirmButtonColor: '#6309CE', // Color del botón morado
                 customClass: {
-                    popup: 'swal2-no-title'
+                    popup: 'swal2-custom-font', // Clase CSS personalizada para la fuente
+                    icon: 'swal2-icon-info-custom' // Clase personalizada para cambiar el color del ícono
                 }
             });
             console.error('Error al obtener los datos filtrados:', error);
