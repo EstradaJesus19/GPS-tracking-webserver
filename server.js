@@ -114,7 +114,7 @@ app.get('/api/getAllData', (req, res) => {
 });
 
 app.get('/api/filterData', (req, res) => {
-    const { startTime, endTime } = req.query; // Obtener los parámetros de la consulta
+    const { startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
 
     db.query(

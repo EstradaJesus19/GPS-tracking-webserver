@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const now = new Date();
 
-    const startFlatpickr = flatpickr(startInput, {
+    const startFlatpickr = endFlatpickr(startInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const endFlatpickr = flatpickr(endInput, {
+    const endFlatpickr = endFlatpickr(endInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
