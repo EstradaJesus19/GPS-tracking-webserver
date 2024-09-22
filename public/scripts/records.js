@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.getElementById('filter-btn').addEventListener('click', function (e) {
+    const startInput = document.getElementById('startDateTime');
+    const endInput = document.getElementById('endDateTime');
     e.preventDefault(); 
 
     const startTime = startInput.value;
@@ -101,7 +103,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 data.forEach(point => {
                     path.push({ lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) });
                 });
-                
+
                 polyline = new google.maps.Polyline({
                     path: path,
                     strokeColor: '#6309CE',
