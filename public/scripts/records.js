@@ -96,10 +96,10 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-            if (data.length > 0) {
-                polyline.setMap(null);
-                path = [];
+            polyline.setMap(null);
+            path = []; 
 
+            if (data.length > 0) {
                 data.forEach(point => {
                     path.push({ lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) });
                 });
@@ -112,10 +112,14 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 });
                 polyline.setMap(map);
             } else {
-                console.log('No se encontraron datos en el rango de tiempo especificado.');
+                alert('No se encontraron datos en el rango de tiempo especificado.');
             }
         })
         .catch(error => {
+            polyline.setMap(null);
+            path = []; 
+
+            alert('Error al obtener los datos filtrados: ' + error);
             console.error('Error al obtener los datos filtrados:', error);
         });
 });
