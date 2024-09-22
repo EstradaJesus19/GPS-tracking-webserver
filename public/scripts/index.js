@@ -16,7 +16,7 @@ fetch('/api/getApiKey')
         loadGoogleMapsApi(data.apiKey);
     })
     .catch(error => {
-        console.error('Error al obtener la API Key:', error);
+        console.error('Error getting API key:', error);
     });
 
 function initMap() {
@@ -74,7 +74,7 @@ function fetchLatestData() {
                     };
 
                     path.push(position);
-                    polyline.setPath(path); // Actualizar directamente la polilínea con los datos recibidos.
+                    polyline.setPath(path); 
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 }

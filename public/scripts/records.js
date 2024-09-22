@@ -15,7 +15,7 @@ fetch('/api/getApiKey')
         loadGoogleMapsApi(data.apiKey);
     })
     .catch(error => {
-        console.error('Error al obtener la API Key:', error);
+        console.error('Error getting API Key:', error);
     });
 
 function initMap() {
@@ -119,10 +119,10 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 polyline.setMap(map);
             } else {
                 Swal.fire({
-                    text: 'No se encontraron datos en el rango de tiempo especificado.',
+                    text: 'No data found in the specified time frame.',
                     icon: 'info',
                     iconColor: '#6309CE', 
-                    confirmButtonText: 'Aceptar',
+                    confirmButtonText: 'Acept',
                     confirmButtonColor: '#6309CE', 
                     customClass: {
                         popup: 'swal2-custom-font',
@@ -136,16 +136,16 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             path = []; 
 
             Swal.fire({
-                text: 'Error al obtener los datos filtrados: ' + error,
+                text: 'Error getting filtered data: ' + error,
                 icon: 'error',
                 iconColor: '#6309CE',
-                confirmButtonText: 'Aceptar',
+                confirmButtonText: 'Acept',
                 confirmButtonColor: '#6309CE', 
                 customClass: {
                     popup: 'swal2-custom-font', 
                     icon: 'swal2-icon-info-custom' 
                 }
             });
-            console.error('Error al obtener los datos filtrados:', error);
+            console.error('Error getting filtered data: ', error);
         });
 });
