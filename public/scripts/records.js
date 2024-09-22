@@ -1,5 +1,4 @@
 let map;
-let marker;
 let polyline;
 let path = [];
 
@@ -31,85 +30,24 @@ function initMap() {
         strokeWeight: 5,
     });
     polyline.setMap(map);
+}
 
-    fetch('/api/getAllData')
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
-                const initialPosition = {
-                    lat: parseFloat(latestData.latitude),
-                    lng: parseFloat(latestData.longitude)
-                };
-                path.push(initialPosition);
+document.getElementById('filter-btn').addEventListener('click', () => {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+
+    if (startDate && endDate) {
+        fetch(`/api/getAllData?start=${startDate}&end=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                path = data.map(entry => ({
+                    lat: parseFloat(entry.latitude),
+                    lng: parseFloat(entry.longitude),
+                }));
                 polyline.setPath(path);
-
-                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
-
-    setInterval(fetchLatestData, 100);
-
-    fetch('/api/getOwner')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('owner').textContent = data.owner;
-        })
-        .catch(error => console.error('Error fetching owner:', error));
-}
-
-function fetchLatestData() {
-    fetch('/api/getAllData')
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
-
-                const lastPosition = path.length > 0 ? path[path.length - 1] : null;
-                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
-                    const position = {
-                        lat: parseFloat(latestData.latitude),
-                        lng: parseFloat(latestData.longitude)
-                    };
-
-                    path.push(position);
-                    polyline.setPath(path); // Actualizar directamente la polilínea con los datos recibidos.
-
-                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                }
-            }
-        })
-        .catch(error => console.error('Error fetching latest data:', error));
-}
-
-function updateMarkerAndInfo(lat, lng, data) {
-    const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-    if (marker) {
-        marker.setMap(null);
+            })
+            .catch(error => console.error('Error fetching filtered data:', error));
+    } else {
+        alert('Please select both start and end dates.');
     }
-
-    const icon = {
-        url: 'media/favicon.svg',
-        scaledSize: new google.maps.Size(40, 40),
-        anchor: new google.maps.Point(20, 35)
-    };
-
-    marker = new google.maps.Marker({
-        position,
-        map,
-        title: `Lat: ${lat}, Lng: ${lng}`,
-        icon: icon
-    });
-
-    map.setCenter(position);
-
-    const date = new Date(data.date);
-    const formattedDate = date.toISOString().split('T')[0];
-
-    document.getElementById('latitude').textContent = data.latitude;
-    document.getElementById('longitude').textContent = data.longitude;
-    document.getElementById('date').textContent = formattedDate;
-    document.getElementById('time').textContent = data.time;
-}
+});

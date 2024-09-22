@@ -12,13 +12,26 @@
         <a href="index.html"><img src="media/TrackIt.png" alt="TrackIt_logo" id="logo"></a>
         <nav>
             <ul id="menu">
-                <li><a href="index.html" class="active main">Real time</a></li>
+                <li><a href="index.html" class="main">Real Time</a></li>
+                <li><a href="records.html" class="active main">Records</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <div class="content-wrapper">
-            
+            <div class="filter-container">
+                <h1>Records Filter</h1>
+                <label for="start-date">Start Date:</label>
+                <input type="date" id="start-date" name="start-date">
+                
+                <label for="end-date">End Date:</label>
+                <input type="date" id="end-date" name="end-date">
+                
+                <button id="filter-btn">Filter</button>
+            </div>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
         </div>
     </main>
     <script src="scripts/records.js"></script>

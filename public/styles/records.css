@@ -68,7 +68,7 @@ main {
 
 .content-wrapper {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     background-color: #f0f0f0;
     border-radius: 32px;
     padding: 40px;
@@ -85,30 +85,49 @@ main {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Aumenta la sombra */
 }
 
-.location-info {
-    flex-basis: 20%;
-    padding-right: 20px;
+.filter-container {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.location-info h1 {
+.filter-container h1 {
     color: #530aa8;
-    font-size: 2.25em;
+    font-size: 2em;
+    margin-bottom: 15px;
 }
 
-.location-info p {
-    font-size: 1.5em;
-    font-weight: bold;
+.filter-container label {
+    font-size: 1.2em;
+    margin-right: 10px;
 }
 
-.location-info span {
-    font-weight: normal;
+.filter-container input {
+    font-size: 1.2em;
+    margin-right: 20px;
+    padding: 5px;
+}
+
+#filter-btn {
+    font-size: 1.2em;
+    padding: 8px 16px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#filter-btn:hover {
+    background-color: #6309CE;
 }
 
 .map-container {
-    flex-basis: 80%;
+    width: 100%;
+    height: 600px;
 }
 
 #map {
-    height: 720px;
+    height: 100%;
+    width: 100%;
     border-radius: 20px;
 }
