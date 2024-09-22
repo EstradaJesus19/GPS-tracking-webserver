@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
-                endFlatpickr.set('minDate', selectedDate); // Establece la fecha mínima del final
+                endFlatpickr.set('minDate', selectedDate); 
             }
         }
     });
@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
+
     e.preventDefault(); 
 
     const startTime = startInput.value;
@@ -97,7 +98,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
         .then(response => response.json())
         .then(data => {
             polyline.setMap(null);
-            path = []; 
+            path = [];
 
             if (data.length > 0) {
                 data.forEach(point => {
@@ -112,14 +113,30 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 });
                 polyline.setMap(map);
             } else {
-                alert('No se encontraron datos en el rango de tiempo especificado.');
+                Swal.fire({
+                    text: 'No se encontraron datos en el rango de tiempo especificado.',
+                    icon: 'info',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#6309CE', 
+                    customClass: {
+                        popup: 'swal2-no-title' 
+                    }
+                });
             }
         })
         .catch(error => {
             polyline.setMap(null);
             path = []; 
 
-            alert('Error al obtener los datos filtrados: ' + error);
+            Swal.fire({
+                text: 'Error al obtener los datos filtrados: ' + error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#6309CE', 
+                customClass: {
+                    popup: 'swal2-no-title'
+                }
+            });
             console.error('Error al obtener los datos filtrados:', error);
         });
 });
