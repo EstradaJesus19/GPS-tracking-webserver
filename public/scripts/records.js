@@ -94,8 +94,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
-    console.error(startInput);
-    console.error(endInput);
+    console.log('Test');
 
     e.preventDefault(); 
 
