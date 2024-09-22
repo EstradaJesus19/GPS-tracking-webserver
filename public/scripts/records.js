@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const startFlatpickr = flatpickr(startInput, {
         enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "d-m-Y H:i",
         time_24hr: true,
         maxDate: now, 
         onChange: function (selectedDates) {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const endFlatpickr = flatpickr(endInput, {
         enableTime: true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "d-m-Y H:i",
         time_24hr: true,
         maxDate: now, 
         onChange: function (selectedDates) {
@@ -96,8 +96,8 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
 
     e.preventDefault(); 
 
-    const startTime = startInput.value;
-    const endTime = endInput.value;
+    const startTime = convertToDatabaseFormat(startInput.value);  // Convertir fecha al formato de la base de datos
+    const endTime = convertToDatabaseFormat(endInput.value);      // Convertir fecha al formato de la base de datos
 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
@@ -149,3 +149,9 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             console.error('Error getting filtered data: ', error);
         });
 });
+
+function convertToDatabaseFormat(dateTimeStr) {
+    const [day, month, yearTime] = dateTimeStr.split('-');
+    const [year, time] = yearTime.split(' ');
+    return `${year}-${month}-${day} ${time}`;
+}
