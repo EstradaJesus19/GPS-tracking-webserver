@@ -32,22 +32,88 @@ function initMap() {
     polyline.setMap(map);
 }
 
-document.getElementById('filter-btn').addEventListener('click', () => {
-    const startDate = document.getElementById('start-date').value;
-    const endDate = document.getElementById('end-date').value;
+document.addEventListener('DOMContentLoaded', function () {
+    const startInput = document.getElementById('startDateTime');
+    const endInput = document.getElementById('endDateTime');
 
-    if (startDate && endDate) {
-        fetch(`/api/getAllData?start=${startDate}&end=${endDate}`)
-            .then(response => response.json())
-            .then(data => {
-                path = data.map(entry => ({
-                    lat: parseFloat(entry.latitude),
-                    lng: parseFloat(entry.longitude),
-                }));
-                polyline.setPath(path);
-            })
-            .catch(error => console.error('Error fetching filtered data:', error));
-    } else {
-        alert('Please select both start and end dates.');
-    }
+    const startFlatpickr = flatpickr(startInput, {
+        enableTime: true,
+        dateFormat: "d-m-Y H:i",
+        time_24hr: true,
+        onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0];
+                endFlatpickr.set('minDate', selectedDate); // Establece la fecha mínima del final
+            }
+        }
+    });
+
+    const endFlatpickr = flatpickr(endInput, {
+        enableTime: true,
+        dateFormat: "d-m-Y H:i",
+        time_24hr: true,
+        onChange: function (selectedDates) {
+            if (selectedDates.length > 0) {
+                const selectedDate = selectedDates[0];
+                startFlatpickr.set('maxDate', selectedDate); 
+            }
+        }
+    });
+
+    [startInput, endInput].forEach(input => {
+        input.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            let formattedValue = '';
+
+            if (value.length >= 8) {
+                formattedValue = `${value.substring(0, 2)}-${value.substring(2, 4)}-${value.substring(4, 8)}`;
+                if (value.length > 8) {
+                    formattedValue += ` ${value.substring(8, 10)}:${value.substring(10, 12)}`;
+                }
+            } else if (value.length >= 4) {
+                formattedValue = `${value.substring(0, 2)}-${value.substring(2, 4)}`;
+            } else if (value.length >= 2) {
+                formattedValue = `${value.substring(0, 2)}`;
+            }
+
+            e.target.value = formattedValue;
+        });
+
+        input.addEventListener('focus', function () {
+            e.target.select();
+        });
+    });
+});
+
+document.getElementById('filter-btn').addEventListener('click', function (e) {
+    e.preventDefault(); 
+
+    const startTime = startInput.value;
+    const endTime = endInput.value;
+
+    fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                polyline.setMap(null);
+                path = [];
+
+                data.forEach(point => {
+                    path.push({ lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) });
+                });
+                
+                polyline = new google.maps.Polyline({
+                    path: path,
+                    strokeColor: '#6309CE',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 5,
+                });
+                polyline.setMap(map);
+            } else {
+                console.log('No se encontraron datos en el rango de tiempo especificado.');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos filtrados:', error);
+        });
 });

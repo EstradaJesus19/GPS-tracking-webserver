@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Records - TrackIT locator</title>
     <link rel="icon" href="media/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="styles/records.css">
 </head>
 <body>
@@ -12,28 +13,39 @@
         <a href="index.html"><img src="media/TrackIt.png" alt="TrackIt_logo" id="logo"></a>
         <nav>
             <ul id="menu">
-                <li><a href="index.html" class="main">Real Time</a></li>
-                <li><a href="records.html" class="active main">Records</a></li>
+                <li><a href="index.html" class="active main">Real Time</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <div class="content-wrapper">
-            <div class="filter-container">
-                <h1>Records Filter</h1>
-                <label for="start-date">Start Date:</label>
-                <input type="date" id="start-date" name="start-date">
-                
-                <label for="end-date">End Date:</label>
-                <input type="date" id="end-date" name="end-date">
-                
-                <button id="filter-btn">Filter</button>
+            <div class="filter-wrapper">
+                <h2>Filter by time range</h2>
+                <form id="timeFilterForm">
+                    <label for="startDateTime">Start time:</label>
+                    <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                    
+                    <label for="endDateTime">End time:</label>
+                    <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                    
+                    <button id="filter-btn">Apply filter</button>
+                </form>
             </div>
             <div class="map-container">
                 <div id="map"></div>
             </div>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr(".flatpickr-datetime", {
+            enableTime: true,
+            dateFormat: "d-m-Y H:i",
+            time_24hr: true,
+            allowInput: false
+        });
+    </script>
     <script src="scripts/records.js"></script>
 </body>
 </html>

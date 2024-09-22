@@ -113,6 +113,24 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+app.get('/api/filterData', (req, res) => {
+    const { startTime, endTime } = req.query; // Obtener los parámetros de la consulta
+    const tableName = process.env.db_table;
+
+    db.query(
+        `SELECT latitude, longitude FROM ?? WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?`,
+        [tableName, startTime, endTime],
+        (err, results) => {
+            if (err) {
+                console.error('Error fetching filtered data:', err);
+                res.status(500).json({ error: 'Error fetching filtered data' });
+            } else {
+                res.json(results);
+            }
+        }
+    );
+});
+
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
