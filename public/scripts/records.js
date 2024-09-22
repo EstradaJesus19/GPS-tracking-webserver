@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const startFlatpickr = flatpickr(startInput, {
         enableTime: true,
-        dateFormat: "d-m-Y H:i",
+        dateFormat: "Y-m-d H:i",
         time_24hr: true,
         maxDate: now, 
         onChange: function (selectedDates) {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const endFlatpickr = flatpickr(endInput, {
         enableTime: true,
-        dateFormat: "d-m-Y H:i",
+        dateFormat: "Y-m-d H:i",
         time_24hr: true,
         maxDate: now, 
         onChange: function (selectedDates) {
@@ -93,9 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
-
-    console.log('Test', startInput);
-    console.log('Test', endInput);
 
     e.preventDefault(); 
 
