@@ -122,7 +122,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     text: 'No data found in the specified time frame.',
                     icon: 'info',
                     iconColor: '#6309CE', 
-                    confirmButtonText: 'Acept',
+                    confirmButtonText: 'Accept',
                     confirmButtonColor: '#6309CE', 
                     customClass: {
                         popup: 'swal2-custom-font',
@@ -139,7 +139,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 text: 'Error getting filtered data: ' + error,
                 icon: 'error',
                 iconColor: '#6309CE',
-                confirmButtonText: 'Acept',
+                confirmButtonText: 'Accept',
                 confirmButtonColor: '#6309CE', 
                 customClass: {
                     popup: 'swal2-custom-font', 
