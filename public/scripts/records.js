@@ -36,18 +36,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
-    const now = new Date();
-
     const startFlatpickr = flatpickr(startInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
-        maxDate: now, 
+        maxDate: new Date(), 
+        onOpen: function() {
+            const now = new Date(); 
+            this.set('maxDate', now); 
+        },
         onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
                 endFlatpickr.set('minDate', selectedDate);
-                endFlatpickr.set('maxDate', now); 
+                endFlatpickr.set('maxDate', new Date()); 
             }
         }
     });
@@ -56,11 +58,15 @@ document.addEventListener('DOMContentLoaded', function () {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
-        maxDate: now, 
+        maxDate: new Date(), 
+        onOpen: function() {
+            const now = new Date(); 
+            this.set('maxDate', now);
+        },
         onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
-                startFlatpickr.set('maxDate', selectedDate); 
+                startFlatpickr.set('maxDate', selectedDate);
             }
         }
     });
