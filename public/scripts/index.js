@@ -78,33 +78,33 @@ function fetchLatestData() {
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
 
-                    new google.maps.Marker({
-                        position: path[0],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  // Flecha hacia adelante
-                            scale: 5,
-                            fillColor: "#6309CE",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: "Inicio"
-                    });
+                    // new google.maps.Marker({
+                    //     position: path[0],
+                    //     map: map,
+                    //     icon: {
+                    //         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  // Flecha hacia adelante
+                    //         scale: 5,
+                    //         fillColor: "#6309CE",
+                    //         fillOpacity: 1,
+                    //         strokeWeight: 2,
+                    //         strokeColor: "#6309CE"
+                    //     },
+                    //     title: "Inicio"
+                    // });
 
-                    new google.maps.Marker({
-                        position: path[path.length - 1],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,  // Círculo
-                            scale: 5,
-                            fillColor: "#6309CE",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: "Fin"
-                    });
+                    // new google.maps.Marker({
+                    //     position: path[path.length - 1],
+                    //     map: map,
+                    //     icon: {
+                    //         path: google.maps.SymbolPath.CIRCLE,  // Círculo
+                    //         scale: 5,
+                    //         fillColor: "#6309CE",
+                    //         fillOpacity: 1,
+                    //         strokeWeight: 2,
+                    //         strokeColor: "#6309CE"
+                    //     },
+                    //     title: "Fin"
+                    // });
                 }
             }
         })
