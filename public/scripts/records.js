@@ -137,12 +137,12 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     icon: {
                         path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  
                         scale: 5,
-                        fillColor: "#6309CE",
+                        fillColor: "#C3AAff",
                         fillOpacity: 1,
                         strokeWeight: 2,
                         strokeColor: "#6309CE"
                     },
-                    title: "Inicio"
+                    title: "Start"
                 });
 
                 new google.maps.Marker({
@@ -151,12 +151,12 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE, 
                         scale: 5,
-                        fillColor: "#6309CE",
+                        fillColor: "#C3AAff",
                         fillOpacity: 1,
                         strokeWeight: 2,
                         strokeColor: "#6309CE"
                     },
-                    title: "Fin"
+                    title: "End"
                 });
 
             } else {
