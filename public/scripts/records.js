@@ -131,27 +131,34 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
 
                 map.fitBounds(bounds);
 
-                new google.maps.Circle({
-                    strokeColor: "#00FF00",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
-                    fillColor: "#00FF00",
-                    fillOpacity: 0.5,
+                new google.maps.Marker({
+                    position: path[0],
                     map: map,
-                    center: path[0],
-                    radius: 20
+                    icon: {
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  
+                        scale: 5,
+                        fillColor: "#6309CE",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Inicio"
                 });
 
-                new google.maps.Circle({
-                    strokeColor: "#FF0000",
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
-                    fillColor: "#FF0000",
-                    fillOpacity: 0.5,
+                new google.maps.Marker({
+                    position: path[path.length - 1],
                     map: map,
-                    center: path[path.length - 1],
-                    radius: 20
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE, 
+                        scale: 5,
+                        fillColor: "#6309CE",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Fin"
                 });
+
             } else {
                 Swal.fire({
                     text: 'No data found in the specified time frame.',
