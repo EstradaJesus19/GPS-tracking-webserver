@@ -96,14 +96,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
 document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
     e.preventDefault(); 
 
-    const startTime = convertToDatabaseFormat(startInput.value);  // Convertir fecha al formato de la base de datos
-    const endTime = convertToDatabaseFormat(endInput.value);      // Convertir fecha al formato de la base de datos
+    const startTime = convertToDatabaseFormat(startInput.value);
+    const endTime = convertToDatabaseFormat(endInput.value);
 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
@@ -112,8 +113,12 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             path = []; 
 
             if (data.length > 0) {
+                const bounds = new google.maps.LatLngBounds();
+
                 data.forEach(point => {
-                    path.push({ lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) });
+                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                    path.push(latLng);
+                    bounds.extend(latLng);  
                 });
 
                 polyline = new google.maps.Polyline({
@@ -123,6 +128,30 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     strokeWeight: 5,
                 });
                 polyline.setMap(map);
+
+                map.fitBounds(bounds);
+
+                new google.maps.Circle({
+                    strokeColor: "#00FF00",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                    fillColor: "#00FF00",
+                    fillOpacity: 0.5,
+                    map: map,
+                    center: path[0],
+                    radius: 20
+                });
+
+                new google.maps.Circle({
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.5,
+                    map: map,
+                    center: path[path.length - 1],
+                    radius: 20
+                });
             } else {
                 Swal.fire({
                     text: 'No data found in the specified time frame.',
