@@ -35,11 +35,13 @@ function initMap() {
                 strokeColor: '#6309CE',
                 strokeWeight: 2,
                 fillColor: '#6309CE',
+                fillOpacity: 1.0,
             },
             offset: '100%', // Aparece al final de cada tramo
             repeat: '100px' // Repite cada 100px en la línea
         }]
     });
+    
     polyline.setMap(map);
 }
 
@@ -144,11 +146,13 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                             strokeColor: '#6309CE',
                             strokeWeight: 2,
                             fillColor: '#6309CE',
+                            fillOpacity: 1.0,
                         },
                         offset: '100%', // Flecha en cada tramo
                         repeat: '100px' // Repite cada 100px
                     }]
                 });
+
                 polyline.setMap(map);
 
                 map.fitBounds(bounds);
