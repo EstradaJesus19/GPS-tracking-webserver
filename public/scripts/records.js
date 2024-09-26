@@ -34,6 +34,7 @@ function initMap() {
                 scale: 3,
                 strokeColor: '#6309CE',
                 strokeWeight: 2,
+                fillColor: '#6309CE',
             },
             offset: '100%', // Aparece al final de cada tramo
             repeat: '100px' // Repite cada 100px en la línea
@@ -142,6 +143,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                             scale: 3,
                             strokeColor: '#6309CE',
                             strokeWeight: 2,
+                            fillColor: '#6309CE',
                         },
                         offset: '100%', // Flecha en cada tramo
                         repeat: '100px' // Repite cada 100px
@@ -150,6 +152,34 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 polyline.setMap(map);
 
                 map.fitBounds(bounds);
+
+                new google.maps.Marker({
+                    position: path[0],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE, 
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Start"
+                });
+
+                new google.maps.Marker({
+                    position: path[path.length - 1],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE, 
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "End"
+                });
 
             } else {
                 Swal.fire({
