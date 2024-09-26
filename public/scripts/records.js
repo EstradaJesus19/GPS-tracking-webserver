@@ -30,15 +30,15 @@ function initMap() {
         strokeWeight: 5,
         icons: [{
             icon: {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, // Flecha
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                 scale: 3,
                 strokeColor: '#6309CE',
                 strokeWeight: 2,
                 fillColor: '#6309CE',
                 fillOpacity: 1.0,
             },
-            offset: '100%', // Aparece al final de cada tramo
-            repeat: '100px' // Repite cada 100px en la línea
+            offset: '100%',
+            repeat: '100px'
         }]
     });
     
@@ -49,20 +49,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
+    function getMaxDate() {
+        return new Date(); // Devuelve el tiempo actual
+    }
+
     const startFlatpickr = flatpickr(startInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
-        maxDate: new Date(), 
+        maxDate: getMaxDate(),
         onOpen: function() {
-            const now = new Date(); 
-            this.set('maxDate', now); 
+            this.set('maxDate', getMaxDate());
         },
         onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
                 endFlatpickr.set('minDate', selectedDate);
-                endFlatpickr.set('maxDate', new Date()); 
+                endFlatpickr.set('maxDate', getMaxDate());
+                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
             }
         }
     });
@@ -71,18 +75,32 @@ document.addEventListener('DOMContentLoaded', function () {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
         time_24hr: true,
-        maxDate: new Date(), 
+        maxDate: getMaxDate(),
         onOpen: function() {
-            const now = new Date(); 
-            this.set('maxDate', now);
+            this.set('maxDate', getMaxDate());
         },
         onChange: function (selectedDates) {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
                 startFlatpickr.set('maxDate', selectedDate);
+                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
             }
         }
     });
+
+    function validateTime(startPicker, endPicker) {
+        const startDate = startPicker.selectedDates[0];
+        const endDate = endPicker.selectedDates[0];
+
+        if (startDate && endDate && startDate.toDateString() === endDate.toDateString()) {
+            const startTime = startDate.getTime();
+            const endTime = endDate.getTime();
+
+            if (startTime >= endTime) {
+                endPicker.setDate(startDate);
+            }
+        }
+    }
 
     [startInput, endInput].forEach(input => {
         input.addEventListener('input', function (e) {
@@ -109,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
@@ -131,7 +148,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 data.forEach(point => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                     path.push(latLng);
-                    bounds.extend(latLng);  
+                    bounds.extend(latLng);
                 });
 
                 polyline = new google.maps.Polyline({
@@ -141,27 +158,26 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     strokeWeight: 5,
                     icons: [{
                         icon: {
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW, // Flecha
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                             scale: 3,
                             strokeColor: '#6309CE',
                             strokeWeight: 2,
                             fillColor: '#6309CE',
                             fillOpacity: 1.0,
                         },
-                        offset: '100%', // Flecha en cada tramo
-                        repeat: '100px' // Repite cada 100px
+                        offset: '100%',
+                        repeat: '100px'
                     }]
                 });
 
                 polyline.setMap(map);
-
                 map.fitBounds(bounds);
 
                 new google.maps.Marker({
                     position: path[0],
                     map: map,
                     icon: {
-                        path: google.maps.SymbolPath.CIRCLE, 
+                        path: google.maps.SymbolPath.CIRCLE,
                         scale: 5,
                         fillColor: "#C3AAff",
                         fillOpacity: 1,
@@ -175,7 +191,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     position: path[path.length - 1],
                     map: map,
                     icon: {
-                        path: google.maps.SymbolPath.CIRCLE, 
+                        path: google.maps.SymbolPath.CIRCLE,
                         scale: 5,
                         fillColor: "#C3AAff",
                         fillOpacity: 1,
@@ -189,29 +205,29 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 Swal.fire({
                     text: 'No data found in the specified time frame.',
                     icon: 'info',
-                    iconColor: '#6309CE', 
+                    iconColor: '#6309CE',
                     confirmButtonText: 'Accept',
-                    confirmButtonColor: '#6309CE', 
+                    confirmButtonColor: '#6309CE',
                     customClass: {
                         popup: 'swal2-custom-font',
-                        icon: 'swal2-icon-info-custom' 
+                        icon: 'swal2-icon-info-custom'
                     }
                 });
             }
         })
         .catch(error => {
             polyline.setMap(null);
-            path = []; 
+            path = [];
 
             Swal.fire({
                 text: 'Error getting filtered data: ' + error,
                 icon: 'error',
                 iconColor: '#6309CE',
                 confirmButtonText: 'Accept',
-                confirmButtonColor: '#6309CE', 
+                confirmButtonColor: '#6309CE',
                 customClass: {
-                    popup: 'swal2-custom-font', 
-                    icon: 'swal2-icon-info-custom' 
+                    popup: 'swal2-custom-font',
+                    icon: 'swal2-icon-info-custom'
                 }
             });
             console.error('Error getting filtered data: ', error);
