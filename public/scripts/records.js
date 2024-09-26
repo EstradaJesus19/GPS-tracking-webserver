@@ -135,7 +135,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                     position: path[0],
                     map: map,
                     icon: {
-                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,  
+                        path: google.maps.SymbolPath.CIRCLE, 
                         scale: 5,
                         fillColor: "#C3AAff",
                         fillOpacity: 1,
