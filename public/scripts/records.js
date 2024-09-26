@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-
+  
     function validateTime(startPicker, endPicker) {
         const startDate = startPicker.selectedDates[0];
         const endDate = endPicker.selectedDates[0];
