@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 disableMapClick(); // Deshabilitar clics en el mapa
 
                 new google.maps.Marker({
-                    position: path[0],
+                    position: selectedPosition,
                     map: map,
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     title: "Center"
                 });
-                
+
             } else {
                 Swal.fire({
                     text: 'Select a location on the map',
