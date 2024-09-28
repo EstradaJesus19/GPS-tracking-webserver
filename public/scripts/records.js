@@ -123,7 +123,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-            clearMarkers(); // Limpia los marcadores antes de agregar nuevos
+            clearMap(); // Limpia los marcadores antes de agregar nuevos
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
