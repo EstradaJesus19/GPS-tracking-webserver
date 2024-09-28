@@ -264,6 +264,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
+            if (circle) {
+                circle.setMap(null);
+            }
             // Primera vez que se presiona "Set on map"
             isSelectingLocation = true;
             selectLocationBtn.textContent = 'Set location';
@@ -280,7 +283,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
                 disableMapClick(); // Deshabilitar clics en el mapa
             } else {
-                alert('Please select a location on the map first.');
+                Swal.fire({
+                    text: 'Select a location on the map',
+                    icon: 'error',
+                    iconColor: '#6309CE',
+                    confirmButtonText: 'Accept',
+                    confirmButtonColor: '#6309CE',
+                    customClass: {
+                        popup: 'swal2-custom-font',
+                        icon: 'swal2-icon-info-custom'
+                    }
+                });
             }
         }
     });
@@ -294,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function enableMapClick() {
-    map.addListener('click', handleMapClick);
+   map.addListener('click', handleMapClick);
 }
 
 function disableMapClick() {
@@ -316,7 +329,7 @@ function handleMapClick(event) {
     document.getElementById('selectLocationBtn').textContent = 'Set location';
 
     // Deshabilitar la capacidad de seleccionar más puntos hasta que se presione el botón de nuevo
-    disableMapClick();
+    // disableMapClick();
 }
 
 function drawCircle(position, radius, isEditable) {
@@ -349,7 +362,7 @@ function drawCircle(position, radius, isEditable) {
 
 function clearMap() {
     circle.setMap(null);
-    circle = null; // Resetear la variable
+    circle = null;
     polyline.setMap(null);
     path = [];
 }
