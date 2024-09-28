@@ -251,6 +251,7 @@ document.getElementById('filterType').addEventListener('change', function (e) {
     const selectedFilter = e.target.value;
     document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
+    clearMap();
 });
 
 let circle = null;
