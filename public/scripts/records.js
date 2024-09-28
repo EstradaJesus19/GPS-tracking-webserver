@@ -1,7 +1,7 @@
 let map; 
 let polyline;
 let path = [];
-let markers = []; // Array para almacenar los marcadores
+let markers = [];
 
 fetch('/api/getOwner')
     .then(response => response.json())
@@ -123,7 +123,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-            clearMap(); // Limpia los marcadores antes de agregar nuevos
+            clearMap(); 
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
@@ -156,7 +156,6 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 polyline.setMap(map);
                 map.fitBounds(bounds);
 
-                // Crear y almacenar los marcadores
                 markers.push(new google.maps.Marker({
                     position: path[0],
                     map: map,
@@ -200,7 +199,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             }
         })
         .catch(error => {
-            clearMarkers(); // Limpia los marcadores en caso de error
+            clearMap();
 
             Swal.fire({
                 text: 'Error getting filtered data: ' + error,
@@ -241,21 +240,18 @@ document.addEventListener('DOMContentLoaded', function () {
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             clearMap()
-            // Primera vez que se presiona "Set on map"
             isSelectingLocation = true;
             selectLocationBtn.textContent = 'Set location';
             enableMapClick();
-            map.setOptions({ draggableCursor: 'crosshair' }); // Cambia el cursor al seleccionar en el mapa
+            map.setOptions({ draggableCursor: 'crosshair' }); 
         } else {
-            // Después de seleccionar la ubicación, se fija el círculo
             if (selectedPosition) {
-                // Fijar el círculo y deshabilitar la edición
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
-                map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
-                disableMapClick(); // Deshabilitar clics en el mapa
+                map.setOptions({ draggableCursor: null }); 
+                disableMapClick(); 
 
                 markers.push(new google.maps.Marker({
                     position: selectedPosition,
@@ -308,14 +304,9 @@ function handleMapClick(event) {
 
     clearMap();
 
-    // Crear un círculo editable en el punto seleccionado
-    drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
+    drawCircle(selectedPosition, parseFloat(radiusInput.value), true); 
 
-    // Cambiar el texto del botón a "Set location"
     document.getElementById('selectLocationBtn').textContent = 'Set location';
-
-    // Deshabilitar la capacidad de seleccionar más puntos hasta que se presione el botón de nuevo
-    // disableMapClick();
 }
 
 function drawCircle(position, radius, isEditable) {
@@ -330,20 +321,18 @@ function drawCircle(position, radius, isEditable) {
         fillColor: '#C3AAff',
         fillOpacity: 0.5,
         map: map,
-        editable: isEditable,  // Si se puede editar o no
-        draggable: isEditable  // Si se puede arrastrar o no
+        editable: isEditable,  
+        draggable: isEditable  
     });
 
-    // Si el círculo es editable, sincronizar los cambios de radio con el input
     if (isEditable) {
         circle.addListener('radius_changed', function () {
             const updatedRadius = Math.round(circle.getRadius());
-            document.getElementById('radiusInput').value = updatedRadius; // Actualizar el input
+            document.getElementById('radiusInput').value = updatedRadius; 
         });
 
-        // Listener para actualizar selectedPosition al arrastrar el círculo
         circle.addListener('center_changed', function () {
-            selectedPosition = circle.getCenter(); // Actualizar la posición seleccionada
+            selectedPosition = circle.getCenter(); 
         });
     }
 }
@@ -351,19 +340,19 @@ function drawCircle(position, radius, isEditable) {
 function clearMap() {
     if (polyline) {
         polyline.setMap(null);
-        polyline = null; // Asegúrate de reiniciar polyline
+        polyline = null; 
     }
-    clearMarkers(); // Limpia los marcadores
+    clearMarkers(); 
     if (circle) {
         circle.setMap(null); 
-        circle = null; // Asegúrate de reiniciar el círculo
+        circle = null; 
     }
-    path = []; // Limpia el camino
+    path = []; 
 }
 
 function clearMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
     });
-    markers = []; // Reinicia el array de marcadores
+    markers = []; 
 }
