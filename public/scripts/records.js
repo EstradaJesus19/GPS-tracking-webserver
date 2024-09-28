@@ -1,13 +1,14 @@
-let map;
+let map; 
 let polyline;
 let path = [];
+let markers = []; // Array para almacenar los marcadores
 
 fetch('/api/getOwner')
-        .then(response => response.json())
-        .then(data => {
-            document.title = `Real time - ${data.owner}`;
-        })
-        .catch(error => console.error('Error fetching owner:', error));
+    .then(response => response.json())
+    .then(data => {
+        document.title = `Real time - ${data.owner}`;
+    })
+    .catch(error => console.error('Error fetching owner:', error));
 
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
@@ -48,7 +49,7 @@ function initMap() {
             repeat: '100px'
         }]
     });
-    
+
     polyline.setMap(map);
 }
 
@@ -149,6 +150,8 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             polyline.setMap(null);
             path = []; 
 
+            clearMarkers(); // Limpia los marcadores antes de agregar nuevos
+
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
 
@@ -180,7 +183,8 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                 polyline.setMap(map);
                 map.fitBounds(bounds);
 
-                new google.maps.Marker({
+                // Crear y almacenar los marcadores
+                markers.push(new google.maps.Marker({
                     position: path[0],
                     map: map,
                     icon: {
@@ -192,9 +196,9 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                         strokeColor: "#6309CE"
                     },
                     title: "Start"
-                });
+                }));
 
-                new google.maps.Marker({
+                markers.push(new google.maps.Marker({
                     position: path[path.length - 1],
                     map: map,
                     icon: {
@@ -206,7 +210,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
                         strokeColor: "#6309CE"
                     },
                     title: "End"
-                });
+                }));
 
             } else {
                 Swal.fire({
@@ -225,6 +229,7 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
         .catch(error => {
             polyline.setMap(null);
             path = [];
+            clearMarkers(); // Limpia los marcadores en caso de error
 
             Swal.fire({
                 text: 'Error getting filtered data: ' + error,
@@ -251,7 +256,7 @@ document.getElementById('filterType').addEventListener('change', function (e) {
     const selectedFilter = e.target.value;
     document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
-    initMap();
+    clearMap();
 });
 
 let circle = null;
@@ -265,119 +270,70 @@ document.addEventListener('DOMContentLoaded', function () {
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             if (circle) {
-                circle.setMap(null);
+                circle.setMap(null); 
+                circle = null;
             }
-            // Primera vez que se presiona "Set on map"
+
             isSelectingLocation = true;
-            selectLocationBtn.textContent = 'Set location';
-            enableMapClick();
-            map.setOptions({ draggableCursor: 'crosshair' }); // Cambia el cursor al seleccionar en el mapa
-        } else {
-            // Después de seleccionar la ubicación, se fija el círculo
-            if (selectedPosition) {
-                // Fijar el círculo y deshabilitar la edición
-                circle.setEditable(false);
-                circle.setDraggable(false);
-                isSelectingLocation = false;
-                selectLocationBtn.textContent = 'Select on map';
-                map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
-                disableMapClick(); // Deshabilitar clics en el mapa
+            selectLocationBtn.textContent = 'Set Location';
+            map.setOptions({ draggableCursor: 'crosshair' });
 
-                new google.maps.Marker({
-                    position: selectedPosition,
+            google.maps.event.addListenerOnce(map, 'click', function (event) {
+                selectedPosition = event.latLng;
+
+                circle = new google.maps.Circle({
+                    strokeColor: '#6309CE',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#C3AAff',
+                    fillOpacity: 0.35,
                     map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "Center"
+                    center: selectedPosition,
+                    radius: parseFloat(radiusInput.value) || 5
                 });
 
-            } else {
-                Swal.fire({
-                    text: 'Select a location on the map',
-                    icon: 'error',
-                    iconColor: '#6309CE',
-                    confirmButtonText: 'Accept',
-                    confirmButtonColor: '#6309CE',
-                    customClass: {
-                        popup: 'swal2-custom-font',
-                        icon: 'swal2-icon-info-custom'
-                    }
+                map.setOptions({ draggableCursor: 'default' });
+                selectLocationBtn.textContent = 'Select on Map';
+
+                // Actualizar el input de radio al cambiar el tamaño del círculo
+                google.maps.event.addListener(circle, 'radius_changed', function() {
+                    radiusInput.value = circle.getRadius();
                 });
+
+                // Cambiar el radio si el input es editado
+                radiusInput.addEventListener('input', function() {
+                    circle.setRadius(parseFloat(this.value) || 5);
+                });
+            });
+        } else {
+            if (circle) {
+                circle.setMap(null); 
+                circle = null;
             }
-        }
-    });
 
-    radiusInput.addEventListener('input', function () {
-        if (circle) {
-            const newRadius = parseFloat(radiusInput.value);
-            circle.setRadius(newRadius);
+            isSelectingLocation = false;
+            selectLocationBtn.textContent = 'Select on Map';
+            map.setOptions({ draggableCursor: 'default' });
         }
     });
 });
 
-function enableMapClick() {
-   map.addListener('click', handleMapClick);
-}
-
-function disableMapClick() {
-    google.maps.event.clearListeners(map, 'click');
-}
-
-function handleMapClick(event) {
-    selectedPosition = event.latLng;
-
-    // Si ya existe un círculo, se remueve
-    if (circle) {
-        circle.setMap(null);
-    }
-
-    // Crear un círculo editable en el punto seleccionado
-    drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
-
-    // Cambiar el texto del botón a "Set location"
-    document.getElementById('selectLocationBtn').textContent = 'Set location';
-
-    // Deshabilitar la capacidad de seleccionar más puntos hasta que se presione el botón de nuevo
-    // disableMapClick();
-}
-
-function drawCircle(position, radius, isEditable) {
-    // Si ya hay un círculo, lo eliminamos
-    if (circle) {
-        circle.setMap(null);
-    }
-
-    circle = new google.maps.Circle({
-        center: position,
-        radius: radius,
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        fillColor: '#C3AAff',
-        fillOpacity: 0.5,
-        map: map,
-        editable: isEditable,  // Si se puede editar o no
-        draggable: isEditable  // Si se puede arrastrar o no
-    });
-
-    // Si el círculo es editable, sincronizar los cambios de radio con el input
-    if (isEditable) {
-        circle.addListener('radius_changed', function () {
-            const updatedRadius = Math.round(circle.getRadius());
-            document.getElementById('radiusInput').value = updatedRadius; // Actualizar el input
-        });
-    }
-}
-
 function clearMap() {
-    circle.setMap(null);
-    circle = null;
-    polyline.setMap(null);
-    path = [];
+    if (polyline) {
+        polyline.setMap(null);
+        polyline = null; // Asegúrate de reiniciar polyline
+    }
+    clearMarkers(); // Limpia los marcadores
+    if (circle) {
+        circle.setMap(null); 
+        circle = null; // Asegúrate de reiniciar el círculo
+    }
+    path = []; // Limpia el camino
+}
+
+function clearMarkers() {
+    markers.forEach(marker => {
+        marker.setMap(null);
+    });
+    markers = []; // Reinicia el array de marcadores
 }
