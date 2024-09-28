@@ -149,6 +149,47 @@ main {
     border-color: #530aa8;
 }
 
+#positionFilterForm {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#selectLocationBtn {
+    font-size: 1.2em;
+    padding: 8px 16px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+#applyPositionFilterBtn {
+    font-size: 1.2em;
+    padding: 8px 16px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0px 20px;
+}
+
+#selectLocationBtn:hover, #applyPositionFilterBtn:hover {
+    background-color: #6309CE;
+}
+
+#radiusInput {
+    font-size: 1.2em;
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    width: 100px;
+}
+
 #filter-btn {
     font-size: 1.2em;
     padding: 8px 16px;

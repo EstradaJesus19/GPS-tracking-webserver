@@ -27,8 +27,8 @@
                 </select>
             </div>
             <div class="filter-wrapper">
-                <h2>Filter by time frame</h2>
                 <form id="timeFilterForm">
+                    <h2>Filter by time frame</h2>
                     <label for="startDateTime">Start time:</label>
                     <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
                     
@@ -37,6 +37,16 @@
                     
                     <button id="filter-btn">Apply filter</button>
                 </form>
+                <div id="positionFilterForm" style="display: none;">
+                    <h2>Filter by position</h2>
+                    <label for="location">Select location:</label>
+                    <button id="selectLocationBtn">Select on map</button>
+                
+                    <label for="radiusInput">Enter radius:</label>
+                    <input type="number" id="radiusInput" min="5" value="5" step="1">
+                    
+                    <button id="applyPositionFilterBtn">Apply filter</button>
+                </div>
             </div>
             <div class="map-container">
                 <div id="map"></div>

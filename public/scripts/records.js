@@ -1,5 +1,7 @@
 let map;
 let polyline;
+let selectedPosition = null;
+let circle = null;
 let path = [];
 
 fetch('/api/getOwner')
@@ -57,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const endInput = document.getElementById('endDateTime');
 
     function getMaxDate() {
-        return new Date(); // Devuelve el tiempo actual
+        return new Date();
     }
 
     const startFlatpickr = flatpickr(startInput, {
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedDate = selectedDates[0];
                 endFlatpickr.set('minDate', selectedDate);
                 endFlatpickr.set('maxDate', getMaxDate());
-                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
+                validateTime(startFlatpickr, endFlatpickr); 
             }
         }
     });
@@ -90,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
                 startFlatpickr.set('maxDate', selectedDate);
-                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
+                validateTime(startFlatpickr, endFlatpickr); 
             }
         }
     });
@@ -131,37 +133,6 @@ document.addEventListener('DOMContentLoaded', function () {
         input.addEventListener('focus', function (e) {
             e.target.select();
         });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    const filterType = document.getElementById('filterType');
-    const filterWrapper = document.querySelector('.filter-wrapper h2');
-    const timeFilterForm = document.getElementById('timeFilterForm');
-
-    filterType.addEventListener('change', function () {
-        if (filterType.value === 'position') {
-            filterWrapper.textContent = 'Filter by position';
-            timeFilterForm.innerHTML = ''; // Borra el formulario de tiempo
-        } else {
-            filterWrapper.textContent = 'Filter by time frame';
-            timeFilterForm.innerHTML = `
-                <label for="startDateTime">Start time:</label>
-                <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
-                
-                <label for="endDateTime">End time:</label>
-                <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
-                
-                <button id="filter-btn">Apply filter</button>
-            `;
-
-            flatpickr(".flatpickr-datetime", {
-                enableTime: true,
-                dateFormat: "d-m-Y H:i",
-                time_24hr: true,
-                allowInput: false
-            });
-        }
     });
 });
 
@@ -277,3 +248,62 @@ function convertToDatabaseFormat(dateTimeStr) {
     const [year, time] = yearTime.split(' ');
     return `${year}-${month}-${day} ${time}`;
 }
+
+document.getElementById('filterType').addEventListener('change', function (e) {
+    const selectedFilter = e.target.value;
+    document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
+    document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
+});
+
+// Evento para seleccionar la ubicación en el mapa
+document.getElementById('selectLocationBtn').addEventListener('click', function() {
+    map.addListener('click', function(event) {
+        if (selectedPosition) {
+            selectedPosition.setMap(null); // Elimina el marcador anterior si existe
+        }
+
+        selectedPosition = new google.maps.Marker({
+            position: event.latLng,
+            map: map
+        });
+
+        if (circle) {
+            circle.setMap(null); // Elimina el círculo anterior si existe
+        }
+    });
+});
+
+// Evento para aplicar el filtro de posición con radio
+document.getElementById('applyPositionFilterBtn').addEventListener('click', function() {
+    const radius = parseFloat(document.getElementById('radiusInput').value);
+    
+    if (selectedPosition) {
+        if (circle) {
+            circle.setMap(null); // Elimina el círculo anterior si existe
+        }
+        
+        circle = new google.maps.Circle({
+            strokeColor: '#530aa8',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#530aa8',
+            fillOpacity: 0.35,
+            map: map,
+            center: selectedPosition.getPosition(),
+            radius: radius,
+            strokeDasharray: '5, 5' // Líneas punteadas
+        });
+
+        map.panTo(selectedPosition.getPosition());
+    } else {
+        Swal.fire({
+            title: 'Error',
+            text: 'Please select a location on the map first.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'swal2-confirm'
+            }
+        });
+    }
+});
