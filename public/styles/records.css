@@ -58,7 +58,6 @@ nav a.main {
 /* Main */
 main {
     padding-top: 90px;
-    height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -66,7 +65,7 @@ main {
 
 .content-wrapper {
     position: absolute;
-    height: 100%;
+    height: calc(100vh - 100px);
     width: 97%;
     left: 50%;
     transform: translateX(-50%);
@@ -84,7 +83,7 @@ main {
 }
 
 .content-wrapper:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Aumenta la sombra */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); 
 }
 
 .filter-wrapper {
@@ -120,9 +119,9 @@ main {
     align-items: center;
     margin-bottom: 20px;
     position: absolute;
-    top: 32.5px;  /* Ajusta la posición desde la parte superior */
-    left: 40px; /* Ajusta la posición desde la parte izquierda */
-    z-index: 3; /* Asegura que esté por encima de otros elementos si es necesario */
+    top: 32.5px;  
+    left: 40px; 
+    z-index: 3; 
 }
 
 .filter-header span {
