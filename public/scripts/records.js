@@ -331,7 +331,7 @@ function drawCircle(position, radius, isEditable) {
         fillOpacity: 0.5,
         map: map,
         editable: isEditable,  // Si se puede editar o no
-        draggable: false  // Si se puede arrastrar o no
+        draggable: isEditable  // Si se puede arrastrar o no
     });
 
     // Si el círculo es editable, sincronizar los cambios de radio con el input
@@ -339,6 +339,11 @@ function drawCircle(position, radius, isEditable) {
         circle.addListener('radius_changed', function () {
             const updatedRadius = Math.round(circle.getRadius());
             document.getElementById('radiusInput').value = updatedRadius; // Actualizar el input
+        });
+
+        // Listener para actualizar selectedPosition al arrastrar el círculo
+        circle.addListener('center_changed', function () {
+            selectedPosition = circle.getCenter(); // Actualizar la posición seleccionada
         });
     }
 }
