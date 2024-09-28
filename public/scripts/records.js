@@ -266,11 +266,13 @@ document.addEventListener('DOMContentLoaded', function () {
             isSelectingLocation = true;
             selectLocationBtn.textContent = 'Set location';
             enableMapClick();
+            map.setOptions({ draggableCursor: 'crosshair' }); // Cambia el cursor al seleccionar en el mapa
         } else {
             if (selectedPosition) {
-                drawCircle(selectedPosition, parseFloat(radiusInput.value));
+                drawCircle(selectedPosition, parseFloat(radiusInput.value), false); // Fijar círculo
                 isSelectingLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
+                map.setOptions({ draggableCursor: null }); // Restaurar cursor normal
             } else {
                 alert('Please select a location on the map first.');
             }
@@ -288,16 +290,21 @@ document.addEventListener('DOMContentLoaded', function () {
 function enableMapClick() {
     map.addListener('click', function (event) {
         selectedPosition = event.latLng;
+
+        // Crear un pequeño círculo en el punto seleccionado
+        drawCircle(selectedPosition, 5, true); // Círculo pequeño inicial y editable
+
         if (circle) {
             circle.setMap(null); // Elimina el círculo anterior si ya existe
         }
     });
 }
 
-function drawCircle(position, radius) {
+function drawCircle(position, radius, isEditable) {
     if (circle) {
         circle.setMap(null); // Elimina el círculo anterior
     }
+
     circle = new google.maps.Circle({
         center: position,
         radius: radius,
@@ -307,7 +314,15 @@ function drawCircle(position, radius) {
         fillColor: '#C3AAff',
         fillOpacity: 0.5,
         map: map,
-        editable: true,
-        draggable: true
+        editable: isEditable, // Si se puede editar o no
+        draggable: isEditable // Si se puede arrastrar o no
     });
+
+    // Si el círculo es editable, sincronizar los cambios de radio con el input
+    if (isEditable) {
+        circle.addListener('radius_changed', function () {
+            const updatedRadius = Math.round(circle.getRadius());
+            radiusInput.value = updatedRadius; // Actualizar el input
+        });
+    }
 }
