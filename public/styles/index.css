@@ -58,7 +58,6 @@ nav a.main {
 /* Main */
 main {
     padding-top: 90px;
-    height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -66,7 +65,7 @@ main {
 
 .content-wrapper {
     position: absolute;
-    height: 100%;
+    height: calc(100vh - 100px);
     width: 97%;
     left: 50%;
     transform: translateX(-50%);
