@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
                 disableMapClick(); // Deshabilitar clics en el mapa
 
-                new google.maps.Marker({
+                markers.push(new google.maps.Marker({
                     position: selectedPosition,
                     map: map,
                     icon: {
@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         strokeColor: "#6309CE"
                     },
                     title: "Center"
-                });
+                }));
 
             } else {
                 Swal.fire({
