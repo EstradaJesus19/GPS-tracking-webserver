@@ -331,7 +331,6 @@ function drawCircle(position, radius, isEditable) {
         fillOpacity: 0.5,
         map: map,
         editable: isEditable,  // Si se puede editar o no
-        draggable: isEditable  // Si se puede arrastrar o no
     });
 
     // Si el círculo es editable, sincronizar los cambios de radio con el input
