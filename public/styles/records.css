@@ -63,7 +63,7 @@ main {
     justify-content: space-between;
 }
 
-.content-wrapper {
+.contentCard {
     position: absolute;
     height: calc(100vh - 100px);
     width: 97%;
@@ -82,28 +82,28 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.content-wrapper:hover {
+.contentCard:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); 
 }
 
-.filter-wrapper {
+.filterContainer {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.filter-wrapper h2 {
+.filterContainer h2 {
     color: #530aa8;
     font-size: 2em;
     margin-bottom: 20px;
     line-height: 0px;
 }
 
-.filter-wrapper label {
+.filterContainer label {
     font-size: 1.2em;
     margin-right: 10px;
 }
 
-.filter-wrapper input {
+.filterContainer input {
     font-size: 1.2em;
     margin-right: 20px;
     padding: 5px;
@@ -113,7 +113,7 @@ main {
     text-align: center;
 }
 
-.filter-header {
+.filterSelection {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -124,13 +124,13 @@ main {
     z-index: 3; 
 }
 
-.filter-header span {
+.filterSelection span {
     font-size: 1.2em;
     color: #505050;
     margin-right: 10px;
 }
 
-.filter-select {
+.filterSelect {
     font-size: 1em;
     padding: 8px;
     border-radius: 8px;
@@ -143,8 +143,8 @@ main {
     height: 35px;
 }
 
-.filter-select:hover, 
-.filter-select:focus {
+.filterSelect:hover, 
+.filterSelect:focus {
     box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
     border-color: #530aa8;
 }
@@ -152,6 +152,7 @@ main {
 #positionFilterForm {
     text-align: center;
     margin-top: 20px;
+    display: none;
 }
 
 #selectLocationBtn {
@@ -165,7 +166,7 @@ main {
     margin-right: 20px;
 }
 
-#applyPositionFilterBtn {
+#positionFilterBtn {
     font-size: 1.2em;
     padding: 8px 16px;
     background-color: #530aa8;
@@ -190,7 +191,7 @@ main {
     width: 100px;
 }
 
-#filter-btn {
+#timeFilterBtn{
     font-size: 1.2em;
     padding: 8px 16px;
     background-color: #530aa8;
@@ -200,11 +201,11 @@ main {
     cursor: pointer;
 }
 
-#filter-btn:hover {
+#timeFilterBtn:hover {
     background-color: #6309CE;
 }
 
-.map-container {
+.mapContainer {
     flex-grow: 1;
     width: 100%;
 }
