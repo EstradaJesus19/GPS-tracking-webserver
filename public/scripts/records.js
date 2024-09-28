@@ -269,9 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
-            if (circle) {
-                circle.setMap(null);
-            }
+            clearMap()
             // Primera vez que se presiona "Set on map"
             isSelectingLocation = true;
             selectLocationBtn.textContent = 'Set location';
@@ -337,10 +335,7 @@ function disableMapClick() {
 function handleMapClick(event) {
     selectedPosition = event.latLng;
 
-    // Si ya existe un círculo, se remueve
-    if (circle) {
-        circle.setMap(null);
-    }
+    clearMap();
 
     // Crear un círculo editable en el punto seleccionado
     drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
@@ -353,10 +348,7 @@ function handleMapClick(event) {
 }
 
 function drawCircle(position, radius, isEditable) {
-    // Si ya hay un círculo, lo eliminamos
-    if (circle) {
-        circle.setMap(null);
-    }
+    clearMap();
 
     circle = new google.maps.Circle({
         center: position,
