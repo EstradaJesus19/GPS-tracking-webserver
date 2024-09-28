@@ -254,3 +254,60 @@ document.getElementById('filterType').addEventListener('change', function (e) {
     document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
 });
+
+let selectedPosition = null;
+
+document.addEventListener('DOMContentLoaded', function () {
+    const selectLocationBtn = document.getElementById('selectLocationBtn');
+    const radiusInput = document.getElementById('radiusInput');
+    
+    selectLocationBtn.addEventListener('click', function () {
+        if (!isSelectingLocation) {
+            isSelectingLocation = true;
+            selectLocationBtn.textContent = 'Set location';
+            enableMapClick();
+        } else {
+            if (selectedPosition) {
+                drawCircle(selectedPosition, parseFloat(radiusInput.value));
+                isSelectingLocation = false;
+                selectLocationBtn.textContent = 'Select on map';
+            } else {
+                alert('Please select a location on the map first.');
+            }
+        }
+    });
+
+    radiusInput.addEventListener('input', function () {
+        if (circle) {
+            const newRadius = parseFloat(radiusInput.value);
+            circle.setRadius(newRadius);
+        }
+    });
+});
+
+function enableMapClick() {
+    map.addListener('click', function (event) {
+        selectedPosition = event.latLng;
+        if (circle) {
+            circle.setMap(null); // Elimina el círculo anterior si ya existe
+        }
+    });
+}
+
+function drawCircle(position, radius) {
+    if (circle) {
+        circle.setMap(null); // Elimina el círculo anterior
+    }
+    circle = new google.maps.Circle({
+        center: position,
+        radius: radius,
+        strokeColor: '#6309CE',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        fillColor: '#C3AAff',
+        fillOpacity: 0.5,
+        map: map,
+        editable: true,
+        draggable: true
+    });
+}
