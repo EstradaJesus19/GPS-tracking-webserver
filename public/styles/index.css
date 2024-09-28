@@ -90,6 +90,7 @@ main {
     flex-direction: column;
     width: 100%;
     align-items: center;
+    flex-basis: 20%;
 }
 
 .location-info-tittle{
