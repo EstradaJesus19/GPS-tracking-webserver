@@ -36,8 +36,8 @@ db.connect((err) => {
 });
 
 const credentials = {
-    key: fs.readFileSync( process.env.https_key ),
-    cert: fs.readFileSync( process.env.https_cert )
+    key: fs.readFileSync(process.env.https_key),
+    cert: fs.readFileSync(process.env.https_cert)
 };
 
 const httpsServer = https.createServer(credentials, app);
@@ -92,6 +92,23 @@ udpServer.on('message', (msg) => {
 udpServer.bind(udpPort);
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/index.html', (req, res) => {
+    res.redirect(301, '/');
+});
+
+app.get('/:page', (req, res, next) => {
+    const pagePath = path.join(__dirname, 'public', `${req.params.page}.html`);
+    if (fs.existsSync(pagePath)) {
+        res.sendFile(pagePath);
+    } else {
+        next(); 
+    }
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.get('/api/getApiKey', (req, res) => {
     res.json({ apiKey: process.env.api_key });
