@@ -270,53 +270,115 @@ document.addEventListener('DOMContentLoaded', function () {
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             if (circle) {
-                circle.setMap(null); 
-                circle = null;
+                circle.setMap(null);
             }
-
+            // Primera vez que se presiona "Set on map"
             isSelectingLocation = true;
-            selectLocationBtn.textContent = 'Set Location';
-            map.setOptions({ draggableCursor: 'crosshair' });
-
-            google.maps.event.addListenerOnce(map, 'click', function (event) {
-                selectedPosition = event.latLng;
-
-                circle = new google.maps.Circle({
-                    strokeColor: '#6309CE',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: '#C3AAff',
-                    fillOpacity: 0.35,
-                    map: map,
-                    center: selectedPosition,
-                    radius: parseFloat(radiusInput.value) || 5
-                });
-
-                map.setOptions({ draggableCursor: 'default' });
-                selectLocationBtn.textContent = 'Select on Map';
-
-                // Actualizar el input de radio al cambiar el tamaño del círculo
-                google.maps.event.addListener(circle, 'radius_changed', function() {
-                    radiusInput.value = circle.getRadius();
-                });
-
-                // Cambiar el radio si el input es editado
-                radiusInput.addEventListener('input', function() {
-                    circle.setRadius(parseFloat(this.value) || 5);
-                });
-            });
+            selectLocationBtn.textContent = 'Set location';
+            enableMapClick();
+            map.setOptions({ draggableCursor: 'crosshair' }); // Cambia el cursor al seleccionar en el mapa
         } else {
-            if (circle) {
-                circle.setMap(null); 
-                circle = null;
-            }
+            // Después de seleccionar la ubicación, se fija el círculo
+            if (selectedPosition) {
+                // Fijar el círculo y deshabilitar la edición
+                circle.setEditable(false);
+                circle.setDraggable(false);
+                isSelectingLocation = false;
+                selectLocationBtn.textContent = 'Select on map';
+                map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
+                disableMapClick(); // Deshabilitar clics en el mapa
 
-            isSelectingLocation = false;
-            selectLocationBtn.textContent = 'Select on Map';
-            map.setOptions({ draggableCursor: 'default' });
+                new google.maps.Marker({
+                    position: selectedPosition,
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Center"
+                });
+
+            } else {
+                Swal.fire({
+                    text: 'Select a location on the map',
+                    icon: 'error',
+                    iconColor: '#6309CE',
+                    confirmButtonText: 'Accept',
+                    confirmButtonColor: '#6309CE',
+                    customClass: {
+                        popup: 'swal2-custom-font',
+                        icon: 'swal2-icon-info-custom'
+                    }
+                });
+            }
+        }
+    });
+
+    radiusInput.addEventListener('input', function () {
+        if (circle) {
+            const newRadius = parseFloat(radiusInput.value);
+            circle.setRadius(newRadius);
         }
     });
 });
+
+function enableMapClick() {
+   map.addListener('click', handleMapClick);
+}
+
+function disableMapClick() {
+    google.maps.event.clearListeners(map, 'click');
+}
+
+function handleMapClick(event) {
+    selectedPosition = event.latLng;
+
+    // Si ya existe un círculo, se remueve
+    if (circle) {
+        circle.setMap(null);
+    }
+
+    // Crear un círculo editable en el punto seleccionado
+    drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
+
+    // Cambiar el texto del botón a "Set location"
+    document.getElementById('selectLocationBtn').textContent = 'Set location';
+
+    // Deshabilitar la capacidad de seleccionar más puntos hasta que se presione el botón de nuevo
+    // disableMapClick();
+}
+
+function drawCircle(position, radius, isEditable) {
+    // Si ya hay un círculo, lo eliminamos
+    if (circle) {
+        circle.setMap(null);
+    }
+
+    circle = new google.maps.Circle({
+        center: position,
+        radius: radius,
+        strokeColor: '#6309CE',
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+        fillColor: '#C3AAff',
+        fillOpacity: 0.5,
+        map: map,
+        editable: isEditable,  // Si se puede editar o no
+        draggable: isEditable  // Si se puede arrastrar o no
+    });
+
+    // Si el círculo es editable, sincronizar los cambios de radio con el input
+    if (isEditable) {
+        circle.addListener('radius_changed', function () {
+            const updatedRadius = Math.round(circle.getRadius());
+            document.getElementById('radiusInput').value = updatedRadius; // Actualizar el input
+        });
+    }
+}
 
 function clearMap() {
     if (polyline) {
