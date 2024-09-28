@@ -134,6 +134,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const filterType = document.getElementById('filterType');
+    const filterWrapper = document.querySelector('.filter-wrapper h2');
+    const timeFilterForm = document.getElementById('timeFilterForm');
+
+    filterType.addEventListener('change', function () {
+        if (filterType.value === 'position') {
+            filterWrapper.textContent = 'Filter by position';
+            timeFilterForm.innerHTML = ''; // Borra el formulario de tiempo
+        } else {
+            filterWrapper.textContent = 'Filter by time frame';
+            timeFilterForm.innerHTML = `
+                <label for="startDateTime">Start time:</label>
+                <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                
+                <label for="endDateTime">End time:</label>
+                <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                
+                <button id="filter-btn">Apply filter</button>
+            `;
+
+            flatpickr(".flatpickr-datetime", {
+                enableTime: true,
+                dateFormat: "d-m-Y H:i",
+                time_24hr: true,
+                allowInput: false
+            });
+        }
+    });
+});
+
 document.getElementById('filter-btn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');

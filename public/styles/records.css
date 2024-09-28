@@ -4,14 +4,14 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    overflow: hidden; /* Evitar scroll */
+    overflow: hidden; 
 }
 
 /* Header */
 header {
     display: flex;
-    justify-content: space-between;
-    padding: 5px 20%;
+    justify-content: space-around;
+    padding: 5px;
     background-color: #ffffff;
     border: 1px solid #dddddd;
     border-radius: 20px;
@@ -21,8 +21,8 @@ header {
     transform: translateX(-50%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 2;
-    width: 58%;
-    max-width: 1200px;
+    width: 97.5%;
+    box-sizing: border-box;
 }
 
 #logo {
@@ -65,17 +65,22 @@ main {
 }
 
 .content-wrapper {
+    position: absolute;
+    height: 100%;
+    width: 97%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    height: 100%;
     justify-content: flex-start;
     align-items: center;
-    background-color: #f0f0f0;
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 95.5%;
     margin: auto;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .content-wrapper:hover {
@@ -91,7 +96,7 @@ main {
     color: #530aa8;
     font-size: 2em;
     margin-bottom: 20px;
-    line-height: 20%;
+    line-height: 0px;
 }
 
 .filter-wrapper label {
@@ -105,6 +110,45 @@ main {
     padding: 5px;
     border-radius: 8px;
     border: 1px solid #ccc;
+    margin-top: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 32.5px;  /* Ajusta la posición desde la parte superior */
+    left: 40px; /* Ajusta la posición desde la parte izquierda */
+    z-index: 3; /* Asegura que esté por encima de otros elementos si es necesario */
+}
+
+.filter-header span {
+    font-size: 1.2em;
+    color: #505050;
+    margin-right: 10px;
+}
+
+.filter-select {
+    font-size: 1em;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    color: #505050;
+    outline: none;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    height: 35px;
+}
+
+.filter-select:hover, 
+.filter-select:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
 }
 
 #filter-btn {
