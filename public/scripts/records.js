@@ -1,6 +1,6 @@
 let map;
 let polyline;
-let selectedPosition = null;
+let isSelectingLocation = false;
 let circle = null;
 let path = [];
 
@@ -249,61 +249,74 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
-document.getElementById('filterType').addEventListener('change', function (e) {
-    const selectedFilter = e.target.value;
-    document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
-    document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
-});
+const selectLocationButton = document.getElementById('select-location-btn');
+const radiusInput = document.getElementById('radius-input'); 
 
-// Evento para seleccionar la ubicación en el mapa
-document.getElementById('selectLocationBtn').addEventListener('click', function() {
-    map.addListener('click', function(event) {
-        if (selectedPosition) {
-            selectedPosition.setMap(null); // Elimina el marcador anterior si existe
-        }
+const icon = {
+    url: 'media/favicon.svg', 
+    scaledSize: new google.maps.Size(40, 40), 
+    anchor: new google.maps.Point(20, 35) 
+};
 
-        selectedPosition = new google.maps.Marker({
-            position: event.latLng,
-            map: map
-        });
-
-        if (circle) {
-            circle.setMap(null); // Elimina el círculo anterior si existe
-        }
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8
     });
-});
 
-// Evento para aplicar el filtro de posición con radio
-document.getElementById('applyPositionFilterBtn').addEventListener('click', function() {
-    const radius = parseFloat(document.getElementById('radiusInput').value);
-    
-    if (selectedPosition) {
-        if (circle) {
-            circle.setMap(null); // Elimina el círculo anterior si existe
+    selectLocationButton.addEventListener('click', function() {
+        isSelectingLocation = !isSelectingLocation;
+
+        if (isSelectingLocation) {
+            selectLocationButton.textContent = 'Set Position';
+        } else {
+            selectLocationButton.textContent = 'Seleccionar ubicación';
         }
-        
-        circle = new google.maps.Circle({
-            strokeColor: '#530aa8',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#530aa8',
-            fillOpacity: 0.35,
-            map: map,
-            center: selectedPosition.getPosition(),
-            radius: radius,
-            strokeDasharray: '5, 5' // Líneas punteadas
-        });
 
-        map.panTo(selectedPosition.getPosition());
-    } else {
-        Swal.fire({
-            title: 'Error',
-            text: 'Please select a location on the map first.',
-            icon: 'error',
-            confirmButtonText: 'OK',
-            customClass: {
-                confirmButton: 'swal2-confirm'
+        map.addListener('click', function(event) {
+            if (isSelectingLocation) {
+                placeMarker(event.latLng);
+                isSelectingLocation = false;
+                selectLocationButton.textContent = 'Seleccionar ubicación';
             }
         });
+    });
+
+    radiusInput.addEventListener('input', function() {
+        if (marker) {
+            drawCircle(marker.getPosition(), parseInt(radiusInput.value, 10));
+        }
+    });
+}
+
+function placeMarker(location) {
+    if (marker) {
+        marker.setPosition(location);
+    } else {
+        marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            icon: icon
+        });
     }
-});
+
+    drawCircle(location, parseInt(radiusInput.value, 10));
+}
+
+function drawCircle(center, radius) {
+    if (circle) {
+        circle.setCenter(center);
+        circle.setRadius(radius);
+    } else {
+        circle = new google.maps.Circle({
+            map: map,
+            center: center,
+            radius: radius, 
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2
+        });
+    }
+}
