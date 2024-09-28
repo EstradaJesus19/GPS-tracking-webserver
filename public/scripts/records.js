@@ -2,6 +2,13 @@ let map;
 let polyline;
 let path = [];
 
+fetch('/api/getOwner')
+        .then(response => response.json())
+        .then(data => {
+            document.title = `Real time - ${data.owner}`;
+        })
+        .catch(error => console.error('Error fetching owner:', error));
+
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
