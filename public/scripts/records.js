@@ -2,6 +2,9 @@ let map;
 let polyline;
 let path = [];
 let markers = [];
+let circle = null;
+let isSelectingLocation = false;
+let selectedPosition = null;
 
 fetch('/api/getOwner')
     .then(response => response.json())
@@ -228,10 +231,6 @@ document.getElementById('filterType').addEventListener('change', function (e) {
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
     clearMap();
 });
-
-let circle = null;
-let isSelectingLocation = false;
-let selectedPosition = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
