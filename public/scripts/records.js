@@ -351,5 +351,5 @@ function clearMap() {
     circle.setMap(null);
     circle = null; // Resetear la variable
     polyline.setMap(null);
-    selectedPosition = null; 
+    path = [];
 }
