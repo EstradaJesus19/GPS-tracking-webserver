@@ -1,6 +1,5 @@
 let map;
 let polyline;
-let isSelectingLocation = false;
 let circle = null;
 let path = [];
 
@@ -255,12 +254,13 @@ document.getElementById('filterType').addEventListener('change', function (e) {
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
 });
 
+let isSelectingLocation = false;
 let selectedPosition = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
     const radiusInput = document.getElementById('radiusInput');
-    
+
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             isSelectingLocation = true;
@@ -269,7 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
             map.setOptions({ draggableCursor: 'crosshair' }); // Cambia el cursor al seleccionar en el mapa
         } else {
             if (selectedPosition) {
-                drawCircle(selectedPosition, parseFloat(radiusInput.value), false); // Fijar círculo
+                // Fijar círculo (ya no editable)
+                setCircleAsFixed();
                 isSelectingLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
                 map.setOptions({ draggableCursor: null }); // Restaurar cursor normal
@@ -280,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     radiusInput.addEventListener('input', function () {
-        if (circle) {
+        if (circle && circle.getEditable()) {
             const newRadius = parseFloat(radiusInput.value);
             circle.setRadius(newRadius);
         }
@@ -291,8 +292,8 @@ function enableMapClick() {
     map.addListener('click', function (event) {
         selectedPosition = event.latLng;
 
-        // Crear un pequeño círculo en el punto seleccionado
-        drawCircle(selectedPosition, 5, true); // Círculo pequeño inicial y editable
+        // Crear un círculo editable en el punto seleccionado
+        drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable
 
         if (circle) {
             circle.setMap(null); // Elimina el círculo anterior si ya existe
@@ -318,11 +319,18 @@ function drawCircle(position, radius, isEditable) {
         draggable: isEditable // Si se puede arrastrar o no
     });
 
-    // Si el círculo es editable, sincronizar los cambios de radio con el input
+    // Sincronizar cambios de radio con el input si el círculo es editable
     if (isEditable) {
         circle.addListener('radius_changed', function () {
             const updatedRadius = Math.round(circle.getRadius());
             radiusInput.value = updatedRadius; // Actualizar el input
         });
+    }
+}
+
+function setCircleAsFixed() {
+    if (circle) {
+        circle.setEditable(false); // No editable
+        circle.setDraggable(false); // No se puede arrastrar
     }
 }
