@@ -11,17 +11,17 @@ body {
 header {
     display: flex;
     justify-content: space-between;
-    padding: 5px 20%;
+    padding: 20px 20%;
     background-color: #ffffff;
     border: 1px solid #dddddd;
     border-radius: 25px;
     position: fixed;
-    top: 5px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 2;
-    width: 57.5%;
+    width: 55%;
     max-width: 1200px;
 }
 
@@ -42,6 +42,7 @@ nav ul {
 }
 
 nav li {
+    margin-right: 15px;
     font-size: 1.25em;
 }
 
@@ -62,23 +63,22 @@ nav a.main {
 
 /* Main */
 main {
-    padding: 75px 25px 50px 25px;
+    padding: 120px 50px 50px 50px;
 }
 
 .content-wrapper {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     background-color: #f0f0f0;
     border-radius: 32px;
-    padding: 0px 20px;
+    padding: 40px;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 97.5%;
+    width: 95%;
 }
 
 .content-wrapper:hover {
@@ -86,34 +86,21 @@ main {
 }
 
 .location-info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
     flex-basis: 20%;
+    padding-right: 20px;
 }
 
-.location-info-tittle{
+.location-info h1 {
     color: #530aa8;
-    font-size: 1em;
-    padding: 10px 0px 0px 0px;
-    line-height: 100%;
+    font-size: 2.25em;
 }
 
-.location-info-data{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 75%;
-    line-height: 0%;
-}
-
-.location-info-data p {
-    font-size: 1.25em;
+.location-info p {
+    font-size: 1.5em;
     font-weight: bold;
 }
 
-.location-info-data span {
+.location-info span {
     font-weight: normal;
 }
 
