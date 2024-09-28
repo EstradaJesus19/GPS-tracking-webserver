@@ -117,10 +117,10 @@ main {
 }
 
 .map-container {
-    height: 100%;
+    flex-basis: 80%;
 }
 
 #map {
-    height: 600px;
+    height: 720px;
     border-radius: 20px;
 }
