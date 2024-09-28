@@ -296,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     title: "Center"
                 });
+                
             } else {
                 Swal.fire({
                     text: 'Select a location on the map',
