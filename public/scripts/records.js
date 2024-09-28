@@ -277,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 isSelectingLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
                 map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
+                disableMapClick(); // Deshabilitar clics en el mapa
             } else {
                 alert('Please select a location on the map first.');
             }
@@ -292,20 +293,29 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function enableMapClick() {
-    map.addListener('click', function (event) {
-        selectedPosition = event.latLng;
+    map.addListener('click', handleMapClick);
+}
 
-        // Si ya existe un círculo, se remueve
-        if (circle) {
-            circle.setMap(null);
-        }
+function disableMapClick() {
+    google.maps.event.clearListeners(map, 'click');
+}
 
-        // Crear un círculo editable en el punto seleccionado
-        drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
+function handleMapClick(event) {
+    selectedPosition = event.latLng;
 
-        // Cambiar el texto del botón a "Set location"
-        document.getElementById('selectLocationBtn').textContent = 'Set location';
-    });
+    // Si ya existe un círculo, se remueve
+    if (circle) {
+        circle.setMap(null);
+    }
+
+    // Crear un círculo editable en el punto seleccionado
+    drawCircle(selectedPosition, parseFloat(radiusInput.value), true); // Editable inicialmente
+
+    // Cambiar el texto del botón a "Set location"
+    document.getElementById('selectLocationBtn').textContent = 'Set location';
+
+    // Deshabilitar la capacidad de seleccionar más puntos hasta que se presione el botón de nuevo
+    disableMapClick();
 }
 
 function drawCircle(position, radius, isEditable) {
