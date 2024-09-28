@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-document.getElementById('time-filter-btn').addEventListener('click', function (e) {
+document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
