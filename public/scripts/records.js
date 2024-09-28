@@ -260,8 +260,6 @@ let selectedPosition = null;
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
     const radiusInput = document.getElementById('radiusInput');
-
-    polyline.setMap(null);
     
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
