@@ -42,7 +42,6 @@ nav ul {
 }
 
 nav li {
-    margin-right: 15px;
     font-size: 1.25em;
 }
 
@@ -133,7 +132,7 @@ main {
     border-radius: 20px;
 }
 
-/* Estilos de Flatpickr */
+/* Flatpickr styles */
 .flatpickr-day.selected, 
 .flatpickr-day.selected:hover, 
 .flatpickr-day.selected:focus {
