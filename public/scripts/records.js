@@ -282,6 +282,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 selectLocationBtn.textContent = 'Select on map';
                 map.setOptions({ draggableCursor: null }); // Restaurar el cursor normal
                 disableMapClick(); // Deshabilitar clics en el mapa
+
+                new google.maps.Marker({
+                    position: path[0],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Center"
+                });
             } else {
                 Swal.fire({
                     text: 'Select a location on the map',
