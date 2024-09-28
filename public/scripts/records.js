@@ -109,30 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-
-    [startInput, endInput].forEach(input => {
-        input.addEventListener('input', function (e) {
-            let value = e.target.value.replace(/[^0-9]/g, '');
-            let formattedValue = '';
-
-            if (value.length >= 8) {
-                formattedValue = `${value.substring(0, 2)}-${value.substring(2, 4)}-${value.substring(4, 8)}`;
-                if (value.length > 8) {
-                    formattedValue += ` ${value.substring(8, 10)}:${value.substring(10, 12)}`;
-                }
-            } else if (value.length >= 4) {
-                formattedValue = `${value.substring(0, 2)}-${value.substring(2, 4)}`;
-            } else if (value.length >= 2) {
-                formattedValue = `${value.substring(0, 2)}`;
-            }
-
-            e.target.value = formattedValue;
-        });
-
-        input.addEventListener('focus', function (e) {
-            e.target.select();
-        });
-    });
 });
 
 document.getElementById('filter-btn').addEventListener('click', function (e) {
@@ -147,9 +123,6 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-            polyline.setMap(null);
-            path = []; 
-
             clearMarkers(); // Limpia los marcadores antes de agregar nuevos
 
             if (data.length > 0) {
@@ -227,8 +200,6 @@ document.getElementById('filter-btn').addEventListener('click', function (e) {
             }
         })
         .catch(error => {
-            polyline.setMap(null);
-            path = [];
             clearMarkers(); // Limpia los marcadores en caso de error
 
             Swal.fire({
