@@ -423,34 +423,34 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
-    function clearMap() {
-        clearCircles();
-        clearMarkers();
-        clearPolylines();
-    }
-
-    function clearMarkers() {
-        markers.forEach(marker => {
-            marker.setMap(null);
-        });
-        markers = [];
-    }
-
-    function clearCircles() {
-        if (circle) {
-            circle.setMap(null);
-            circle = null;
-        }
-    }
-
-    function clearPolylines() {
-        polylines.forEach(polyline => {
-            polyline.setMap(null);
-        });
-        polylines = [];
-    }
 });
+
+function clearMap() {
+    clearCircles();
+    clearMarkers();
+    clearPolylines();
+}
+
+function clearMarkers() {
+    markers.forEach(marker => {
+        marker.setMap(null);
+    });
+    markers = [];
+}
+
+function clearCircles() {
+    if (circle) {
+        circle.setMap(null);
+        circle = null;
+    }
+}
+
+function clearPolylines() {
+    polylines.forEach(polyline => {
+        polyline.setMap(null);
+    });
+    polylines = [];
+}
 
 
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
