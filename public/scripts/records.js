@@ -289,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         checkBtn.addEventListener('click', function () {
             if (selectedPosition) {
+                console.log(selectedPosition);
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
@@ -471,8 +472,6 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         });
         return;
     }
-
-    console.log(selectedPosition.lat());
 
     const position = {
         latitude: selectedPosition.lat(),
