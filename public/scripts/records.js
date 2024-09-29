@@ -6,8 +6,6 @@ let markers = [];
 let circle = null;
 let isSelectingLocation = false;
 let selectedPosition = null;
-let startTime = null;
-let endTime = null;
 
 fetch('/api/getOwner')
     .then(response => response.json())
@@ -123,13 +121,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     e.preventDefault(); 
 
-    clearMap();
-    path = [];
-
-    const startTime = convertToDatabaseFormat(startInput.value);
-    const endTime = convertToDatabaseFormat(endInput.value);
-
-    if (!startTime || !endTime) {
+    if (!startInput.value || !endInput.value) {
         Swal.fire({
             text: 'Please set a time frame',
             icon: 'error',
@@ -141,8 +133,14 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 icon: 'swal2-icon-info-custom'
             }
         });
-        return;
+        return;  // Detener la ejecución si no hay tiempos de inicio o final definidos
     }
+
+    clearMap();
+    path = [];
+
+    const startTime = convertToDatabaseFormat(startInput.value);
+    const endTime = convertToDatabaseFormat(endInput.value);
 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
