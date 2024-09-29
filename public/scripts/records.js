@@ -396,10 +396,11 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
                     // Combinar 'date' y 'time' en un solo objeto Date
-                    const currentTime = new Date(`${point.date}T${point.time}`);
+                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; // Combinar correctamente
+                    const currentTime = new Date(currentTimeString);
 
-                    console.log(`Date:`, point.date);
-                    console.log(`Date:`, point.time);
+                    console.log(`Point ${index + 1}:`);
+                    console.log(`Current time: ${currentTime}`);
 
                     if (previousTime) {
                         // Calcular la diferencia en segundos
