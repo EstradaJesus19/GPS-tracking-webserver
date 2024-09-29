@@ -398,8 +398,8 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     // Combinar 'date' y 'time' en un solo objeto Date
                     const currentTime = new Date(`${point.date}T${point.time}`);
 
-                    console.log(`Point ${index + 1}:`);
-                    console.log(`Current time: ${currentTime}`);
+                    console.log(`Date:`, point.date);
+                    console.log(`Date:`, point.time);
 
                     if (previousTime) {
                         // Calcular la diferencia en segundos
