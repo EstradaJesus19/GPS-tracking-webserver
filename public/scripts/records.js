@@ -486,6 +486,7 @@ function createPathSelector(paths) {
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
         buttonContainer.style.display = 'flex'; 
+        buttonContainer.style.alignItems = 'center';
 
         const button = document.createElement('button');
         button.className = 'pathButton';
