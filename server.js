@@ -131,25 +131,6 @@ app.get('/api/filterData', (req, res) => {
     );
 });
 
-app.get('/api/getDataInRadius', (req, res) => {
-    const { lat, lng, radius } = req.query;
-    const tableName = process.env.db_table;
-
-    db.query(
-        `SELECT latitude, longitude, date, time FROM ?? 
-         WHERE (POW(latitude - ?, 2) + POW(longitude - ?, 2)) <= POW(?, 2)`,
-        [tableName, lat, lng, radius],
-        (err, results) => {
-            if (err) {
-                console.error('Error fetching data:', err);
-                return res.status(500).json({ error: 'Error fetching data' });
-            }
-            res.json(results);
-        }
-    );
-});
-
-
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
