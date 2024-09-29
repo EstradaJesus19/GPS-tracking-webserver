@@ -240,6 +240,7 @@ document.getElementById('filterType').addEventListener('change', function (e) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
+    const selectLocationContainer = document.getElementById('selectLocationContainer');
     const positionFilterBtn = document.getElementById('positionFilterBtn');
     const radiusInput = document.getElementById('radiusInput');
     const pathSelectorContainer = document.getElementById('pathSelector');
@@ -256,9 +257,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // positionFilterBtn.style.color = '#6309CE';
             // positionFilterBtn.style.border = '2px solid #6309CE';
             // positionFilterBtn.disabled = true;
-            positionFilterBtn.fillOpacity = 0.5;
-            positionFilterBtn.strokeOpacity = 0.5;
-            positionFilterBtn.cursor = 'not-allowed';
+            positionFilterBtn.style.opacity = 0.5;
+            positionFilterBtn.style.cursor = 'not-allowed';
 
             selectLocationBtn.style.display = 'none'; 
             createLocationButtons();
@@ -300,9 +300,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // positionFilterBtn.style.backgroundColor = ''; // Reestablecer estilo del botón
                 // positionFilterBtn.style.color = '';
                 // positionFilterBtn.style.border = '';
-                positionFilterBtn.fillOpacity = 0.5;
-                positionFilterBtn.strokeOpacity = 0.5;
-                positionFilterBtn.cursor = 'auto';
+                positionFilterBtn.style.opacity = 1;
+                positionFilterBtn.style.cursor = 'auto';
 
                 map.setOptions({ draggableCursor: null });
                 disableMapClick();
@@ -362,14 +361,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // positionFilterBtn.style.color = '';
             // positionFilterBtn.style.border = '';
             // positionFilterBtn.disabled = false; // Habilitar el botón
-            positionFilterBtn.fillOpacity = 0.5;
-            positionFilterBtn.strokeOpacity = 0.5;
-            positionFilterBtn.cursor = 'auto';
+            positionFilterBtn.style.opacity = 1;
+            positionFilterBtn.style.cursor = 'auto';
         });
 
         buttonContainer.appendChild(checkBtn);
         buttonContainer.appendChild(cancelBtn);
-        selectLocationBtn.parentElement.appendChild(buttonContainer);
+        selectLocationContainer.appendChild(buttonContainer);
     }
 
     function clearLocationButtons() {
