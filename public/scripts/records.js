@@ -228,18 +228,22 @@ function convertToDatabaseFormat(dateTimeStr) {
 
 document.getElementById('filterType').addEventListener('change', function (e) {
     const selectedFilter = e.target.value;
+    const pathSelectorContainer = document.getElementById('pathSelector');
     document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
     document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
+    pathSelectorContainer.style.display = 'none';
     clearMap();
 });
 
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
     const radiusInput = document.getElementById('radiusInput');
+    const pathSelectorContainer = document.getElementById('pathSelector');
     
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             clearMap()
+            pathSelectorContainer.style.display = 'none';
             isSelectingLocation = true;
             selectLocationBtn.textContent = 'Set location';
             enableMapClick();
