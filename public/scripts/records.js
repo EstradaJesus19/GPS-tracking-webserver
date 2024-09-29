@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
-                isSetLocation = false;
+                isSetLocation = true;
                 selectLocationBtn.textContent = 'Select on map';
                 map.setOptions({ draggableCursor: null }); 
                 disableMapClick(); 
