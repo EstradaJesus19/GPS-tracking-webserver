@@ -158,6 +158,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 });
 
                 polyline.setMap(map);
+                polylines.push(polyline);
                 map.fitBounds(bounds);
 
                 markers.push(new google.maps.Marker({
