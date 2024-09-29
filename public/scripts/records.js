@@ -271,20 +271,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function createLocationButtons() {
         const buttonContainer = document.createElement('div');
         buttonContainer.id = 'locationButtons';
-        buttonContainer.style.display = 'flex';
+        buttonContainer.style.display = 'inline';
         buttonContainer.style.gap = '10px';
         buttonContainer.style.justifyContent = 'center';
         buttonContainer.style.marginTop = '10px';
 
         // Botón de chulito
         const checkBtn = document.createElement('button');
-        checkBtn.innerHTML = '<img src="../media/check.svg" alt="Check">';
-        checkBtn.style.backgroundColor = '#6309CE';
-        checkBtn.style.color = 'white';
+        checkBtn.innerHTML = '<img src="media/check.svg" alt="Check">';
+        checkBtn.style.backgroundColor = '#ffffff';
+        checkBtn.style.border = '2px solid #6309CE';
         checkBtn.style.borderRadius = '50%';
         checkBtn.style.width = '40px';
         checkBtn.style.height = '40px';
-        checkBtn.style.border = 'none';
         checkBtn.style.cursor = 'pointer';
 
         checkBtn.addEventListener('click', function () {
@@ -337,13 +336,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Botón de x
         const cancelBtn = document.createElement('button');
-        cancelBtn.innerHTML = '<img src="../media/cancel.svg" alt="Cancel">';
-        cancelBtn.style.backgroundColor = '#6309CE';
-        cancelBtn.style.color = 'white';
+        cancelBtn.innerHTML = '<img src="media/cancel.svg" alt="Cancel">';
+        cancelBtn.style.backgroundColor = '#ffffff';
+        cancelBtn.style.border = '2px solid #6309CE';
         cancelBtn.style.borderRadius = '50%';
         cancelBtn.style.width = '40px';
         cancelBtn.style.height = '40px';
-        cancelBtn.style.border = 'none';
         cancelBtn.style.cursor = 'pointer';
 
         cancelBtn.addEventListener('click', function () {
