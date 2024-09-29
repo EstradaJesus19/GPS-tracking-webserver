@@ -355,3 +355,109 @@ function clearMarkers() {
     });
     markers = []; 
 }
+
+document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
+    e.preventDefault(); 
+
+    const position = {
+        latitude: selectedPosition.lat(),
+        longitude: selectedPosition.lng(),
+        radius: parseFloat(radiusInput.value)
+    };
+
+    // Solicita los datos filtrados por posición y radio
+    fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
+        .then(response => response.json())
+        .then(data => {
+            clearMap(); 
+
+            if (data.length > 0) {
+                const bounds = new google.maps.LatLngBounds();
+
+                data.forEach(point => {
+                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                    path.push(latLng);
+                    bounds.extend(latLng);
+                });
+
+                polyline = new google.maps.Polyline({
+                    path: path,
+                    strokeColor: '#6309CE',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 5,
+                    icons: [{
+                        icon: {
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                            scale: 3,
+                            strokeColor: '#6309CE',
+                            strokeWeight: 2,
+                            fillColor: '#6309CE',
+                            fillOpacity: 1.0,
+                        },
+                        offset: '100%',
+                        repeat: '100px'
+                    }]
+                });
+
+                polyline.setMap(map);
+                map.fitBounds(bounds);
+
+                markers.push(new google.maps.Marker({
+                    position: path[0],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Start"
+                }));
+
+                markers.push(new google.maps.Marker({
+                    position: path[path.length - 1],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "End"
+                }));
+
+            } else {
+                Swal.fire({
+                    text: 'No data found in the specified area.',
+                    icon: 'info',
+                    iconColor: '#6309CE',
+                    confirmButtonText: 'Accept',
+                    confirmButtonColor: '#6309CE',
+                    customClass: {
+                        popup: 'swal2-custom-font',
+                        icon: 'swal2-icon-info-custom'
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            clearMap();
+
+            Swal.fire({
+                text: 'Error fetching filtered data: ' + error,
+                icon: 'error',
+                iconColor: '#6309CE',
+                confirmButtonText: 'Accept',
+                confirmButtonColor: '#6309CE',
+                customClass: {
+                    popup: 'swal2-custom-font',
+                    icon: 'swal2-icon-info-custom'
+                }
+            });
+            console.error('Error fetching filtered data: ', error);
+        });
+});
