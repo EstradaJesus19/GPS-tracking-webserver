@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
     const radiusInput = document.getElementById('radiusInput');
     const pathSelectorContainer = document.getElementById('pathSelector');
+    const positionFilterBtn = document.getElementById('positionFilterBtn');
     
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
@@ -250,15 +251,21 @@ document.addEventListener('DOMContentLoaded', function () {
             isSelectingLocation = true;
             selectedPosition = null;
             selectLocationBtn.textContent = 'Set location';
+            selectLocationBtn.style.backgroundColor = 'purple';
             enableMapClick();
-            map.setOptions({ draggableCursor: 'crosshair' }); 
+            map.setOptions({ draggableCursor: 'crosshair' });
+
+            positionFilterBtn.style.backgroundColor = 'white';
+            positionFilterBtn.style.color = 'purple';
+            positionFilterBtn.style.borderColor = 'purple';
+            positionFilterBtn.disabled = true; 
         } else {
             if (selectedPosition) {
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
-                map.setOptions({ draggableCursor: null }); 
+                map.setOptions({ draggableCursor: null });
                 disableMapClick(); 
 
                 markers.push(new google.maps.Marker({
@@ -275,6 +282,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     title: "Center"
                 }));
 
+                // Reset positionFilterBtn styles
+                positionFilterBtn.disabled = false;
+                positionFilterBtn.style.backgroundColor = ''; // Reset to original
+                positionFilterBtn.style.color = ''; // Reset to original
+                positionFilterBtn.style.borderColor = ''; // Reset to original
+
+                displayConfirmCancelButtons();
             } else {
                 Swal.fire({
                     text: 'Set a location on the map',
@@ -300,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function enableMapClick() {
-   map.addListener('click', handleMapClick);
+    map.addListener('click', handleMapClick);
 }
 
 function disableMapClick() {
@@ -408,41 +422,88 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                 let endTime = null;
 
                 data.forEach((point, index) => {
-                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                    const latLng = new google.maps.LatLng(point.latitude, point.longitude);
+                    const pointTime = new Date(point.time); 
 
-                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
-                    const currentTime = new Date(currentTimeString);
+                    if (index === 0 || (pointTime - previousTime) < 120000) { 
+                        currentPath.push(latLng);
+                        bounds.extend(latLng);
 
-                    if (previousTime) {
-                        const timeDifference = (currentTime - previousTime) / 1000; 
-
-                        if (timeDifference > 60) {
-                            if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, startTime: startTime, endTime: endTime }); 
-                            }
-                            currentPath = []; 
+                        if (index === 0) {
+                            startTime = point.time;
                         }
+
+                        previousTime = pointTime; 
+                    } else {
+                        paths.push({ path: currentPath, startTime, endTime: previousTime }); 
+                        currentPath = [latLng]; 
+                        previousTime = pointTime;
+                        startTime = point.time;
                     }
 
-                    if (!currentPath.length) {
-                        startTime = currentTime; 
-                    }
-                    endTime = currentTime; 
-                    currentPath.push(latLng); 
-                    bounds.extend(latLng); 
-                    previousTime = currentTime; 
+                    endTime = point.time;
                 });
 
                 if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
+                    paths.push({ path: currentPath, startTime, endTime }); 
                 }
 
-                createPathSelector(paths);
-                selectPath(0, paths);
+                paths.forEach((segment, i) => {
+                    const segmentPolyline = new google.maps.Polyline({
+                        path: segment.path,
+                        strokeColor: '#6309CE',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        icons: [{
+                            icon: {
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                scale: 3,
+                                strokeColor: '#6309CE',
+                                strokeWeight: 2,
+                                fillColor: '#6309CE',
+                                fillOpacity: 1.0,
+                            },
+                            offset: '100%',
+                            repeat: '100px'
+                        }]
+                    });
+
+                    segmentPolyline.setMap(map);
+                    polylines.push(segmentPolyline);
+                });
+
                 map.fitBounds(bounds);
+
+                markers.push(new google.maps.Marker({
+                    position: paths[0].path[0],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "Start"
+                }));
+
+                markers.push(new google.maps.Marker({
+                    position: paths[paths.length - 1].path[paths[paths.length - 1].path.length - 1],
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 5,
+                        fillColor: "#C3AAff",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#6309CE"
+                    },
+                    title: "End"
+                }));
             } else {
                 Swal.fire({
-                    text: 'No data found in the specified area.',
+                    text: 'No data found in the specified position.',
                     icon: 'info',
                     iconColor: '#6309CE',
                     confirmButtonText: 'Accept',
@@ -458,7 +519,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
             clearMap();
 
             Swal.fire({
-                text: 'Error fetching filtered data: ' + error,
+                text: 'Error getting position filtered data: ' + error,
                 icon: 'error',
                 iconColor: '#6309CE',
                 confirmButtonText: 'Accept',
@@ -468,97 +529,27 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     icon: 'swal2-icon-info-custom'
                 }
             });
-            console.error('Error fetching filtered data: ', error);
+            console.error('Error getting position filtered data: ', error);
         });
 });
 
-function createPathSelector(paths) {
+function displayConfirmCancelButtons() {
     const pathSelectorContainer = document.getElementById('pathSelector');
-    const pathButtonsContainer = document.getElementById('pathButtons');
-    pathButtonsContainer.innerHTML = ''; 
-
-    if (paths.length === 0) {
-        pathSelectorContainer.style.display = 'none';
-        return;
-    }
-    pathSelectorContainer.style.display = 'block'; 
-
-    paths.forEach((pathInfo, index) => {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.style.display = 'flex'; 
-        buttonContainer.style.alignItems = 'center';
-
-        const button = document.createElement('button');
-        button.className = 'pathButton';
-        button.innerText = `Path ${index + 1}`;
-        button.onclick = () => selectPath(index, paths);
-        
-        const startDate = new Date(pathInfo.startTime);
-        const endDate = new Date(pathInfo.endTime);
-        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
-        
-        const timeText = document.createElement('span');
-        timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
-        timeText.style.marginLeft = '5px'; 
-
-        buttonContainer.appendChild(button);
-        buttonContainer.appendChild(timeText);
-        pathButtonsContainer.appendChild(buttonContainer);
-    });
+    pathSelectorContainer.style.display = 'block';
 }
 
-function selectPath(index, paths) {
-    clearPolylines();
-    clearMarkers(); 
+document.getElementById('cancelPathSelectionBtn').addEventListener('click', function () {
+    clearMap();
+    document.getElementById('pathSelector').style.display = 'none';
+    document.getElementById('selectLocationBtn').textContent = 'Select on map';
+    isSelectingLocation = false;
+});
 
-    const polyline = new google.maps.Polyline({
-        path: paths[index].path,
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-        icons: [{
-            icon: {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                scale: 3,
-                strokeColor: '#6309CE',
-                strokeWeight: 2,
-                fillColor: '#6309CE',
-                fillOpacity: 1.0,
-            },
-            offset: '100%',
-            repeat: '100px'
-        }]
-    });
-
-    polyline.setMap(map); 
-    polylines.push(polyline);
-
-    markers.push(new google.maps.Marker({
-        position: paths[index].path[0],
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: `Start of path ${index + 1}`
-    }));
-
-    markers.push(new google.maps.Marker({
-        position: paths[index].path[paths[index].path.length - 1],
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: `End of path ${index + 1}`
-    }));
-}
+document.getElementById('confirmPathSelectionBtn').addEventListener('click', function () {
+    const positionFilterBtn = document.getElementById('positionFilterBtn');
+    document.getElementById('pathSelector').style.display = 'none';
+    positionFilterBtn.style.backgroundColor = ''; 
+    positionFilterBtn.style.color = ''; 
+    positionFilterBtn.style.borderColor = ''; 
+    positionFilterBtn.disabled = false; 
+});
