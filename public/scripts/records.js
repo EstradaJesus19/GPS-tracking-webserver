@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 Swal.fire({
-                    text: 'Select a location on the map',
+                    text: 'Set a location on the map',
                     icon: 'error',
                     iconColor: '#6309CE',
                     confirmButtonText: 'Accept',
@@ -399,12 +399,13 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
                 let paths = []; 
                 let currentPath = []; 
                 let previousTime = null; 
+                let startTime = null;
+                let endTime = null;
 
                 data.forEach((point, index) => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
@@ -417,25 +418,27 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
 
                         if (timeDifference > 60) {
                             if (currentPath.length > 0) {
-                                paths.push(currentPath); 
+                                paths.push({ path: currentPath, startTime: startTime, endTime: endTime }); 
                             }
                             currentPath = []; 
                         }
                     }
 
+                    if (!currentPath.length) {
+                        startTime = currentTime; 
+                    }
+                    endTime = currentTime; 
                     currentPath.push(latLng); 
                     bounds.extend(latLng); 
                     previousTime = currentTime; 
-
-                    if (index === data.length - 1 && currentPath.length > 0) {
-                        paths.push(currentPath);
-                    }
                 });
 
+                if (currentPath.length > 0) {
+                    paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
+                }
+
                 createPathSelector(paths);
-
                 selectPath(0, paths);
-
                 map.fitBounds(bounds);
             } else {
                 Swal.fire({
@@ -480,10 +483,17 @@ function createPathSelector(paths) {
     }
     pathSelectorContainer.style.display = 'block'; 
 
-    paths.forEach((path, index) => {
+    paths.forEach((pathInfo, index) => {
         const button = document.createElement('button');
-        button.className = 'pathButton';
-        button.innerText = `Path ${index + 1}`;
+        button.className = 'path-button';
+
+        const startDate = new Date(pathInfo.startTime);
+        const endDate = new Date(pathInfo.endTime);
+        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+
+        // Asignar el texto del botón
+        button.innerText = `Path ${index + 1} (${startTimeFormatted} - ${endTimeFormatted})`;
         button.onclick = () => selectPath(index, paths);
         pathButtonsContainer.appendChild(button);
     });
@@ -494,7 +504,7 @@ function selectPath(index, paths) {
     clearMarkers(); 
 
     const polyline = new google.maps.Polyline({
-        path: paths[index],
+        path: paths[index].path,
         strokeColor: '#6309CE',
         strokeOpacity: 1.0,
         strokeWeight: 5,
@@ -516,7 +526,7 @@ function selectPath(index, paths) {
     polylines.push(polyline);
 
     markers.push(new google.maps.Marker({
-        position: paths[index][0],
+        position: paths[index].path[0],
         map: map,
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
@@ -530,7 +540,7 @@ function selectPath(index, paths) {
     }));
 
     markers.push(new google.maps.Marker({
-        position: paths[index][paths[index].length - 1],
+        position: paths[index].path[paths[index].path.length - 1],
         map: map,
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
@@ -543,4 +553,3 @@ function selectPath(index, paths) {
         title: `End of path ${index + 1}`
     }));
 }
-
