@@ -359,6 +359,22 @@ function clearMarkers() {
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
     e.preventDefault(); 
 
+    // Verifica que se haya seleccionado una posición y radio
+    if (!selectedPosition || !radiusInput.value) {
+        Swal.fire({
+            text: 'Please select a location and define a radius',
+            icon: 'error',
+            iconColor: '#6309CE',
+            confirmButtonText: 'Accept',
+            confirmButtonColor: '#6309CE',
+            customClass: {
+                popup: 'swal2-custom-font',
+                icon: 'swal2-icon-info-custom'
+            }
+        });
+        return;
+    }
+
     const position = {
         latitude: selectedPosition.lat(),
         longitude: selectedPosition.lng(),
