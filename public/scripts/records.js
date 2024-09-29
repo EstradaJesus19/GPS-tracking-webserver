@@ -359,7 +359,6 @@ function clearMarkers() {
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
     e.preventDefault(); 
 
-    // Verifica que se haya seleccionado una posición y radio
     if (!selectedPosition || !radiusInput.value) {
         Swal.fire({
             text: 'Please select a location and define a radius',
@@ -381,71 +380,94 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         radius: parseFloat(radiusInput.value)
     };
 
-    // Solicita los datos filtrados por posición y radio
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-            clearMap(); 
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
+                let paths = []; // Lista de todos los paths
+                let currentPath = []; // El path actual
+                let previousTime = new Date(data[0].timestamp); // Almacena el tiempo del punto anterior
 
-                data.forEach(point => {
+                // Iterar sobre los puntos filtrados
+                data.forEach((point, index) => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-                    path.push(latLng);
-                    bounds.extend(latLng);
+                    const currentTime = new Date(point.timestamp);
+
+                    // Si la diferencia entre el tiempo actual y el anterior es mayor de 1 minuto, inicia un nuevo path
+                    if ((currentTime - previousTime) / 1000 > 60) {
+                        if (currentPath.length > 0) {
+                            paths.push(currentPath); // Guarda el path actual en paths
+                        }
+                        currentPath = []; // Inicia un nuevo path
+                    }
+
+                    currentPath.push(latLng); // Agrega el punto actual al path
+                    bounds.extend(latLng); // Expande los límites del mapa
+                    previousTime = currentTime; // Actualiza el tiempo anterior al actual
+
+                    // Si es el último punto, guarda el path
+                    if (index === data.length - 1 && currentPath.length > 0) {
+                        paths.push(currentPath);
+                    }
                 });
 
-                polyline = new google.maps.Polyline({
-                    path: path,
-                    strokeColor: '#6309CE',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 5,
-                    icons: [{
+                // Mostrar cada path en el mapa
+                paths.forEach((path, pathIndex) => {
+                    const polyline = new google.maps.Polyline({
+                        path: path,
+                        strokeColor: '#6309CE',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        icons: [{
+                            icon: {
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                scale: 3,
+                                strokeColor: '#6309CE',
+                                strokeWeight: 2,
+                                fillColor: '#6309CE',
+                                fillOpacity: 1.0,
+                            },
+                            offset: '100%',
+                            repeat: '100px'
+                        }]
+                    });
+
+                    polyline.setMap(map); // Muestra la línea en el mapa
+
+                    // Agregar marcadores de inicio y fin para cada path
+                    markers.push(new google.maps.Marker({
+                        position: path[0],
+                        map: map,
                         icon: {
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                            scale: 3,
-                            strokeColor: '#6309CE',
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
                             strokeWeight: 2,
-                            fillColor: '#6309CE',
-                            fillOpacity: 1.0,
+                            strokeColor: "#6309CE"
                         },
-                        offset: '100%',
-                        repeat: '100px'
-                    }]
+                        title: `Start of path ${pathIndex + 1}`
+                    }));
+
+                    markers.push(new google.maps.Marker({
+                        position: path[path.length - 1],
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: `End of path ${pathIndex + 1}`
+                    }));
                 });
 
-                polyline.setMap(map);
+                // Ajustar los límites del mapa para que todos los paths sean visibles
                 map.fitBounds(bounds);
-
-                markers.push(new google.maps.Marker({
-                    position: path[0],
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "Start"
-                }));
-
-                markers.push(new google.maps.Marker({
-                    position: path[path.length - 1],
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "End"
-                }));
-
             } else {
                 Swal.fire({
                     text: 'No data found in the specified area.',
@@ -477,64 +499,3 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
             console.error('Error fetching filtered data: ', error);
         });
 });
-
-function separatePathsByTime(data) {
-    const timeThreshold = 60000; // 1 minuto en milisegundos
-    let paths = [];
-    let currentPath = [];
-
-    data.forEach((point, index) => {
-        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-        const currentTime = new Date(point.timestamp).getTime();
-
-        if (currentPath.length === 0) {
-            currentPath.push(latLng);
-        } else {
-            const previousTime = new Date(data[index - 1].timestamp).getTime();
-            if (currentTime - previousTime > timeThreshold) {
-                // Si ha pasado más de un minuto, comienza un nuevo path
-                paths.push(currentPath);
-                currentPath = [];
-            }
-            currentPath.push(latLng);
-        }
-    });
-
-    if (currentPath.length > 0) {
-        paths.push(currentPath); // Añadir el último path si existe
-    }
-
-    return paths;
-}
-
-function addStartEndMarkers(start, end) {
-    // Añadir marcador de inicio
-    markers.push(new google.maps.Marker({
-        position: start,
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: "Start"
-    }));
-
-    // Añadir marcador de fin
-    markers.push(new google.maps.Marker({
-        position: end,
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: "End"
-    }));
-}
