@@ -274,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
         buttonContainer.style.display = 'inline';
         buttonContainer.style.gap = '10px';
         buttonContainer.style.justifyContent = 'center';
-        buttonContainer.style.marginTop = '20px';
 
         // Botón de chulito
         const checkBtn = document.createElement('button');
@@ -301,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // positionFilterBtn.style.color = '';
                 // positionFilterBtn.style.border = '';
                 positionFilterBtn.style.opacity = 1;
-                positionFilterBtn.style.cursor = 'auto';
+                positionFilterBtn.style.cursor = 'pointer';
 
                 map.setOptions({ draggableCursor: null });
                 disableMapClick();
@@ -362,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // positionFilterBtn.style.border = '';
             // positionFilterBtn.disabled = false; // Habilitar el botón
             positionFilterBtn.style.opacity = 1;
-            positionFilterBtn.style.cursor = 'auto';
+            positionFilterBtn.style.cursor = 'pointer';
         });
 
         buttonContainer.appendChild(checkBtn);
@@ -478,6 +477,8 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         longitude: selectedPosition.lng(),
         radius: parseFloat(radiusInput.value)
     };
+
+    console.log(position);
 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
