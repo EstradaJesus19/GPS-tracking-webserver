@@ -95,7 +95,7 @@ main {
 
 .location-info h1 {
     color: #530aa8;
-    font-size: 2em;
+    font-size: 1em;
     line-height: 25%;
     padding-bottom: 5px;
 }
@@ -107,7 +107,7 @@ main {
 }
 
 .location-data p {
-    font-size: 1.25em;
+    font-size: 0.8em;
     font-weight: bold;
     margin: 0;
 }
