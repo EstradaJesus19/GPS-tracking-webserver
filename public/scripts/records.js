@@ -6,6 +6,7 @@ let markers = [];
 let circle = null;
 let isSelectingLocation = false;
 let selectedPosition = null;
+let isSetLocation = false;
 
 fetch('/api/getOwner')
     .then(response => response.json())
@@ -256,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
+                isSetLocation = false;
                 selectLocationBtn.textContent = 'Select on map';
                 map.setOptions({ draggableCursor: null }); 
                 disableMapClick(); 
@@ -374,7 +376,7 @@ function clearPolylines() {
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
     e.preventDefault();
 
-    if (!selectedPosition || !radiusInput.value) {
+    if (!isSetLocation || !radiusInput.value) {
         Swal.fire({
             text: 'Please select a location and define a radius',
             icon: 'error',
@@ -432,10 +434,8 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     }
                 });
 
-                // Crear botones para seleccionar paths
                 createPathSelector(paths);
 
-                // Inicializar el primer path en el mapa
                 selectPath(0, paths);
 
                 map.fitBounds(bounds);
