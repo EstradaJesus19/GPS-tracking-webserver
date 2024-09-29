@@ -353,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
             map.setOptions({ draggableCursor: null });
             disableMapClick();
             isSelectingLocation = false;
+            selectedPosition = null;
 
             // Reestablecer estilo del botón positionFilterBtn
             // positionFilterBtn.style.backgroundColor = '';
