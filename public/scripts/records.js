@@ -121,7 +121,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     e.preventDefault(); 
 
-    clearMap(); 
+    clearMap();
+    path = [];
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
