@@ -121,6 +121,21 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     e.preventDefault(); 
 
+    if (!startInput || !endInput) {
+        Swal.fire({
+            text: 'Please set a time frame',
+            icon: 'error',
+            iconColor: '#6309CE',
+            confirmButtonText: 'Accept',
+            confirmButtonColor: '#6309CE',
+            customClass: {
+                popup: 'swal2-custom-font',
+                icon: 'swal2-icon-info-custom'
+            }
+        });
+        return;
+    }
+
     clearMap();
     path = [];
 
