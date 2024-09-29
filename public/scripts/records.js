@@ -484,18 +484,24 @@ function createPathSelector(paths) {
     pathSelectorContainer.style.display = 'block'; 
 
     paths.forEach((pathInfo, index) => {
+        const buttonContainer = document.createElement('div');
         const button = document.createElement('button');
-        button.className = 'path-button';
-
+        button.className = 'pathButton';
+        button.innerText = `Path ${index + 1}`;
+        button.onclick = () => selectPath(index, paths);
+        
         const startDate = new Date(pathInfo.startTime);
         const endDate = new Date(pathInfo.endTime);
         const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
         const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+        
+        const timeText = document.createElement('span');
+        timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
+        timeText.style.marginLeft = '10px'; 
 
-        // Asignar el texto del botón
-        button.innerText = `Path ${index + 1} (${startTimeFormatted} - ${endTimeFormatted})`;
-        button.onclick = () => selectPath(index, paths);
-        pathButtonsContainer.appendChild(button);
+        buttonContainer.appendChild(button);
+        buttonContainer.appendChild(timeText);
+        pathButtonsContainer.appendChild(buttonContainer);
     });
 }
 
