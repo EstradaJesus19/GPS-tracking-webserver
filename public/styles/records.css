@@ -149,6 +149,11 @@ main {
     border-color: #530aa8;
 }
 
+#selectLocationContainer {
+    display: inline;
+    align-items: center;
+}
+
 #positionFilterForm {
     text-align: center;
     margin-top: 20px;

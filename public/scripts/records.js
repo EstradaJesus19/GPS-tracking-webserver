@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         buttonContainer.style.display = 'inline';
         buttonContainer.style.gap = '10px';
         buttonContainer.style.justifyContent = 'center';
-        buttonContainer.style.marginTop = '10px';
+        buttonContainer.style.marginTop = '20px';
 
         // Botón de chulito
         const checkBtn = document.createElement('button');
@@ -285,6 +285,8 @@ document.addEventListener('DOMContentLoaded', function () {
         checkBtn.style.width = '40px';
         checkBtn.style.height = '40px';
         checkBtn.style.cursor = 'pointer';
+        checkBtn.style.marginRight = '10px';
+        checkBtn.style.padding = '2px';
 
         checkBtn.addEventListener('click', function () {
             if (selectedPosition) {
@@ -343,12 +345,15 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelBtn.style.width = '40px';
         cancelBtn.style.height = '40px';
         cancelBtn.style.cursor = 'pointer';
+        cancelBtn.style.marginRight = '10px';
+        cancelBtn.style.padding = '2px';
 
         cancelBtn.addEventListener('click', function () {
             clearLocationButtons(); // Limpiar los botones morados
             selectLocationBtn.style.display = 'inline'; // Mostrar el botón selectLocationBtn de nuevo
 
             clearMap();
+            map.setOptions({ draggableCursor: null });
             disableMapClick();
             isSelectingLocation = false;
 
