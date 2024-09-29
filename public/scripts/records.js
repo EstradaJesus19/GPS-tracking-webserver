@@ -252,16 +252,16 @@ document.addEventListener('DOMContentLoaded', function () {
             pathSelectorContainer.style.display = 'none';
             isSelectingLocation = true;
             selectedPosition = null;
+            // positionFilterBtn.style.backgroundColor = 'white';
+            // positionFilterBtn.style.color = '#6309CE';
+            // positionFilterBtn.style.border = '2px solid #6309CE';
+            // positionFilterBtn.disabled = true;
+            positionFilterBtn.fillOpacity = 0.5;
+            positionFilterBtn.strokeOpacity = 0.5;
+            positionFilterBtn.cursor = 'not-allowed';
 
-            // Cambiar estilo de positionFilterBtn
-            positionFilterBtn.style.backgroundColor = 'white';
-            positionFilterBtn.style.color = '#6309CE';
-            positionFilterBtn.style.border = '2px solid #6309CE';
-            positionFilterBtn.disabled = true;
-
-            // Cambiar texto y funcionalidad del botón
-            selectLocationBtn.style.display = 'none'; // Ocultar el botón selectLocationBtn
-            createLocationButtons(); // Crear los botones morados
+            selectLocationBtn.style.display = 'none'; 
+            createLocationButtons();
 
             enableMapClick();
             map.setOptions({ draggableCursor: 'crosshair' });
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Botón de chulito
         const checkBtn = document.createElement('button');
-        checkBtn.innerHTML = '✔';
+        checkBtn.innerHTML = '<img src="../media/check.svg" alt="Check">';
         checkBtn.style.backgroundColor = '#6309CE';
         checkBtn.style.color = 'white';
         checkBtn.style.borderRadius = '50%';
@@ -294,13 +294,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 isSelectingLocation = false;
 
                 clearLocationButtons(); // Limpiar los botones morados
-                selectLocationBtn.textContent = 'Select on map';
-                selectLocationBtn.style.display = 'block'; // Mostrar el botón selectLocationBtn de nuevo
+                selectLocationBtn.style.display = 'inline'; // Mostrar el botón selectLocationBtn de nuevo
 
-                positionFilterBtn.style.backgroundColor = ''; // Reestablecer estilo del botón
-                positionFilterBtn.style.color = '';
-                positionFilterBtn.style.border = '';
-                positionFilterBtn.disabled = false; // Habilitar el botón
+                // positionFilterBtn.style.backgroundColor = ''; // Reestablecer estilo del botón
+                // positionFilterBtn.style.color = '';
+                // positionFilterBtn.style.border = '';
+                positionFilterBtn.fillOpacity = 0.5;
+                positionFilterBtn.strokeOpacity = 0.5;
+                positionFilterBtn.cursor = 'auto';
 
                 map.setOptions({ draggableCursor: null });
                 disableMapClick();
@@ -318,6 +319,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     title: "Center"
                 }));
+                
             } else {
                 Swal.fire({
                     text: 'Set a location on the map',
@@ -335,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Botón de x
         const cancelBtn = document.createElement('button');
-        cancelBtn.innerHTML = '✘';
+        cancelBtn.innerHTML = '<img src="../media/cancel.svg" alt="Cancel">';
         cancelBtn.style.backgroundColor = '#6309CE';
         cancelBtn.style.color = 'white';
         cancelBtn.style.borderRadius = '50%';
@@ -346,18 +348,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
         cancelBtn.addEventListener('click', function () {
             clearLocationButtons(); // Limpiar los botones morados
-            selectLocationBtn.style.display = 'block'; // Mostrar el botón selectLocationBtn de nuevo
-            selectLocationBtn.textContent = 'Select on map';
+            selectLocationBtn.style.display = 'inline'; // Mostrar el botón selectLocationBtn de nuevo
 
             clearMap();
             disableMapClick();
             isSelectingLocation = false;
 
             // Reestablecer estilo del botón positionFilterBtn
-            positionFilterBtn.style.backgroundColor = '';
-            positionFilterBtn.style.color = '';
-            positionFilterBtn.style.border = '';
-            positionFilterBtn.disabled = false; // Habilitar el botón
+            // positionFilterBtn.style.backgroundColor = '';
+            // positionFilterBtn.style.color = '';
+            // positionFilterBtn.style.border = '';
+            // positionFilterBtn.disabled = false; // Habilitar el botón
+            positionFilterBtn.fillOpacity = 0.5;
+            positionFilterBtn.strokeOpacity = 0.5;
+            positionFilterBtn.cursor = 'auto';
         });
 
         buttonContainer.appendChild(checkBtn);
