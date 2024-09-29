@@ -281,20 +281,26 @@ input[type="number"] {
 }
 
 /* Path selector */ 
-.path-selector {
+.pathSelectors {
     display: none;
     position: absolute;
     bottom: 40px;
     left: 60px;
+    width: 300px;
     background-color: white;
-    border: 2px solid #6309CE;
     border-radius: 10px;
     padding: 10px;
     z-index: 1000; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.path-selector h4 {
+.pathSelectors:hover, 
+.pathSelectors:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.pathSelectors h4 {
     margin: 0 0 10px 0;
     font-size: 16px;
 }
@@ -304,7 +310,7 @@ input[type="number"] {
     overflow-y: auto; 
 }
 
-.path-button {
+.pathButton {
     display: block;
     margin: 5px 0;
     padding: 5px 10px;
@@ -316,6 +322,6 @@ input[type="number"] {
     transition: background-color 0.3s;
 }
 
-.path-button:hover {
+.pathButton:hover {
     background-color: #5b0b97;
 }

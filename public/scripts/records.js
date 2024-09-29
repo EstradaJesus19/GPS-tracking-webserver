@@ -477,7 +477,7 @@ function createPathSelector(paths) {
 
     paths.forEach((path, index) => {
         const button = document.createElement('button');
-        button.className = 'path-button';
+        button.className = 'pathButton';
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
         pathButtonsContainer.appendChild(button);
