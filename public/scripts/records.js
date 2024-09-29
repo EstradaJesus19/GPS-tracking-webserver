@@ -121,7 +121,13 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     e.preventDefault(); 
 
-    if (!startInput || !endInput) {
+    clearMap();
+    path = [];
+
+    const startTime = convertToDatabaseFormat(startInput.value);
+    const endTime = convertToDatabaseFormat(endInput.value);
+
+    if (!startTime || !endTime) {
         Swal.fire({
             text: 'Please set a time frame',
             icon: 'error',
@@ -135,12 +141,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
         return;
     }
-
-    clearMap();
-    path = [];
-
-    const startTime = convertToDatabaseFormat(startInput.value);
-    const endTime = convertToDatabaseFormat(endInput.value);
 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
