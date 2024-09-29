@@ -253,6 +253,7 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedPosition = null;
             positionFilterBtn.style.opacity = 0.5;
             positionFilterBtn.style.cursor = 'not-allowed';
+            positionFilterBtn.disabled = true;
 
             selectLocationBtn.style.display = 'none'; 
             createLocationButtons();
@@ -292,6 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 positionFilterBtn.style.opacity = 1;
                 positionFilterBtn.style.cursor = 'pointer';
+                positionFilterBtn.disabled = false;
 
                 map.setOptions({ draggableCursor: null });
                 disableMapClick();
@@ -348,6 +350,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             positionFilterBtn.style.opacity = 1;
             positionFilterBtn.style.cursor = 'pointer';
+            positionFilterBtn.disabled = false;
         });
 
         buttonContainer.appendChild(checkBtn);
