@@ -248,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
             clearMap()
             pathSelectorContainer.style.display = 'none';
             isSelectingLocation = true;
+            selectedPosition = null;
             selectLocationBtn.textContent = 'Set location';
             enableMapClick();
             map.setOptions({ draggableCursor: 'crosshair' }); 
