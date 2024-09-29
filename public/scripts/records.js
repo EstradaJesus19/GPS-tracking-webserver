@@ -356,7 +356,7 @@ function clearMarkers() {
     markers = []; 
 }
 
-document.getElementById('positionFilterBtn').addEventListener('click', function () {
+document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
     e.preventDefault();
 
     const radius = parseFloat(radiusInput.value);
