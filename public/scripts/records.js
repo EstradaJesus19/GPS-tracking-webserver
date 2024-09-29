@@ -133,7 +133,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 icon: 'swal2-icon-info-custom'
             }
         });
-        return;  // Detener la ejecución si no hay tiempos de inicio o final definidos
+        return; 
     }
 
     clearMap();
@@ -527,6 +527,20 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                 createPathSelector(paths);
                 selectPath(0, paths);
                 map.fitBounds(bounds);
+
+                if (paths.length > 1){
+                    Swal.fire({
+                        text: 'More than one path found. Select a path to view in the lower window.',
+                        icon: 'info',
+                        iconColor: '#6309CE',
+                        confirmButtonText: 'Accept',
+                        confirmButtonColor: '#6309CE',
+                        customClass: {
+                            popup: 'swal2-custom-font',
+                            icon: 'swal2-icon-info-custom'
+                        }
+                    });
+                }
             } else {
                 Swal.fire({
                     text: 'No data found in the specified area.',
