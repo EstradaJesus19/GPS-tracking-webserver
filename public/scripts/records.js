@@ -6,6 +6,8 @@ let markers = [];
 let circle = null;
 let isSelectingLocation = false;
 let selectedPosition = null;
+let startTime = null;
+let endTime = null;
 
 fetch('/api/getOwner')
     .then(response => response.json())
