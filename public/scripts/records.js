@@ -472,13 +472,14 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         return;
     }
 
+    console.log(selectedPosition.lat());
+
     const position = {
         latitude: selectedPosition.lat(),
         longitude: selectedPosition.lng(),
         radius: parseFloat(radiusInput.value)
     };
 
-    console.log(position);
 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
