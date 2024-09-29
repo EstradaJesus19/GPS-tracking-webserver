@@ -489,7 +489,8 @@ function createPathSelector(paths) {
 }
 
 function selectPath(index, paths) {
-    clearMap(); 
+    clearPolylines();
+    clearMarkers(); 
 
     const polyline = new google.maps.Polyline({
         path: paths[index],
