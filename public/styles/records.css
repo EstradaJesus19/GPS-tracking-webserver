@@ -287,7 +287,7 @@ input[type="number"] {
     position: absolute;
     bottom: 40px;
     left: 60px;
-    width: 300px;
+    width: 350px;
     background-color: white;
     border-radius: 10px;
     padding: 10px;
@@ -313,6 +313,7 @@ input[type="number"] {
 
 .pathButton {
     display: block;
+    width: 30px;
     margin: 5px 0;
     padding: 5px 10px;
     background-color: #6309CE;
