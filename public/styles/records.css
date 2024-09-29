@@ -306,11 +306,6 @@ input[type="number"] {
     font-size: 16px;
 }
 
-.buttonContainer{
-    display: flex;
-    flex-direction: row;
-}
-
 #pathButtons {
     max-height: 200px; 
     overflow-y: auto; 
