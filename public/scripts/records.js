@@ -465,14 +465,15 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
 });
 
 function createPathSelector(paths) {
+    const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
     pathButtonsContainer.innerHTML = ''; 
 
     if (paths.length === 0) {
-        pathButtonsContainer.style.display = 'none';
+        pathSelectorContainer.style.display = 'none';
         return;
     }
-    pathButtonsContainer.style.display = 'block'; 
+    pathSelectorContainer.style.display = 'block'; 
 
     paths.forEach((path, index) => {
         const button = document.createElement('button');
