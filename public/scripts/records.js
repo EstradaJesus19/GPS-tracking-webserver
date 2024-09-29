@@ -1,6 +1,7 @@
 let map; 
 let polyline;
 let path = [];
+let polylines = [];
 let markers = [];
 let circle = null;
 let isSelectingLocation = false;
@@ -337,16 +338,9 @@ function drawCircle(position, radius, isEditable) {
 }
 
 function clearMap() {
-    if (polyline) {
-        polyline.setMap(null);
-        polyline = null; 
-    }
+    clearCircles();
     clearMarkers(); 
-    if (circle) {
-        circle.setMap(null); 
-        circle = null; 
-    }
-    path = []; 
+    clearPolylines();
 }
 
 function clearMarkers() {
@@ -354,6 +348,20 @@ function clearMarkers() {
         marker.setMap(null);
     });
     markers = []; 
+}
+
+function clearCircles() {
+    if (circle) {
+        circle.setMap(null); 
+        circle = null; 
+    }
+}
+
+function clearPolylines() {
+    polylines.forEach(polyline => {
+        polyline.setMap(null); 
+    });
+    polylines = [];
 }
 
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
@@ -383,52 +391,46 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-            clearMap(); // Limpiar el mapa antes de mostrar los nuevos datos.
+            clearMap(); 
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
-                let paths = []; // Lista de todos los paths
-                let currentPath = []; // El path actual
-                let previousTime = null; // Inicializar tiempo anterior
+                let paths = []; 
+                let currentPath = []; 
+                let previousTime = null; 
 
-                // Iterar sobre los puntos filtrados
                 data.forEach((point, index) => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
-                    // Combinar 'date' y 'time' en un solo objeto Date
-                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; // Combinar correctamente
+                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
                     const currentTime = new Date(currentTimeString);
 
                     console.log(`Point ${index + 1}:`);
                     console.log(`Current time: ${currentTime}`);
 
                     if (previousTime) {
-                        // Calcular la diferencia en segundos
-                        const timeDifference = (currentTime - previousTime) / 1000; // Convertir a segundos
+                        const timeDifference = (currentTime - previousTime) / 1000; 
                         console.log(`Previous time: ${previousTime}`);
                         console.log(`Time difference (in seconds): ${timeDifference}`);
 
-                        // Si la diferencia entre el tiempo actual y el anterior es mayor de 1 minuto, iniciar un nuevo path
                         if (timeDifference > 60) {
                             console.log(`New path started after ${timeDifference} seconds.`);
                             if (currentPath.length > 0) {
-                                paths.push(currentPath); // Guarda el path actual en paths
+                                paths.push(currentPath); 
                             }
-                            currentPath = []; // Inicia un nuevo path
+                            currentPath = []; 
                         }
                     }
 
-                    currentPath.push(latLng); // Agrega el punto actual al path
-                    bounds.extend(latLng); // Expande los límites del mapa
-                    previousTime = currentTime; // Actualiza el tiempo anterior al actual
+                    currentPath.push(latLng); 
+                    bounds.extend(latLng); 
+                    previousTime = currentTime; 
 
-                    // Si es el último punto, guarda el path
                     if (index === data.length - 1 && currentPath.length > 0) {
                         paths.push(currentPath);
                     }
                 });
 
-                // Mostrar cada path en el mapa
                 paths.forEach((path, pathIndex) => {
                     const polyline = new google.maps.Polyline({
                         path: path,
@@ -449,9 +451,9 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                         }]
                     });
 
-                    polyline.setMap(map); // Muestra la línea en el mapa
+                    polyline.setMap(map); 
+                    polylines.push(polyline);
 
-                    // Agregar marcadores de inicio y fin para cada path
                     markers.push(new google.maps.Marker({
                         position: path[0],
                         map: map,
@@ -481,7 +483,6 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     }));
                 });
 
-                // Ajustar los límites del mapa para que todos los paths sean visibles
                 map.fitBounds(bounds);
             } else {
                 Swal.fire({
