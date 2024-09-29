@@ -389,24 +389,37 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                 const bounds = new google.maps.LatLngBounds();
                 let paths = []; // Lista de todos los paths
                 let currentPath = []; // El path actual
-                let previousTimestamp = new Date(`${data[0].date}T${data[0].time}`); // Combina la fecha y hora del primer punto
+                let previousTime = null; // Inicializar tiempo anterior
 
                 // Iterar sobre los puntos filtrados
                 data.forEach((point, index) => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-                    const currentTimestamp = new Date(`${point.date}T${point.time}`); // Combina la fecha y hora del punto actual
 
-                    // Si la diferencia entre el tiempo actual y el anterior es mayor de 1 minuto, inicia un nuevo path
-                    if ((currentTimestamp - previousTimestamp) / 1000 > 3600) {
-                        if (currentPath.length > 0) {
-                            paths.push(currentPath); // Guarda el path actual en paths
+                    // Combinar 'date' y 'time' en un solo objeto Date
+                    const currentTime = new Date(`${point.date}T${point.time}`);
+
+                    console.log(`Point ${index + 1}:`);
+                    console.log(`Current time: ${currentTime}`);
+
+                    if (previousTime) {
+                        // Calcular la diferencia en segundos
+                        const timeDifference = (currentTime - previousTime) / 1000; // Convertir a segundos
+                        console.log(`Previous time: ${previousTime}`);
+                        console.log(`Time difference (in seconds): ${timeDifference}`);
+
+                        // Si la diferencia entre el tiempo actual y el anterior es mayor de 1 minuto, iniciar un nuevo path
+                        if (timeDifference > 60) {
+                            console.log(`New path started after ${timeDifference} seconds.`);
+                            if (currentPath.length > 0) {
+                                paths.push(currentPath); // Guarda el path actual en paths
+                            }
+                            currentPath = []; // Inicia un nuevo path
                         }
-                        currentPath = []; // Inicia un nuevo path
                     }
 
                     currentPath.push(latLng); // Agrega el punto actual al path
                     bounds.extend(latLng); // Expande los límites del mapa
-                    previousTimestamp = currentTimestamp; // Actualiza el tiempo anterior al actual
+                    previousTime = currentTime; // Actualiza el tiempo anterior al actual
 
                     // Si es el último punto, guarda el path
                     if (index === data.length - 1 && currentPath.length > 0) {
