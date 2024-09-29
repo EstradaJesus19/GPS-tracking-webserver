@@ -154,7 +154,6 @@ app.get('/api/filterDataByPosition', (req, res) => {
     });
 });
 
-
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
