@@ -279,3 +279,37 @@ input[type="number"] {
 .swal2-icon-info-custom .swal2-icon-content {
     color: #6309CE !important; 
 }
+
+/*Path selector*/
+.path-selector {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: white;
+    border: 2px solid #6309CE;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1000; /* Asegura que esté encima del mapa */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.path-selector h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.path-button {
+    display: block;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background-color: #6309CE;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.path-button:hover {
+    background-color: #5b0b97;
+}

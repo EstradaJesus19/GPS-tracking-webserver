@@ -364,7 +364,7 @@ function clearPolylines() {
     polylines = [];
 }
 
-document.getElementById('positionFilterBtn').addEventListener('click', function (e) {
+document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
     e.preventDefault();
 
     if (!selectedPosition || !radiusInput.value) {
@@ -405,16 +405,10 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
                     const currentTime = new Date(currentTimeString);
 
-                    console.log(`Point ${index + 1}:`);
-                    console.log(`Current time: ${currentTime}`);
-
                     if (previousTime) {
                         const timeDifference = (currentTime - previousTime) / 1000; 
-                        console.log(`Previous time: ${previousTime}`);
-                        console.log(`Time difference (in seconds): ${timeDifference}`);
 
                         if (timeDifference > 60) {
-                            console.log(`New path started after ${timeDifference} seconds.`);
                             if (currentPath.length > 0) {
                                 paths.push(currentPath); 
                             }
@@ -431,57 +425,11 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     }
                 });
 
-                paths.forEach((path, pathIndex) => {
-                    const polyline = new google.maps.Polyline({
-                        path: path,
-                        strokeColor: '#6309CE',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 5,
-                        icons: [{
-                            icon: {
-                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                                scale: 3,
-                                strokeColor: '#6309CE',
-                                strokeWeight: 2,
-                                fillColor: '#6309CE',
-                                fillOpacity: 1.0,
-                            },
-                            offset: '100%',
-                            repeat: '100px'
-                        }]
-                    });
+                // Crear botones para seleccionar paths
+                createPathSelector(paths);
 
-                    polyline.setMap(map); 
-                    polylines.push(polyline);
-
-                    markers.push(new google.maps.Marker({
-                        position: path[0],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: `Start of path ${pathIndex + 1}`
-                    }));
-
-                    markers.push(new google.maps.Marker({
-                        position: path[path.length - 1],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: `End of path ${pathIndex + 1}`
-                    }));
-                });
+                // Inicializar el primer path en el mapa
+                selectPath(0, paths);
 
                 map.fitBounds(bounds);
             } else {
@@ -515,3 +463,74 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
             console.error('Error fetching filtered data: ', error);
         });
 });
+
+// Función para crear la interfaz de selección de paths
+function createPathSelector(paths) {
+    const pathButtonsContainer = document.getElementById('pathButtons');
+    pathButtonsContainer.innerHTML = ''; // Limpia el contenedor
+
+    paths.forEach((path, index) => {
+        const button = document.createElement('button');
+        button.className = 'path-button';
+        button.innerText = `Path ${index + 1}`;
+        button.onclick = () => selectPath(index, paths);
+        pathButtonsContainer.appendChild(button);
+    });
+}
+
+// Función para seleccionar y mostrar el path en el mapa
+function selectPath(index, paths) {
+    clearPolylines(); // Borra las polilíneas anteriores
+
+    const polyline = new google.maps.Polyline({
+        path: paths[index],
+        strokeColor: '#6309CE',
+        strokeOpacity: 1.0,
+        strokeWeight: 5,
+        icons: [{
+            icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 3,
+                strokeColor: '#6309CE',
+                strokeWeight: 2,
+                fillColor: '#6309CE',
+                fillOpacity: 1.0,
+            },
+            offset: '100%',
+            repeat: '100px'
+        }]
+    });
+
+    polyline.setMap(map); 
+    polylines.push(polyline); // Agrega la nueva polilínea al array
+
+    // Crear marcadores para el inicio y el fin del path
+    markers.push(new google.maps.Marker({
+        position: paths[index][0],
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: "#C3AAff",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#6309CE"
+        },
+        title: `Start of path ${index + 1}`
+    }));
+
+    markers.push(new google.maps.Marker({
+        position: paths[index][paths[index].length - 1],
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: "#C3AAff",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#6309CE"
+        },
+        title: `End of path ${index + 1}`
+    }));
+}
+
