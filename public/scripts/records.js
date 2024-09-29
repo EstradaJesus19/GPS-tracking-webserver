@@ -251,10 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
             pathSelectorContainer.style.display = 'none';
             isSelectingLocation = true;
             selectedPosition = null;
-            // positionFilterBtn.style.backgroundColor = 'white';
-            // positionFilterBtn.style.color = '#6309CE';
-            // positionFilterBtn.style.border = '2px solid #6309CE';
-            // positionFilterBtn.disabled = true;
             positionFilterBtn.style.opacity = 0.5;
             positionFilterBtn.style.cursor = 'not-allowed';
 
@@ -273,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
         buttonContainer.style.gap = '10px';
         buttonContainer.style.justifyContent = 'center';
 
-        // Botón de chulito
         const checkBtn = document.createElement('button');
         checkBtn.innerHTML = '<img src="media/check.svg" alt="Check">';
         checkBtn.style.backgroundColor = '#ffffff';
@@ -292,12 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 circle.setDraggable(false);
                 isSelectingLocation = false;
 
-                clearLocationButtons(); // Limpiar los botones morados
-                selectLocationBtn.style.display = 'inline'; // Mostrar el botón selectLocationBtn de nuevo
+                clearLocationButtons(); 
+                selectLocationBtn.style.display = 'inline'; 
 
-                // positionFilterBtn.style.backgroundColor = ''; // Reestablecer estilo del botón
-                // positionFilterBtn.style.color = '';
-                // positionFilterBtn.style.border = '';
                 positionFilterBtn.style.opacity = 1;
                 positionFilterBtn.style.cursor = 'pointer';
 
@@ -333,7 +325,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Botón de x
         const cancelBtn = document.createElement('button');
         cancelBtn.innerHTML = '<img src="media/cancel.svg" alt="Cancel">';
         cancelBtn.style.backgroundColor = '#ffffff';
@@ -346,8 +337,8 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelBtn.style.padding = '2px';
 
         cancelBtn.addEventListener('click', function () {
-            clearLocationButtons(); // Limpiar los botones morados
-            selectLocationBtn.style.display = 'inline'; // Mostrar el botón selectLocationBtn de nuevo
+            clearLocationButtons();
+            selectLocationBtn.style.display = 'inline'; 
 
             clearMap();
             map.setOptions({ draggableCursor: null });
@@ -355,11 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
             isSelectingLocation = false;
             selectedPosition = null;
 
-            // Reestablecer estilo del botón positionFilterBtn
-            // positionFilterBtn.style.backgroundColor = '';
-            // positionFilterBtn.style.color = '';
-            // positionFilterBtn.style.border = '';
-            // positionFilterBtn.disabled = false; // Habilitar el botón
             positionFilterBtn.style.opacity = 1;
             positionFilterBtn.style.cursor = 'pointer';
         });
@@ -457,7 +443,7 @@ function clearPolylines() {
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
     e.preventDefault();
 
-    if (isSelectingLocation || !radiusInput.value) {
+    if (!selectedPosition || !radiusInput.value) {
         Swal.fire({
             text: 'Please set a location and define a radius',
             icon: 'error',
