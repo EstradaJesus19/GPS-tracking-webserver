@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             clearMap();
+            radiusInput.disabled = false;
             pathSelectorContainer.style.display = 'none';
             isSelectingLocation = true;
             selectedPosition = null;
@@ -459,6 +460,8 @@ function clearPolylines() {
 
 
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
+    const radiusInput = document.getElementById('radiusInput');
+
     e.preventDefault();
 
     if (!selectedPosition || !radiusInput.value) {
@@ -482,6 +485,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         radius: parseFloat(radiusInput.value)
     };
 
+    radiusInput.disabled = true;
 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
