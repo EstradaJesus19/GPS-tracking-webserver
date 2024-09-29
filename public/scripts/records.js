@@ -323,10 +323,10 @@ function drawCircle(position, radius, isEditable) {
         center: position,
         radius: radius,
         strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
+        strokeOpacity: 0.5,
         strokeWeight: 2,
         fillColor: '#C3AAff',
-        fillOpacity: 0.5,
+        fillOpacity: 0.25,
         map: map,
         editable: isEditable,  
         draggable: isEditable  
