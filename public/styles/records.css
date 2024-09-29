@@ -199,7 +199,7 @@ main {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 #timeFilterBtn:hover {
