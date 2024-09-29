@@ -500,7 +500,7 @@ function createPathSelector(paths) {
         
         const timeText = document.createElement('span');
         timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
-        timeText.style.marginLeft = '0px'; 
+        timeText.style.marginLeft = '5px'; 
 
         buttonContainer.appendChild(button);
         buttonContainer.appendChild(timeText);
