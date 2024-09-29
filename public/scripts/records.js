@@ -397,7 +397,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     const currentTimestamp = new Date(`${point.date}T${point.time}`); // Combina la fecha y hora del punto actual
 
                     // Si la diferencia entre el tiempo actual y el anterior es mayor de 1 minuto, inicia un nuevo path
-                    if ((currentTimestamp - previousTimestamp) / 1000 > 60) {
+                    if ((currentTimestamp - previousTimestamp) / 1000 > 3600) {
                         if (currentPath.length > 0) {
                             paths.push(currentPath); // Guarda el path actual en paths
                         }
