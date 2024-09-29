@@ -464,10 +464,15 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         });
 });
 
-// Función para crear la interfaz de selección de paths
 function createPathSelector(paths) {
     const pathButtonsContainer = document.getElementById('pathButtons');
-    pathButtonsContainer.innerHTML = ''; // Limpia el contenedor
+    pathButtonsContainer.innerHTML = ''; 
+
+    if (paths.length === 0) {
+        pathButtonsContainer.style.display = 'none';
+        return;
+    }
+    pathButtonsContainer.style.display = 'block'; 
 
     paths.forEach((path, index) => {
         const button = document.createElement('button');
@@ -478,9 +483,8 @@ function createPathSelector(paths) {
     });
 }
 
-// Función para seleccionar y mostrar el path en el mapa
 function selectPath(index, paths) {
-    clearPolylines(); // Borra las polilíneas anteriores
+    clearMap(); 
 
     const polyline = new google.maps.Polyline({
         path: paths[index],
@@ -502,9 +506,8 @@ function selectPath(index, paths) {
     });
 
     polyline.setMap(map); 
-    polylines.push(polyline); // Agrega la nueva polilínea al array
+    polylines.push(polyline);
 
-    // Crear marcadores para el inicio y el fin del path
     markers.push(new google.maps.Marker({
         position: paths[index][0],
         map: map,

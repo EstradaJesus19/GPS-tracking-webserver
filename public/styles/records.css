@@ -280,17 +280,20 @@ input[type="number"] {
     color: #6309CE !important; 
 }
 
-/*Path selector*/
+/* Path selector */ 
 .path-selector {
+    display: none;
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 40px;
+    left: 60px;
     background-color: white;
     border: 2px solid #6309CE;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 10px;
-    z-index: 1000; /* Asegura que esté encima del mapa */
+    z-index: 1000; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    max-height: 200px; 
+    overflow-y: auto; 
 }
 
 .path-selector h4 {
@@ -305,7 +308,7 @@ input[type="number"] {
     background-color: #6309CE;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
