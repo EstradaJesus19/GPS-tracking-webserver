@@ -244,8 +244,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const positionFilterBtn = document.getElementById('positionFilterBtn');
     const radiusInput = document.getElementById('radiusInput');
     const pathSelectorContainer = document.getElementById('pathSelector');
-    let isSelectingLocation = false;
-    let selectedPosition = null;
 
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
