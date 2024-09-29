@@ -374,7 +374,7 @@ function clearPolylines() {
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
     e.preventDefault();
 
-    if (!isSelectingLocation || !radiusInput.value) {
+    if (isSelectingLocation || !radiusInput.value) {
         Swal.fire({
             text: 'Please set a location and define a radius',
             icon: 'error',
@@ -398,7 +398,6 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-            clearMap(); 
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
