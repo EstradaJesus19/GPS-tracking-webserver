@@ -121,13 +121,14 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     e.preventDefault(); 
 
+    clearMap(); 
+
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-            clearMap(); 
 
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
