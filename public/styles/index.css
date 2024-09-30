@@ -95,14 +95,14 @@ main {
 
 .location-info h1 {
     color: #530aa8;
-    font-size: 1.15em;
+    font-size: 1.4em;
     line-height: 25%;
     padding-bottom: 5px;
 }
 
 .location-data {
     display: flex;
-    
+    font-size: 1.2em;
     justify-content: center;
     gap: 20px;
 }
