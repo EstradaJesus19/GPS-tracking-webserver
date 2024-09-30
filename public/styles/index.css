@@ -57,7 +57,7 @@ nav a.main {
 
 /* Main */
 main {
-    padding-top: 90px;
+    padding-top: 85px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -76,7 +76,7 @@ main {
     justify-content: flex-start;
     align-items: center;
     border-radius: 20px;
-    padding: 20px;
+    padding: 10px;
     margin: auto;
     background-color: #f0f0f0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -89,7 +89,7 @@ main {
 
 .location-info {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-top: 2px;
 }
 
