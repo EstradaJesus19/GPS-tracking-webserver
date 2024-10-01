@@ -119,7 +119,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
-    e.preventDefault(); 
+    e.preventDefault();
 
     if (!startInput.value || !endInput.value) {
         Swal.fire({
@@ -133,11 +133,13 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 icon: 'swal2-icon-info-custom'
             }
         });
-        return; 
+        return;
     }
 
     clearMap();
-    path = [];
+    let paths = [];
+    let currentPath = [];
+    let previousLatLng = null; 
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
@@ -145,66 +147,87 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
 
                 data.forEach(point => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-                    path.push(latLng);
+
+                    if (previousLatLng) {
+                        const distance = calculateDistance(previousLatLng, latLng);
+                        
+                        if (distance > 1) {
+                            if (currentPath.length > 0) {
+                                paths.push(currentPath);
+                            }
+                            currentPath = [];
+                        }
+                    }
+
+                    currentPath.push(latLng);
                     bounds.extend(latLng);
+                    previousLatLng = latLng;
                 });
 
-                polyline = new google.maps.Polyline({
-                    path: path,
-                    strokeColor: '#6309CE',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 5,
-                    icons: [{
-                        icon: {
-                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                            scale: 3,
-                            strokeColor: '#6309CE',
-                            strokeWeight: 2,
-                            fillColor: '#6309CE',
-                            fillOpacity: 1.0,
-                        },
-                        offset: '100%',
-                        repeat: '100px'
-                    }]
+                if (currentPath.length > 0) {
+                    paths.push(currentPath);
+                }
+
+                paths.forEach(path => {
+                    const polyline = new google.maps.Polyline({
+                        path: path,
+                        strokeColor: '#6309CE',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        icons: [{
+                            icon: {
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                scale: 3,
+                                strokeColor: '#6309CE',
+                                strokeWeight: 2,
+                                fillColor: '#6309CE',
+                                fillOpacity: 1.0,
+                            },
+                            offset: '100%',
+                            repeat: '100px'
+                        }]
+                    });
+                    polyline.setMap(map);
+                    polylines.push(polyline);
                 });
 
-                polyline.setMap(map);
-                polylines.push(polyline);
                 map.fitBounds(bounds);
 
-                markers.push(new google.maps.Marker({
-                    position: path[0],
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "Start"
-                }));
+                if (paths.length > 0) {
+                    markers.push(new google.maps.Marker({
+                        position: paths[0][0],
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: "Start"
+                    }));
 
-                markers.push(new google.maps.Marker({
-                    position: path[path.length - 1],
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "End"
-                }));
+                    const lastPath = paths[paths.length - 1];
+                    markers.push(new google.maps.Marker({
+                        position: lastPath[lastPath.length - 1],
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: "End"
+                    }));
+                }
 
             } else {
                 Swal.fire({
@@ -237,6 +260,18 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             console.error('Error getting filtered data: ', error);
         });
 });
+
+function calculateDistance(pointA, pointB) {
+    const R = 6371; 
+    const dLat = (pointB.lat - pointA.lat) * Math.PI / 180;
+    const dLng = (pointB.lng - pointA.lng) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(pointA.lat * Math.PI / 180) * Math.cos(pointB.lat * Math.PI / 180) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; 
+    return distance;
+}
 
 function convertToDatabaseFormat(dateTimeStr) {
     const [day, month, yearTime] = dateTimeStr.split('-');
@@ -595,7 +630,7 @@ function createPathSelector(paths) {
 
         const button = document.createElement('button');
         button.className = 'pathButton';
-        button.id = `pathButton-${index}`; // Asignar un ID único al botón
+        button.id = `pathButton-${index}`;
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
         
@@ -614,19 +649,16 @@ function createPathSelector(paths) {
     });
 }
 
-//funcion de prueba por orlando
 function SelectButtonOrNo(index) {
-    // Remover la clase 'selected' de todos los botones dentro de #pathButtons
     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
     allButtons.forEach(button => button.classList.remove('selected'));
 
-    // Agregar la clase 'selected' al botón seleccionado
     const selectedButton = document.getElementById(`pathButton-${index}`);
     selectedButton.classList.add('selected');
 }
 
 function selectPath(index, paths) {
-    SelectButtonOrNo(index); //se llama a la funcion de prueba
+    SelectButtonOrNo(index); 
     clearPolylines();
     clearMarkers(); 
 
