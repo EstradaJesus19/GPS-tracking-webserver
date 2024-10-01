@@ -534,14 +534,11 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
 
                 if (paths.length > 1){
                     Swal.fire({
-                        text: 'More than one path found. Select a path to view in the lower window.',
-                        icon: 'info',
-                        iconColor: '#6309CE',
+                        text: 'More than one path found. <br>Select a path to view in the lower window.',
                         confirmButtonText: 'Accept',
                         confirmButtonColor: '#6309CE',
                         customClass: {
                             popup: 'swal2-custom-font',
-                            icon: 'swal2-icon-info-custom'
                         }
                     });
                 }
