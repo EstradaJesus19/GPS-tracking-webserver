@@ -137,9 +137,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     }
 
     clearMap();
-    let paths = [];
-    let currentPath = [];
-    let previousLatLng = null; 
+    path = [];
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
@@ -147,18 +145,25 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
+
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
+                let paths = [];
+                let currentPath = [];
+                let lastPoint = null;
 
                 data.forEach(point => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
-                    if (previousLatLng) {
-                        const distance = calculateDistance(previousLatLng, latLng);
-                        
-                        if (distance > 1) {
+                    if (lastPoint) {
+                        const distance = google.maps.geometry.spherical.computeDistanceBetween(
+                            new google.maps.LatLng(lastPoint.lat, lastPoint.lng),
+                            new google.maps.LatLng(latLng.lat, latLng.lng)
+                        );
+
+                        if (distance > 1000) {
                             if (currentPath.length > 0) {
-                                paths.push(currentPath);
+                                paths.push([...currentPath]);
                             }
                             currentPath = [];
                         }
@@ -166,14 +171,14 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
                     currentPath.push(latLng);
                     bounds.extend(latLng);
-                    previousLatLng = latLng;
+                    lastPoint = latLng;
                 });
 
                 if (currentPath.length > 0) {
-                    paths.push(currentPath);
+                    paths.push([...currentPath]);
                 }
 
-                paths.forEach(path => {
+                paths.forEach((path, index) => {
                     const polyline = new google.maps.Polyline({
                         path: path,
                         strokeColor: '#6309CE',
@@ -192,43 +197,40 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                             repeat: '100px'
                         }]
                     });
+
                     polyline.setMap(map);
                     polylines.push(polyline);
+
+                    markers.push(new google.maps.Marker({
+                        position: path[0], 
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: `Start of Path ${index + 1}`
+                    }));
+
+                    markers.push(new google.maps.Marker({
+                        position: path[path.length - 1], 
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: `End of Path ${index + 1}`
+                    }));
                 });
 
                 map.fitBounds(bounds);
-
-                if (paths.length > 0) {
-                    markers.push(new google.maps.Marker({
-                        position: paths[0][0],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: "Start"
-                    }));
-
-                    const lastPath = paths[paths.length - 1];
-                    markers.push(new google.maps.Marker({
-                        position: lastPath[lastPath.length - 1],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: "End"
-                    }));
-                }
-
             } else {
                 Swal.fire({
                     text: 'No data found in the specified time frame.',
@@ -260,18 +262,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             console.error('Error getting filtered data: ', error);
         });
 });
-
-function calculateDistance(pointA, pointB) {
-    const R = 6371; 
-    const dLat = (pointB.lat - pointA.lat) * Math.PI / 180;
-    const dLng = (pointB.lng - pointA.lng) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(pointA.lat * Math.PI / 180) * Math.cos(pointB.lat * Math.PI / 180) *
-              Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; 
-    return distance;
-}
 
 function convertToDatabaseFormat(dateTimeStr) {
     const [day, month, yearTime] = dateTimeStr.split('-');
