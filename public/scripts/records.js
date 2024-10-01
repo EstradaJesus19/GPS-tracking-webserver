@@ -534,7 +534,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
 
                 if (paths.length > 1){
                     Swal.fire({
-                        text: 'More than one path found. <br>Select a path to view in the lower window.',
+                        text: 'More than one path found. Select a path to view in the lower window.',
                         confirmButtonText: 'Accept',
                         confirmButtonColor: '#6309CE',
                         customClass: {
