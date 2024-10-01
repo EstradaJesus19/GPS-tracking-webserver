@@ -618,7 +618,7 @@ function createPathSelector(paths) {
 }
 
 //funcion de prueba por orlando
-function SelectButtonOrNo() {
+function SelectButtonOrNo(index) {
     // Remover la clase 'selected' de todos los botones dentro de #pathButtons
     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
     allButtons.forEach(button => button.classList.remove('selected'));
@@ -629,7 +629,7 @@ function SelectButtonOrNo() {
 }
 
 function selectPath(index, paths) {
-    SelectButtonOrNo(); //se llama a la funcion de prueba
+    SelectButtonOrNo(index); //se llama a la funcion de prueba
     clearPolylines();
     clearMarkers(); 
 

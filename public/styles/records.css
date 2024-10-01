@@ -346,4 +346,5 @@ input[type="number"] {
 
 .pathButton:hover {
     background-color: #5b0b97;
+    color: white;
 }
