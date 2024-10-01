@@ -110,7 +110,7 @@ main {
 .location-data p {
     font-size: 1em;
     font-weight: bold;
-    margin: 5px;
+    margin: 10px;
 }
 
 .location-info span {
