@@ -2,13 +2,33 @@ let map;
 let marker;
 let polyline;
 let path = [];
+let oldPath = [];
 
-fetch('/api/getOwner')
+function loadLastLocation() {
+    fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
-            document.title = `Real time - ${data.owner}`;
+            if (data.length > 0) {
+                const latestData = data[data.length - 1];
+                const initialPosition = {
+                    lat: parseFloat(latestData.latitude),
+                    lng: parseFloat(latestData.longitude)
+                };
+                path.push(initialPosition);
+                oldPath.push(initialPosition);
+                polyline.setPath(path);
+                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+            }
         })
-        .catch(error => console.error('Error fetching owner:', error));
+        .catch(error => console.error('Error fetching data:', error));
+}
+
+fetch('/api/getOwner')
+    .then(response => response.json())
+    .then(data => {
+        document.title = `Real time - ${data.owner}`;
+    })
+    .catch(error => console.error('Error fetching owner:', error));
 
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
@@ -39,22 +59,7 @@ function initMap() {
     });
     polyline.setMap(map);
 
-    fetch('/api/getAllData')
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
-                const initialPosition = {
-                    lat: parseFloat(latestData.latitude),
-                    lng: parseFloat(latestData.longitude)
-                };
-                path.push(initialPosition);
-                polyline.setPath(path);
-
-                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
+    loadLastLocation();
 
     setInterval(fetchLatestData, 100);
 }
@@ -68,13 +73,18 @@ function fetchLatestData() {
 
                 const lastPosition = path.length > 0 ? path[path.length - 1] : null;
                 if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
+                    if (oldPath.length > 0) {
+                        oldPath = [];
+                        path = [];
+                    }
+
                     const position = {
                         lat: parseFloat(latestData.latitude),
                         lng: parseFloat(latestData.longitude)
                     };
 
                     path.push(position);
-                    polyline.setPath(path); 
+                    polyline.setPath(path);
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 }
