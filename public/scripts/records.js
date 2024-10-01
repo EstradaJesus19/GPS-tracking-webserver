@@ -577,6 +577,9 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         });
 });
 
+
+
+
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
@@ -595,6 +598,7 @@ function createPathSelector(paths) {
 
         const button = document.createElement('button');
         button.className = 'pathButton';
+        button.id = `pathButton-${index}`; // Asignar un ID único al botón
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
         
@@ -613,7 +617,19 @@ function createPathSelector(paths) {
     });
 }
 
+//funcion de prueba por orlando
+function SelectButtonOrNo() {
+    // Remover la clase 'selected' de todos los botones dentro de #pathButtons
+    const allButtons = document.querySelectorAll('#pathButtons .pathButton');
+    allButtons.forEach(button => button.classList.remove('selected'));
+
+    // Agregar la clase 'selected' al botón seleccionado
+    const selectedButton = document.getElementById(`pathButton-${index}`);
+    selectedButton.classList.add('selected');
+}
+
 function selectPath(index, paths) {
+    SelectButtonOrNo(); //se llama a la funcion de prueba
     clearPolylines();
     clearMarkers(); 
 

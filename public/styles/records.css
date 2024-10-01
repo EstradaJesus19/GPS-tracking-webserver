@@ -316,7 +316,22 @@ input[type="number"] {
     overflow-y: auto; 
 }
 
+
+
 .pathButton {
+    display: block;
+    width: 80px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background-color: white; /* Fondo blanco cuando no está seleccionado */
+    color: #6309CE; /* Texto morado cuando no está seleccionado */
+    border: 2px solid #6309CE; /* Borde morado cuando no está seleccionado */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Transición suave para los cambios de color */
+}
+
+.pathButton.selected {
     display: block;
     width: 80px;
     margin: 5px 0;
