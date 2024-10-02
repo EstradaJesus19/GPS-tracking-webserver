@@ -113,6 +113,7 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+// Time filtering query
 app.get('/api/filterData', (req, res) => {
     const { startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
@@ -131,6 +132,7 @@ app.get('/api/filterData', (req, res) => {
     );
 });
 
+// Position filtering query
 app.get('/api/filterDataByPosition', (req, res) => {
     const { latitude, longitude, radius } = req.query;
 

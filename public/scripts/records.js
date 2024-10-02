@@ -7,13 +7,15 @@ let circle = null;
 let isSelectingLocation = false;
 let selectedPosition = null;
 
+// Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
     .then(response => response.json())
     .then(data => {
-        document.title = `Real time - ${data.owner}`;
+        document.title = `Records - ${data.owner}`;
     })
     .catch(error => console.error('Error fetching owner:', error));
 
+// Load Google Maps API
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
@@ -21,6 +23,7 @@ function loadGoogleMapsApi(apiKey) {
     document.head.appendChild(script);
 }
 
+// Get APIKEY and load map API
 fetch('/api/getApiKey')
     .then(response => response.json())
     .then(data => {
@@ -30,12 +33,14 @@ fetch('/api/getApiKey')
         console.error('Error getting API Key:', error);
     });
 
+// Init map
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
     });
 
+    // Define polyline features
     polyline = new google.maps.Polyline({
         strokeColor: '#6309CE',
         strokeOpacity: 1.0,
@@ -57,6 +62,18 @@ function initMap() {
     polyline.setMap(map);
 }
 
+// Changing filtering type with dropdown 
+document.getElementById('filterType').addEventListener('change', function (e) {
+    const selectedFilter = e.target.value;
+    const pathSelectorContainer = document.getElementById('pathSelector');
+    document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
+    document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
+    pathSelectorContainer.style.display = 'none';
+    clearMap();
+});
+
+//Filtering by time
+// Link calendars and dates
 document.addEventListener('DOMContentLoaded', function () {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
@@ -65,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return new Date();
     }
 
+    // Set start time calendar
     const startFlatpickr = flatpickr(startInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
@@ -83,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Set end time calendar
     const endFlatpickr = flatpickr(endInput, {
         enableTime: true,
         dateFormat: "d-m-Y H:i",
@@ -99,7 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-  
+    
+    // Compare start and end date/time
     function validateTime(startPicker, endPicker) {
         const startDate = startPicker.selectedDates[0];
         const endDate = endPicker.selectedDates[0];
@@ -115,12 +135,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Filter by time
 document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
     e.preventDefault();
 
+    // Message if time frame not selected
     if (!startInput.value || !endInput.value) {
         Swal.fire({
             text: 'Please set a time frame',
@@ -142,16 +164,19 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
 
+    // Request time filtered data to server
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
-
+            
+            // Process data and update map
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
                 let paths = [];
                 let currentPath = [];
                 let lastPoint = null;
 
+                // Separate data in paths
                 data.forEach(point => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
@@ -160,7 +185,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                             new google.maps.LatLng(lastPoint.lat, lastPoint.lng),
                             new google.maps.LatLng(latLng.lat, latLng.lng)
                         );
-
+                        
+                        // Check if distance between points is less than 1km
                         if (distance > 1000) {
                             if (currentPath.length > 0) {
                                 paths.push([...currentPath]);
@@ -173,11 +199,13 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     bounds.extend(latLng);
                     lastPoint = latLng;
                 });
-
+                
+                // Add data to paths
                 if (currentPath.length > 0) {
                     paths.push([...currentPath]);
                 }
-
+                
+                // Print polylines
                 paths.forEach((path, index) => {
                     const polyline = new google.maps.Polyline({
                         path: path,
@@ -232,6 +260,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
                 map.fitBounds(bounds);
             } else {
+                // Print warning if no data was found
                 Swal.fire({
                     text: 'No data found in the specified time frame.',
                     icon: 'info',
@@ -247,7 +276,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         })
         .catch(error => {
             clearMap();
-
+            
+            // Print warning if error filtering data
             Swal.fire({
                 text: 'Error getting filtered data: ' + error,
                 icon: 'error',
@@ -263,21 +293,14 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
 });
 
+// Convert date and time into database format
 function convertToDatabaseFormat(dateTimeStr) {
     const [day, month, yearTime] = dateTimeStr.split('-');
     const [year, time] = yearTime.split(' ');
     return `${year}-${month}-${day} ${time}`;
 }
 
-document.getElementById('filterType').addEventListener('change', function (e) {
-    const selectedFilter = e.target.value;
-    const pathSelectorContainer = document.getElementById('pathSelector');
-    document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
-    document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
-    pathSelectorContainer.style.display = 'none';
-    clearMap();
-});
-
+//Filtering by position
 document.addEventListener('DOMContentLoaded', function () {
     const selectLocationBtn = document.getElementById('selectLocationBtn');
     const selectLocationContainer = document.getElementById('selectLocationContainer');
@@ -285,6 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const radiusInput = document.getElementById('radiusInput');
     const pathSelectorContainer = document.getElementById('pathSelector');
 
+    // Define select location button actions
     selectLocationBtn.addEventListener('click', function () {
         if (!isSelectingLocation) {
             clearMap();
@@ -304,6 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Create confirm and cancel buttons
     function createLocationButtons() {
         const buttonContainer = document.createElement('div');
         buttonContainer.id = 'locationButtons';
@@ -320,11 +345,11 @@ document.addEventListener('DOMContentLoaded', function () {
         checkBtn.style.height = '40px';
         checkBtn.style.cursor = 'pointer';
         checkBtn.style.marginRight = '10px';
-        checkBtn.style.padding = '2px';
+        checkBtn.style.padding = '5px';
 
+        // Confirm selected location
         checkBtn.addEventListener('click', function () {
             if (selectedPosition) {
-                console.log(selectedPosition);
                 circle.setEditable(false);
                 circle.setDraggable(false);
                 isSelectingLocation = false;
@@ -339,6 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 map.setOptions({ draggableCursor: null });
                 disableMapClick();
 
+                // Creater center marker in the area circle
                 markers.push(new google.maps.Marker({
                     position: selectedPosition,
                     map: map,
@@ -354,6 +380,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }));
                 
             } else {
+                // Print warning whrn position is not set
                 Swal.fire({
                     text: 'Set a location on the map',
                     icon: 'error',
@@ -377,8 +404,9 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelBtn.style.height = '40px';
         cancelBtn.style.cursor = 'pointer';
         cancelBtn.style.marginRight = '10px';
-        cancelBtn.style.padding = '2px';
+        cancelBtn.style.padding = '5px';
 
+        // Cancel selected location
         cancelBtn.addEventListener('click', function () {
             clearLocationButtons();
             selectLocationBtn.style.display = 'inline'; 
@@ -394,11 +422,13 @@ document.addEventListener('DOMContentLoaded', function () {
             positionFilterBtn.disabled = false;
         });
 
+        // Set buttons in web page
         buttonContainer.appendChild(checkBtn);
         buttonContainer.appendChild(cancelBtn);
         selectLocationContainer.appendChild(buttonContainer);
     }
 
+    // Remove location buttons
     function clearLocationButtons() {
         const buttonContainer = document.getElementById('locationButtons');
         if (buttonContainer) {
@@ -406,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Link radius input with map circle
     radiusInput.addEventListener('input', function () {
         if (circle) {
             const newRadius = parseFloat(radiusInput.value);
@@ -413,20 +444,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Enable map click
     function enableMapClick() {
         map.addListener('click', handleMapClick);
     }
 
+    // Disable map click
     function disableMapClick() {
         google.maps.event.clearListeners(map, 'click');
     }
 
+    // Manage clicking on map
     function handleMapClick(event) {
         selectedPosition = event.latLng;
         clearMap();
         drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
     }
 
+    // Draw circle on map
     function drawCircle(position, radius, isEditable) {
         clearMap();
 
@@ -444,11 +479,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (isEditable) {
+            // Update radius input with edited on map values 
             circle.addListener('radius_changed', function () {
                 const updatedRadius = Math.round(circle.getRadius());
                 document.getElementById('radiusInput').value = updatedRadius;
             });
 
+            // Change selected position with new center
             circle.addListener('center_changed', function () {
                 selectedPosition = circle.getCenter();
             });
@@ -456,12 +493,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Clear map
 function clearMap() {
     clearCircles();
     clearMarkers();
     clearPolylines();
 }
 
+// Clear markers
 function clearMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
@@ -469,6 +508,7 @@ function clearMarkers() {
     markers = [];
 }
 
+// Clear circles
 function clearCircles() {
     if (circle) {
         circle.setMap(null);
@@ -476,6 +516,7 @@ function clearCircles() {
     }
 }
 
+// Clear polylines
 function clearPolylines() {
     polylines.forEach(polyline => {
         polyline.setMap(null);
@@ -483,12 +524,13 @@ function clearPolylines() {
     polylines = [];
 }
 
-
+// Filter by position
 document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
     const radiusInput = document.getElementById('radiusInput');
 
     e.preventDefault();
 
+    // Print warning if position or radius aren't selected
     if (!selectedPosition || !radiusInput.value) {
         Swal.fire({
             text: 'Please set a location and define a radius',
@@ -512,6 +554,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
 
     radiusInput.disabled = true;
 
+    // Request position filtered data to server
     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
@@ -523,12 +566,14 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                 let startTime = null;
                 let endTime = null;
 
+                // Check recieved data
                 data.forEach((point, index) => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
                     const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
                     const currentTime = new Date(currentTimeString);
-
+                    
+                    // Compare time between data
                     if (previousTime) {
                         const timeDifference = (currentTime - previousTime) / 1000; 
 
@@ -552,12 +597,14 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                 if (currentPath.length > 0) {
                     paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
                 }
-
+                
+                // Create windows for path selecting
                 createPathSelector(paths);
                 selectPath(0, paths);
                 map.fitBounds(bounds);
 
                 if (paths.length > 1){
+                    // Tell user that more than one path was found
                     Swal.fire({
                         text: 'More than one path found. Select a path to view in the lower window.',
                         confirmButtonText: 'Accept',
@@ -568,6 +615,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
                     });
                 }
             } else {
+                // Print warning that no data was found
                 Swal.fire({
                     text: 'No data found in the specified area.',
                     icon: 'info',
@@ -584,6 +632,7 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
         .catch(error => {
             clearMap();
 
+            // Print warning if error filtering data
             Swal.fire({
                 text: 'Error fetching filtered data: ' + error,
                 icon: 'error',
@@ -598,9 +647,6 @@ document.getElementById('positionFilterBtn').addEventListener('click', function 
             console.error('Error fetching filtered data: ', error);
         });
 });
-
-
-
 
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
@@ -624,6 +670,7 @@ function createPathSelector(paths) {
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
         
+        // Format date and time for UX
         const startDate = new Date(pathInfo.startTime);
         const endDate = new Date(pathInfo.endTime);
         const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
@@ -639,6 +686,7 @@ function createPathSelector(paths) {
     });
 }
 
+// Set selected or not selected button class
 function SelectButtonOrNo(index) {
     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
     allButtons.forEach(button => button.classList.remove('selected'));
@@ -647,6 +695,7 @@ function SelectButtonOrNo(index) {
     selectedButton.classList.add('selected');
 }
 
+// Select path
 function selectPath(index, paths) {
     SelectButtonOrNo(index); 
     clearPolylines();
