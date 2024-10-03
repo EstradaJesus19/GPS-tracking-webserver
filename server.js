@@ -113,6 +113,7 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+// Time filtering query
 app.get('/api/filterData', (req, res) => {
     const { startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
@@ -129,6 +130,30 @@ app.get('/api/filterData', (req, res) => {
             }
         }
     );
+});
+
+// Position filtering query
+app.get('/api/filterDataByPosition', (req, res) => {
+    const { latitude, longitude, radius } = req.query;
+
+    const query = `
+        SELECT latitude, longitude, date, time 
+        FROM ?? 
+        WHERE ST_Distance_Sphere(
+            point(longitude, latitude), 
+            point(?, ?)
+        ) <= ?;
+    `;
+
+    const tableName = process.env.db_table;
+    db.query(query, [tableName, longitude, latitude, radius], (err, results) => {
+        if (err) {
+            console.error('Error fetching data by position:', err);
+            res.status(500).json({ error: 'Error fetching data by position' });
+        } else {
+            res.json(results);
+        }
+    });
 });
 
 httpsServer.listen(httpsPort, '0.0.0.0', () => {

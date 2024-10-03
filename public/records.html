@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Records - TrackIT locator</title>
+    <title>Records</title>
     <link rel="icon" href="media/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="styles/records.css">
 </head>
 <body>
     <header>
-        <a href="index.html"><img src="media/TrackIt.png" alt="TrackIt_logo" id="logo"></a>
+        <a href="index.html"><img src="media/TrackIt.svg" alt="TrackIt_logo" id="logo"></a>
         <nav>
             <ul id="menu">
                 <li><a href="index.html" class="main">Real time</a></li>
@@ -18,28 +18,50 @@
         </nav>
     </header>
     <main>
-        <div class="content-wrapper">
-            <div class="filter-wrapper">
-                <h2>Filter by time frame</h2>
+        <div class="contentCard">
+            <div class="filterSelection">
+                <span>Filter by:</span>
+                <select id="filterType" class="filterSelect">
+                    <option value="time">Time</option>
+                    <option value="position">Position</option>
+                </select>
+            </div>
+            <div class="filterContainer">
                 <form id="timeFilterForm">
+                    <h2>Filter by time frame</h2>
                     <label for="startDateTime">Start time:</label>
-                    <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                    <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
                     
                     <label for="endDateTime">End time:</label>
-                    <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickr-datetime" maxlength="16">
+                    <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
                     
-                    <button id="filter-btn">Apply filter</button>
+                    <button id="timeFilterBtn">Apply filter</button>
                 </form>
+                <div id="positionFilterForm">
+                    <h2>Filter by position</h2>
+                    <div id="selectLocationContainer">   
+                        <label for="location">Select location:</label>
+                        <button id="selectLocationBtn">Select on map</button>
+                    </div>
+                
+                    <label for="radiusInput">Enter radius (m):</label>
+                    <input type="number" id="radiusInput" min="500" value="500" step="1">
+                    
+                    <button id="positionFilterBtn">Apply filter</button>
+                </div>
             </div>
-            <div class="map-container">
+            <div class="mapContainer">
                 <div id="map"></div>
             </div>
         </div>
     </main>
-
+    <div id="pathSelector" class="pathSelectors">
+        <h4>Select a path</h4>
+        <div id="pathButtons"></div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        flatpickr(".flatpickr-datetime", {
+        flatpickr(".flatpickrDateTime", {
             enableTime: true,
             dateFormat: "d-m-Y H:i",
             time_24hr: true,
