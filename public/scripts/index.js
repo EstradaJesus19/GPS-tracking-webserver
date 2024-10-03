@@ -4,6 +4,7 @@ let polyline;
 let path = [];
 let oldPath = [];
 
+// Load map
 function loadLastLocation() {
     fetch('/api/getAllData')
         .then(response => response.json())
