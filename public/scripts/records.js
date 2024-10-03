@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const endInput = document.getElementById('endDateTime');
 
     function getMaxDate() {
-        return new Date(); // Devuelve el tiempo actual
+        return new Date(); 
     }
 
     const startFlatpickr = flatpickr(startInput, {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const selectedDate = selectedDates[0];
                 endFlatpickr.set('minDate', selectedDate);
                 endFlatpickr.set('maxDate', getMaxDate());
-                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
+                validateTime(startFlatpickr, endFlatpickr); 
             }
         }
     });
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectedDates.length > 0) {
                 const selectedDate = selectedDates[0];
                 startFlatpickr.set('maxDate', selectedDate);
-                validateTime(startFlatpickr, endFlatpickr); // Validar horas si están en el mismo día
+                validateTime(startFlatpickr, endFlatpickr); 
             }
         }
     });
