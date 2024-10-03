@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const endInput = document.getElementById('endDateTime');
 
     function getMaxDate() {
-        return new Date();
+        return new Date(); // Devuelve el tiempo actual
     }
 
     // Set start time calendar
