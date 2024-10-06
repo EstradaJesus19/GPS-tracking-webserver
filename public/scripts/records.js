@@ -665,11 +665,11 @@ function convertToDatabaseFormat(dateTimeStr) {
 //         buttonContainer.style.display = 'flex'; 
 //         buttonContainer.style.alignItems = 'center';
 
-        const button = document.createElement('button');
-        button.className = 'pathButton';
-        button.id = `pathButton-${index}`;
-        button.innerText = `Path ${index + 1}`;
-        button.onclick = () => selectPath(index, paths);
+        // const button = document.createElement('button');
+        // button.className = 'pathButton';
+        // button.id = `pathButton-${index}`;
+        // button.innerText = `Path ${index + 1}`;
+        // button.onclick = () => selectPath(index, paths);
         
 
         
@@ -678,30 +678,30 @@ function convertToDatabaseFormat(dateTimeStr) {
  
 
         // format date and time for query
-        const startDate = new Date(pathInfo.startTime);
-        const endDate = new Date(pathInfo.endTime);
-        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+        // const startDate = new Date(pathInfo.startTime);
+        // const endDate = new Date(pathInfo.endTime);
+        // const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+        // const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
         
-        function formatDateAndTime(date) {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        // function formatDateAndTime(date) {
+        //     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-            const day = date.getDate();
-            const month = months[date.getMonth()]; 
-            const year = date.getFullYear();
-            const hours = date.getHours().toString().padStart(2, '0'); 
-            const minutes = date.getMinutes().toString().padStart(2, '0'); 
+        //     const day = date.getDate();
+        //     const month = months[date.getMonth()]; 
+        //     const year = date.getFullYear();
+        //     const hours = date.getHours().toString().padStart(2, '0'); 
+        //     const minutes = date.getMinutes().toString().padStart(2, '0'); 
 
-            return `${day} ${month} ${year} at ${hours}:${minutes}`;
-        }
+        //     return `${day} ${month} ${year} at ${hours}:${minutes}`;
+        // }
 
 
-        const startTimeFormatted2 = formatDateAndTime(startDate);
-        const endTimeFormatted2 = formatDateAndTime(endDate);
+        // const startTimeFormatted2 = formatDateAndTime(startDate);
+        // const endTimeFormatted2 = formatDateAndTime(endDate);
         
-        const timeText = document.createElement('span');
-        timeText.innerText = `: ${startTimeFormatted2} to ${endTimeFormatted2}`;
-        timeText.style.marginLeft = '5px'; 
+        // const timeText = document.createElement('span');
+        // timeText.innerText = `: ${startTimeFormatted2} to ${endTimeFormatted2}`;
+        // timeText.style.marginLeft = '5px'; 
 
 //         buttonContainer.appendChild(button);
 //         buttonContainer.appendChild(timeText);
