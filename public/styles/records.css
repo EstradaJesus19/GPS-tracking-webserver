@@ -290,14 +290,23 @@ input[type="number"] {
 .pathSelectors {
     display: none;
     position: absolute;
-    bottom: 40px;
-    left: 60px;
+    bottom: 20px;
+    left: 30px;
     width: 350px;
     background-color: white;
     border-radius: 10px;
     padding: 10px;
     z-index: 1000; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Media query para dispositivos móviles */
+@media (max-width: 768px) {
+    .pathSelectors {
+        position: static; 
+        margin-top: 20px; 
+        width: 90%; 
+    }
 }
 
 .pathSelectors:hover, 
