@@ -134,19 +134,17 @@ app.get('/api/filterData', (req, res) => {
 
 // Position filtering query
 app.get('/api/filterDataByPosition', (req, res) => {
-    const { latitude, longitude, radius } = req.query;
+    const { startTime, endTime, latitude, longitude, radius } = req.query;
 
     const query = `
-        SELECT latitude, longitude, date, time 
+       SELECT latitude, longitude, date, time 
         FROM ?? 
-        WHERE ST_Distance_Sphere(
-            point(longitude, latitude), 
-            point(?, ?)
-        ) <= ?;
+        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
+        AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
     `;
 
     const tableName = process.env.db_table;
-    db.query(query, [tableName, longitude, latitude, radius], (err, results) => {
+    db.query(query, [tableName, startTime, endTime, longitude, latitude, radius], (err, results) => {
         if (err) {
             console.error('Error fetching data by position:', err);
             res.status(500).json({ error: 'Error fetching data by position' });

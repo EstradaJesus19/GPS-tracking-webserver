@@ -6,6 +6,7 @@ let markers = [];
 let circle = null;
 let isSelectingLocation = false;
 let selectedPosition = null;
+let radius = null;
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -253,7 +254,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             });
             console.error('Error getting filtered data: ', error);
         });
-        
+
     // Enable map click
     function enableMapClick() {
         map.addListener('click', handleMapClick);
@@ -288,15 +289,127 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
 
         if (isEditable) {
-            // Update radius input with edited on map values 
-            circle.addListener('radius_changed', function () {
-                const updatedRadius = Math.round(circle.getRadius());
-                document.getElementById('radiusInput').value = updatedRadius;
-            });
-
             // Change selected position with new center
             circle.addListener('center_changed', function () {
                 selectedPosition = circle.getCenter();
+
+                // Print warning if position or radius aren't selected
+                if (!selectedPosition || !radius) {
+                    Swal.fire({
+                        text: 'Please set a location and define a radius',
+                        icon: 'error',
+                        iconColor: '#6309CE',
+                        confirmButtonText: 'Accept',
+                        confirmButtonColor: '#6309CE',
+                        customClass: {
+                            popup: 'swal2-custom-font',
+                            icon: 'swal2-icon-info-custom'
+                        }
+                    });
+                    return;
+                }
+
+                const position = {
+                    latitude: selectedPosition.lat(),
+                    longitude: selectedPosition.lng(),
+                    radius: radius
+                };
+
+                radiusInput.disabled = true;
+
+                // Request position filtered data to server
+                fetch(`/api/filterDataByPosition?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            const bounds = new google.maps.LatLngBounds();
+                            let paths = []; 
+                            let currentPath = []; 
+                            let previousTime = null; 
+                            let startTimePath = null;
+                            let endTimePath = null;
+
+                            // Check received data
+                            data.forEach((point, index) => {
+                                const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+
+                                const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
+                                const currentTime = new Date(currentTimeString);
+                                
+                                // Compare time between data
+                                if (previousTime) {
+                                    const timeDifference = (currentTime - previousTime) / 1000; 
+
+                                    if (timeDifference > 60) {
+                                        if (currentPath.length > 0) {
+                                            paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath }); 
+                                        }
+                                        currentPath = []; 
+                                    }
+                                }
+
+                                if (!currentPath.length) {
+                                    startTimePath = currentTime; 
+                                }
+                                endTimePath = currentTime; 
+                                currentPath.push(latLng); 
+                                bounds.extend(latLng); 
+                                previousTime = currentTime; 
+                            });
+
+                            if (currentPath.length > 0) {
+                                paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                            }
+                            
+                            // Create windows for path selecting
+                            createPathSelector(paths);
+                            selectPath(0, paths);
+                            map.fitBounds(bounds);
+
+                            if (paths.length > 1){
+                                // Tell user that more than one path was found
+                                Swal.fire({
+                                    text: 'More than one path found. Select a path to view in the lower window.',
+                                    confirmButtonText: 'Accept',
+                                    confirmButtonColor: '#6309CE',
+                                    customClass: {
+                                        popup: 'swal2-custom-font',
+                                    }
+                                });
+                            }
+                        } else {
+                            // Print warning that no data was found
+                            Swal.fire({
+                                text: 'No data found in the specified area.',
+                                icon: 'info',
+                                iconColor: '#6309CE',
+                                confirmButtonText: 'Accept',
+                                confirmButtonColor: '#6309CE',
+                                customClass: {
+                                    popup: 'swal2-custom-font',
+                                    icon: 'swal2-icon-info-custom'
+                                }
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        clearMap();
+
+                        // Print warning if error filtering data
+                        Swal.fire({
+                            text: 'Error fetching filtered data: ' + error,
+                            icon: 'error',
+                            iconColor: '#6309CE',
+                            confirmButtonText: 'Accept',
+                            confirmButtonColor: '#6309CE',
+                            customClass: {
+                                popup: 'swal2-custom-font',
+                                icon: 'swal2-icon-info-custom'
+                            }
+                        });
+                        console.error('Error fetching filtered data: ', error);
+                    });
+
             });
         }
     }
@@ -426,8 +539,6 @@ function selectPath(index, paths) {
         title: `End of path ${index + 1}`
     }));
 }
-
-
 
 // Clear map
 function clearMap() {
