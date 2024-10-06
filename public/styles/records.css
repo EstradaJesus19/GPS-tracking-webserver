@@ -328,14 +328,18 @@ input[type="number"] {
     position: relative;
 }
 
-#pathButtons::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(transparent, white); /* Degradado que indica más contenido */
+/* Para navegadores basados en WebKit (como Safari en MacOS y Chrome) */
+#pathButtons::-webkit-scrollbar {
+    width: 8px; /* Grosor de la barra de desplazamiento */
+}
+
+#pathButtons::-webkit-scrollbar-thumb {
+    background-color: #bfbfbf; /* Color del scrollbar */
+    border-radius: 4px; /* Redondeado */
+}
+
+#pathButtons::-webkit-scrollbar-track {
+    background-color: #ffffff; /* Color del fondo */
 }
 
 
