@@ -290,23 +290,30 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             draggable: isEditable
         });
 
+        let radiusChanged = false;
+        let positionChanged = false;
+
         if (isEditable) {
-            // Detect when the user is dragging or changing the radius
-            circle.addListener('radius_changed', function () {
-                isDragging = true;  // Flag set to true when changing radius
+            // Detect if radius has changed
+            google.maps.event.addListener(circle, 'radius_changed', function () {
+                radiusChanged = true;
             });
 
-            circle.addListener('center_changed', function () {
-                isDragging = true;  // Flag set to true when moving the circle
+            // Detect if center position has changed
+            google.maps.event.addListener(circle, 'center_changed', function () {
+                positionChanged = true;
             });
 
-            // Apply filter when mouse is released after dragging or changing radius
+            // Handle the 'mouseup' event to execute filterByPosition only when the click is released
             google.maps.event.addListener(circle, 'mouseup', function () {
-                if (isDragging) {
-                    isDragging = false;  // Reset the flag after mouse release
+                if (radiusChanged || positionChanged) {
                     radius = Math.round(circle.getRadius());
                     selectedPosition = circle.getCenter();
                     filterByPosition(radius, selectedPosition, startTime, endTime);
+
+                    // Reset flags
+                    radiusChanged = false;
+                    positionChanged = false;
                 }
             });
         }
