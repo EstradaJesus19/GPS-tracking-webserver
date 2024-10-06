@@ -374,7 +374,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 createPathSelector(paths);
                 selectPath(0, paths);
                 map.fitBounds(bounds);
-                
+
             } else {
                 // Print warning that no data was found
                 Swal.fire({
@@ -462,7 +462,7 @@ function createPathSelector(paths) {
         timeText.style.marginLeft = '5px'; 
 
         buttonContainer.appendChild(button);
-        buttonContainer.appendChild(timeText);
+        // buttonContainer.appendChild(timeText);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 }
