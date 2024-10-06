@@ -291,8 +291,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         if (isEditable) {
             // Change selected position with new center
             circle.addListener('center_changed', function () {
-            selectedPosition = circle.getCenter();
-            filterByPosition(radius, selectedPosition, startTime, endTime);
+                selectedPosition = circle.getCenter();
+                filterByPosition(radius, selectedPosition, startTime, endTime);
         });
         }
     }
