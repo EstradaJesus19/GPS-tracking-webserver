@@ -197,70 +197,27 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                         currentPath = [];
                     }
 
-                    currentPath.push(latLng);
-                    bounds.extend(latLng);
-                    lastPoint = latLng;
+                    if (!currentPath.length) {
+                        startTime = currentTime; 
+                    }
+                    
+                    endTime = currentTime; 
+                    currentPath.push(latLng); 
+                    bounds.extend(latLng); 
+                    previousTime = currentTime; 
+                    lastPoint = latLng;         
                 });
-                
+
                 // Add data to paths
                 if (currentPath.length > 0) {
-                    paths.push([...currentPath]);
+                    paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
                 }
-                
-                // Print polylines
-                paths.forEach((path, index) => {
-                    const polyline = new google.maps.Polyline({
-                        path: path,
-                        strokeColor: '#6309CE',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 5,
-                        icons: [{
-                            icon: {
-                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                                scale: 3,
-                                strokeColor: '#6309CE',
-                                strokeWeight: 2,
-                                fillColor: '#6309CE',
-                                fillOpacity: 1.0,
-                            },
-                            offset: '100%',
-                            repeat: '100px'
-                        }]
-                    });
-
-                    polyline.setMap(map);
-                    polylines.push(polyline);
-
-                    markers.push(new google.maps.Marker({
-                        position: path[0], 
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: `Start of Path ${index + 1}`
-                    }));
-
-                    markers.push(new google.maps.Marker({
-                        position: path[path.length - 1], 
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: "#6309CE"
-                        },
-                        title: `End of Path ${index + 1}`
-                    }));
-                });
-
+                                    
+                // Create windows for path selecting
+                createPathSelector(paths);
+                selectPath(0, paths);
                 map.fitBounds(bounds);
+
             } else {
                 // Print warning if no data was found
                 Swal.fire({
@@ -301,6 +258,126 @@ function convertToDatabaseFormat(dateTimeStr) {
     const [year, time] = yearTime.split(' ');
     return `${year}-${month}-${day} ${time}`;
 }
+
+// Create path selector
+function createPathSelector(paths) {
+    const pathSelectorContainer = document.getElementById('pathSelector');
+    const pathButtonsContainer = document.getElementById('pathButtons');
+    pathButtonsContainer.innerHTML = ''; 
+
+    if (paths.length === 0) {
+        pathSelectorContainer.style.display = 'none';
+        return;
+    }
+    pathSelectorContainer.style.display = 'block'; 
+
+    paths.forEach((pathInfo, index) => {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.display = 'flex'; 
+        buttonContainer.style.alignItems = 'center';
+
+        const button = document.createElement('button');
+        button.className = 'pathButton';
+        button.id = `pathButton-${index}`;
+        button.innerText = `Path ${index + 1}`;
+        button.onclick = () => selectPath(index, paths);
+
+        // Format date and time for UX
+        // Función para formatear la fecha en inglés
+        const startDate = new Date(pathInfo.startTime);
+        const endDate = new Date(pathInfo.endTime);
+
+        // Función para formatear la fecha y la hora
+        function formatDateAndTime(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const day = date.getDate();
+            const month = months[date.getMonth()]; 
+            const year = date.getFullYear();
+            const hours = date.getHours().toString().padStart(2, '0'); 
+            const minutes = date.getMinutes().toString().padStart(2, '0'); 
+
+            return `${day} ${month} ${year} at ${hours}:${minutes}`;
+        }
+
+        const startTimeFormatted = formatDateAndTime(startDate);
+        const endTimeFormatted = formatDateAndTime(endDate);
+
+        const timeText = document.createElement('span');
+        timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
+        timeText.style.marginLeft = '5px'; 
+
+        buttonContainer.appendChild(button);
+        buttonContainer.appendChild(timeText);
+        pathButtonsContainer.appendChild(buttonContainer);
+    });
+}
+
+// Set selected or not selected button class
+function SelectButtonOrNo(index) {
+    const allButtons = document.querySelectorAll('#pathButtons .pathButton');
+    allButtons.forEach(button => button.classList.remove('selected'));
+
+    const selectedButton = document.getElementById(`pathButton-${index}`);
+    selectedButton.classList.add('selected');
+}
+
+// Select path
+function selectPath(index, paths) {
+    SelectButtonOrNo(index); 
+    clearPolylines();
+    clearMarkers(); 
+
+    const polyline = new google.maps.Polyline({
+        path: paths[index].path,
+        strokeColor: '#6309CE',
+        strokeOpacity: 1.0,
+        strokeWeight: 5,
+        icons: [{
+            icon: {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 3,
+                strokeColor: '#6309CE',
+                strokeWeight: 2,
+                fillColor: '#6309CE',
+                fillOpacity: 1.0,
+            },
+            offset: '100%',
+            repeat: '100px'
+        }]
+    });
+
+    polyline.setMap(map); 
+    polylines.push(polyline);
+
+    markers.push(new google.maps.Marker({
+        position: paths[index].path[0],
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: "#C3AAff",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#6309CE"
+        },
+        title: `Start of path ${index + 1}`
+    }));
+
+    markers.push(new google.maps.Marker({
+        position: paths[index].path[paths[index].path.length - 1],
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: "#C3AAff",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#6309CE"
+        },
+        title: `End of path ${index + 1}`
+    }));
+}
+
 
 // Clear map
 function clearMap() {
@@ -652,128 +729,4 @@ function clearPolylines() {
 //         });
 // });
 
-// function createPathSelector(paths) {
-//     const pathSelectorContainer = document.getElementById('pathSelector');
-//     const pathButtonsContainer = document.getElementById('pathButtons');
-//     pathButtonsContainer.innerHTML = ''; 
 
-//     if (paths.length === 0) {
-//         pathSelectorContainer.style.display = 'none';
-//         return;
-//     }
-//     pathSelectorContainer.style.display = 'block'; 
-
-//     paths.forEach((pathInfo, index) => {
-//         const buttonContainer = document.createElement('div');
-//         buttonContainer.style.display = 'flex'; 
-//         buttonContainer.style.alignItems = 'center';
-
-        // const button = document.createElement('button');
-        // button.className = 'pathButton';
-        // button.id = `pathButton-${index}`;
-        // button.innerText = `Path ${index + 1}`;
-        // button.onclick = () => selectPath(index, paths);
-        
-
-        
-        // Format date and time for UX
-        // Función para formatear la fecha en inglés
- 
-
-        // format date and time for query
-        // const startDate = new Date(pathInfo.startTime);
-        // const endDate = new Date(pathInfo.endTime);
-        // const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        // const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
-        
-        // function formatDateAndTime(date) {
-        //     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-        //     const day = date.getDate();
-        //     const month = months[date.getMonth()]; 
-        //     const year = date.getFullYear();
-        //     const hours = date.getHours().toString().padStart(2, '0'); 
-        //     const minutes = date.getMinutes().toString().padStart(2, '0'); 
-
-        //     return `${day} ${month} ${year} at ${hours}:${minutes}`;
-        // }
-
-
-        // const startTimeFormatted2 = formatDateAndTime(startDate);
-        // const endTimeFormatted2 = formatDateAndTime(endDate);
-        
-        // const timeText = document.createElement('span');
-        // timeText.innerText = `: ${startTimeFormatted2} to ${endTimeFormatted2}`;
-        // timeText.style.marginLeft = '5px'; 
-
-//         buttonContainer.appendChild(button);
-//         buttonContainer.appendChild(timeText);
-//         pathButtonsContainer.appendChild(buttonContainer);
-//     });
-// }
-
-// // Set selected or not selected button class
-// function SelectButtonOrNo(index) {
-//     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
-//     allButtons.forEach(button => button.classList.remove('selected'));
-
-//     const selectedButton = document.getElementById(`pathButton-${index}`);
-//     selectedButton.classList.add('selected');
-// }
-
-// // Select path
-// function selectPath(index, paths) {
-//     SelectButtonOrNo(index); 
-//     clearPolylines();
-//     clearMarkers(); 
-
-//     const polyline = new google.maps.Polyline({
-//         path: paths[index].path,
-//         strokeColor: '#6309CE',
-//         strokeOpacity: 1.0,
-//         strokeWeight: 5,
-//         icons: [{
-//             icon: {
-//                 path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-//                 scale: 3,
-//                 strokeColor: '#6309CE',
-//                 strokeWeight: 2,
-//                 fillColor: '#6309CE',
-//                 fillOpacity: 1.0,
-//             },
-//             offset: '100%',
-//             repeat: '100px'
-//         }]
-//     });
-
-//     polyline.setMap(map); 
-//     polylines.push(polyline);
-
-//     markers.push(new google.maps.Marker({
-//         position: paths[index].path[0],
-//         map: map,
-//         icon: {
-//             path: google.maps.SymbolPath.CIRCLE,
-//             scale: 5,
-//             fillColor: "#C3AAff",
-//             fillOpacity: 1,
-//             strokeWeight: 2,
-//             strokeColor: "#6309CE"
-//         },
-//         title: `Start of path ${index + 1}`
-//     }));
-
-//     markers.push(new google.maps.Marker({
-//         position: paths[index].path[paths[index].path.length - 1],
-//         map: map,
-//         icon: {
-//             path: google.maps.SymbolPath.CIRCLE,
-//             scale: 5,
-//             fillColor: "#C3AAff",
-//             fillOpacity: 1,
-//             strokeWeight: 2,
-//             strokeColor: "#6309CE"
-//         },
-//         title: `End of path ${index + 1}`
-//     }));
-// }
