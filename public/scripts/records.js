@@ -393,7 +393,7 @@ function disableMapClick() {
 // Manage clicking on map
 function handleMapClick(event) {
     selectedPosition = event.latLng;
-    drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
+    drawCircle(selectedPosition, 500, true);
 }
 
 // Draw circle on map
