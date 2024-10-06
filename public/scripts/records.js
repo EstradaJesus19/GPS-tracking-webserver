@@ -301,6 +301,37 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
+// Clear map
+function clearMap() {
+    clearCircles();
+    clearMarkers();
+    clearPolylines();
+}
+
+// Clear markers
+function clearMarkers() {
+    markers.forEach(marker => {
+        marker.setMap(null);
+    });
+    markers = [];
+}
+
+// Clear circles
+function clearCircles() {
+    if (circle) {
+        circle.setMap(null);
+        circle = null;
+    }
+}
+
+// Clear polylines
+function clearPolylines() {
+    polylines.forEach(polyline => {
+         polyline.setMap(null);
+    });
+    polylines = [];
+}
+
 //Filtering by position
 // document.addEventListener('DOMContentLoaded', function () {
 //     const selectLocationBtn = document.getElementById('selectLocationBtn');
@@ -494,36 +525,7 @@ function convertToDatabaseFormat(dateTimeStr) {
 //     }
 // });
 
-// // Clear map
-// function clearMap() {
-//     clearCircles();
-//     clearMarkers();
-//     clearPolylines();
-// }
 
-// // Clear markers
-// function clearMarkers() {
-//     markers.forEach(marker => {
-//         marker.setMap(null);
-//     });
-//     markers = [];
-// }
-
-// // Clear circles
-// function clearCircles() {
-//     if (circle) {
-//         circle.setMap(null);
-//         circle = null;
-//     }
-// }
-
-// // Clear polylines
-// function clearPolylines() {
-//     polylines.forEach(polyline => {
-//         polyline.setMap(null);
-//     });
-//     polylines = [];
-// }
 
 // // Filter by position
 // document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
