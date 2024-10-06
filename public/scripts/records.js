@@ -674,6 +674,14 @@ function createPathSelector(paths) {
         
         // Format date and time for UX
         // Función para formatear la fecha en inglés
+ 
+
+        // format date and time for query
+        const startDate = new Date(pathInfo.startTime);
+        const endDate = new Date(pathInfo.endTime);
+        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+        
         function formatDateAndTime(date) {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -689,12 +697,6 @@ function createPathSelector(paths) {
 
         const startTimeFormatted2 = formatDateAndTime(startDate);
         const endTimeFormatted2 = formatDateAndTime(endDate);
-
-        // format date and time for query
-        const startDate = new Date(pathInfo.startTime);
-        const endDate = new Date(pathInfo.endTime);
-        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
         
         const timeText = document.createElement('span');
         timeText.innerText = `: ${startTimeFormatted2} to ${endTimeFormatted2}`;
