@@ -205,15 +205,25 @@ input[type="number"] {
 /* Path selector */ 
 .pathSelectors {
     display: none;
-    position: absolute;
-    bottom: 40px;
-    left: 60px;
-    width: 350px;
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    /*width: 350px;*/
     background-color: white;
     border-radius: 10px;
     padding: 10px;
     z-index: 1000; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Media query para dispositivos móviles */
+@media (max-width: 768px) {
+    .pathSelectors {
+        left: 50%; /* Centrar horizontalmente */
+        transform: translateX(-50%); /* Mover el elemento al centro exacto */
+        width: 90%; /* Ajustar el ancho para móviles, dejando algo de espacio en los bordes */
+        bottom: 1rem; /* Mantener el mismo espacio en la parte inferior */
+    }
 }
 
 .pathSelectors:hover, 
@@ -227,10 +237,27 @@ input[type="number"] {
     font-size: 16px;
 }
 
+
 #pathButtons {
-    max-height: 200px; 
-    overflow-y: auto; 
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
 }
+
+/* Para navegadores basados en WebKit (como Safari en MacOS y Chrome) */
+#pathButtons::-webkit-scrollbar {
+    width: 8px; /* Grosor de la barra de desplazamiento */
+}
+
+#pathButtons::-webkit-scrollbar-thumb {
+    background-color: #bfbfbf; /* Color del scrollbar */
+    border-radius: 4px; /* Redondeado */
+}
+
+#pathButtons::-webkit-scrollbar-track {
+    background-color: #ffffff; /* Color del fondo */
+}
+
 
 .pathButton {
     display: block;
