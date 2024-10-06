@@ -285,11 +285,9 @@ function createPathSelector(paths) {
         button.onclick = () => selectPath(index, paths);
 
         // Format date and time for UX
-        // Función para formatear la fecha en inglés
-        const startDate = new Date(pathInfo.startTime);
-        const endDate = new Date(pathInfo.endTime);
+        const startDate = new Date(pathInfo.startTimePath);
+        const endDate = new Date(pathInfo.endTimePath);
 
-        // Función para formatear la fecha y la hora
         function formatDateAndTime(date) {
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             const day = date.getDate();
