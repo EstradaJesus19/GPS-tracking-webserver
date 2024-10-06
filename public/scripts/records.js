@@ -374,18 +374,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 createPathSelector(paths);
                 selectPath(0, paths);
                 map.fitBounds(bounds);
-
-                if (paths.length > 1){
-                    // Tell user that more than one path was found
-                    Swal.fire({
-                        text: 'More than one path found. Select a path to view in the lower window.',
-                        confirmButtonText: 'Accept',
-                        confirmButtonColor: '#6309CE',
-                        customClass: {
-                            popup: 'swal2-custom-font',
-                        }
-                    });
-                }
+                
             } else {
                 // Print warning that no data was found
                 Swal.fire({
