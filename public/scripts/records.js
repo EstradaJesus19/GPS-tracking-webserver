@@ -62,16 +62,6 @@ function initMap() {
     polyline.setMap(map);
 }
 
-// Changing filtering type with dropdown 
-document.getElementById('filterType').addEventListener('change', function (e) {
-    const selectedFilter = e.target.value;
-    const pathSelectorContainer = document.getElementById('pathSelector');
-    document.getElementById('timeFilterForm').style.display = selectedFilter === 'time' ? 'block' : 'none';
-    document.getElementById('positionFilterForm').style.display = selectedFilter === 'position' ? 'block' : 'none';
-    pathSelectorContainer.style.display = 'none';
-    clearMap();
-});
-
 //Filtering by time
 // Link calendars and dates
 document.addEventListener('DOMContentLoaded', function () {
@@ -180,19 +170,30 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 data.forEach(point => {
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
+                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
+                    const currentTime = new Date(currentTimeString);
+
+                    // Inicialize comparation variables
+                    let timeDifference = 0;
+                    let distance = 0;
+
+                    if (previousTime) {
+                        timeDifference = (currentTime - previousTime) / 1000; 
+                    }
+
                     if (lastPoint) {
-                        const distance = google.maps.geometry.spherical.computeDistanceBetween(
+                        distance = google.maps.geometry.spherical.computeDistanceBetween(
                             new google.maps.LatLng(lastPoint.lat, lastPoint.lng),
                             new google.maps.LatLng(latLng.lat, latLng.lng)
                         );
-                        
-                        // Check if distance between points is less than 1km
-                        if (distance > 1000) {
-                            if (currentPath.length > 0) {
-                                paths.push([...currentPath]);
-                            }
-                            currentPath = [];
+                    }
+
+                    // Crate new path if time differences > 60 or distance > 1000
+                    if (timeDifference > 60 || distance > 1000) {
+                        if (currentPath.length > 0) {
+                            paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
                         }
+                        currentPath = [];
                     }
 
                     currentPath.push(latLng);
@@ -301,453 +302,453 @@ function convertToDatabaseFormat(dateTimeStr) {
 }
 
 //Filtering by position
-document.addEventListener('DOMContentLoaded', function () {
-    const selectLocationBtn = document.getElementById('selectLocationBtn');
-    const selectLocationContainer = document.getElementById('selectLocationContainer');
-    const positionFilterBtn = document.getElementById('positionFilterBtn');
-    const radiusInput = document.getElementById('radiusInput');
-    const pathSelectorContainer = document.getElementById('pathSelector');
+// document.addEventListener('DOMContentLoaded', function () {
+//     const selectLocationBtn = document.getElementById('selectLocationBtn');
+//     const selectLocationContainer = document.getElementById('selectLocationContainer');
+//     const positionFilterBtn = document.getElementById('positionFilterBtn');
+//     const radiusInput = document.getElementById('radiusInput');
+//     const pathSelectorContainer = document.getElementById('pathSelector');
 
-    // Define select location button actions
-    selectLocationBtn.addEventListener('click', function () {
-        if (!isSelectingLocation) {
-            clearMap();
-            radiusInput.disabled = false;
-            pathSelectorContainer.style.display = 'none';
-            isSelectingLocation = true;
-            selectedPosition = null;
-            positionFilterBtn.style.opacity = 0.5;
-            positionFilterBtn.style.cursor = 'not-allowed';
-            positionFilterBtn.disabled = true;
+//     // Define select location button actions
+//     selectLocationBtn.addEventListener('click', function () {
+//         if (!isSelectingLocation) {
+//             clearMap();
+//             radiusInput.disabled = false;
+//             pathSelectorContainer.style.display = 'none';
+//             isSelectingLocation = true;
+//             selectedPosition = null;
+//             positionFilterBtn.style.opacity = 0.5;
+//             positionFilterBtn.style.cursor = 'not-allowed';
+//             positionFilterBtn.disabled = true;
 
-            selectLocationBtn.style.display = 'none'; 
-            createLocationButtons();
+//             selectLocationBtn.style.display = 'none'; 
+//             createLocationButtons();
 
-            enableMapClick();
-            map.setOptions({ draggableCursor: 'crosshair' });
-        }
-    });
+//             enableMapClick();
+//             map.setOptions({ draggableCursor: 'crosshair' });
+//         }
+//     });
 
-    // Create confirm and cancel buttons
-    function createLocationButtons() {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.id = 'locationButtons';
-        buttonContainer.style.display = 'inline';
-        buttonContainer.style.gap = '10px';
-        buttonContainer.style.justifyContent = 'center';
+//     // Create confirm and cancel buttons
+//     function createLocationButtons() {
+//         const buttonContainer = document.createElement('div');
+//         buttonContainer.id = 'locationButtons';
+//         buttonContainer.style.display = 'inline';
+//         buttonContainer.style.gap = '10px';
+//         buttonContainer.style.justifyContent = 'center';
 
-        const checkBtn = document.createElement('button');
-        checkBtn.innerHTML = '<img src="media/check.svg" alt="Check">';
-        checkBtn.style.backgroundColor = '#ffffff';
-        checkBtn.style.border = '2px solid #6309CE';
-        checkBtn.style.borderRadius = '50%';
-        checkBtn.style.width = '40px';
-        checkBtn.style.height = '40px';
-        checkBtn.style.cursor = 'pointer';
-        checkBtn.style.marginRight = '10px';
-        checkBtn.style.padding = '5px';
+//         const checkBtn = document.createElement('button');
+//         checkBtn.innerHTML = '<img src="media/check.svg" alt="Check">';
+//         checkBtn.style.backgroundColor = '#ffffff';
+//         checkBtn.style.border = '2px solid #6309CE';
+//         checkBtn.style.borderRadius = '50%';
+//         checkBtn.style.width = '40px';
+//         checkBtn.style.height = '40px';
+//         checkBtn.style.cursor = 'pointer';
+//         checkBtn.style.marginRight = '10px';
+//         checkBtn.style.padding = '5px';
 
-        // Confirm selected location
-        checkBtn.addEventListener('click', function () {
-            if (selectedPosition) {
-                circle.setEditable(false);
-                circle.setDraggable(false);
-                isSelectingLocation = false;
+//         // Confirm selected location
+//         checkBtn.addEventListener('click', function () {
+//             if (selectedPosition) {
+//                 circle.setEditable(false);
+//                 circle.setDraggable(false);
+//                 isSelectingLocation = false;
 
-                clearLocationButtons(); 
-                selectLocationBtn.style.display = 'inline'; 
+//                 clearLocationButtons(); 
+//                 selectLocationBtn.style.display = 'inline'; 
 
-                positionFilterBtn.style.opacity = 1;
-                positionFilterBtn.style.cursor = 'pointer';
-                positionFilterBtn.disabled = false;
+//                 positionFilterBtn.style.opacity = 1;
+//                 positionFilterBtn.style.cursor = 'pointer';
+//                 positionFilterBtn.disabled = false;
 
-                map.setOptions({ draggableCursor: null });
-                disableMapClick();
+//                 map.setOptions({ draggableCursor: null });
+//                 disableMapClick();
 
-                // Creater center marker in the area circle
-                markers.push(new google.maps.Marker({
-                    position: selectedPosition,
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 5,
-                        fillColor: "#C3AAff",
-                        fillOpacity: 1,
-                        strokeWeight: 2,
-                        strokeColor: "#6309CE"
-                    },
-                    title: "Center"
-                }));
+//                 // Creater center marker in the area circle
+//                 markers.push(new google.maps.Marker({
+//                     position: selectedPosition,
+//                     map: map,
+//                     icon: {
+//                         path: google.maps.SymbolPath.CIRCLE,
+//                         scale: 5,
+//                         fillColor: "#C3AAff",
+//                         fillOpacity: 1,
+//                         strokeWeight: 2,
+//                         strokeColor: "#6309CE"
+//                     },
+//                     title: "Center"
+//                 }));
                 
-            } else {
-                // Print warning whrn position is not set
-                Swal.fire({
-                    text: 'Set a location on the map',
-                    icon: 'error',
-                    iconColor: '#6309CE',
-                    confirmButtonText: 'Accept',
-                    confirmButtonColor: '#6309CE',
-                    customClass: {
-                        popup: 'swal2-custom-font',
-                        icon: 'swal2-icon-info-custom'
-                    }
-                });
-            }
-        });
+//             } else {
+//                 // Print warning whrn position is not set
+//                 Swal.fire({
+//                     text: 'Set a location on the map',
+//                     icon: 'error',
+//                     iconColor: '#6309CE',
+//                     confirmButtonText: 'Accept',
+//                     confirmButtonColor: '#6309CE',
+//                     customClass: {
+//                         popup: 'swal2-custom-font',
+//                         icon: 'swal2-icon-info-custom'
+//                     }
+//                 });
+//             }
+//         });
 
-        const cancelBtn = document.createElement('button');
-        cancelBtn.innerHTML = '<img src="media/cancel.svg" alt="Cancel">';
-        cancelBtn.style.backgroundColor = '#ffffff';
-        cancelBtn.style.border = '2px solid #6309CE';
-        cancelBtn.style.borderRadius = '50%';
-        cancelBtn.style.width = '40px';
-        cancelBtn.style.height = '40px';
-        cancelBtn.style.cursor = 'pointer';
-        cancelBtn.style.marginRight = '10px';
-        cancelBtn.style.padding = '5px';
+//         const cancelBtn = document.createElement('button');
+//         cancelBtn.innerHTML = '<img src="media/cancel.svg" alt="Cancel">';
+//         cancelBtn.style.backgroundColor = '#ffffff';
+//         cancelBtn.style.border = '2px solid #6309CE';
+//         cancelBtn.style.borderRadius = '50%';
+//         cancelBtn.style.width = '40px';
+//         cancelBtn.style.height = '40px';
+//         cancelBtn.style.cursor = 'pointer';
+//         cancelBtn.style.marginRight = '10px';
+//         cancelBtn.style.padding = '5px';
 
-        // Cancel selected location
-        cancelBtn.addEventListener('click', function () {
-            clearLocationButtons();
-            selectLocationBtn.style.display = 'inline'; 
+//         // Cancel selected location
+//         cancelBtn.addEventListener('click', function () {
+//             clearLocationButtons();
+//             selectLocationBtn.style.display = 'inline'; 
 
-            clearMap();
-            map.setOptions({ draggableCursor: null });
-            disableMapClick();
-            isSelectingLocation = false;
-            selectedPosition = null;
+//             clearMap();
+//             map.setOptions({ draggableCursor: null });
+//             disableMapClick();
+//             isSelectingLocation = false;
+//             selectedPosition = null;
 
-            positionFilterBtn.style.opacity = 1;
-            positionFilterBtn.style.cursor = 'pointer';
-            positionFilterBtn.disabled = false;
-        });
+//             positionFilterBtn.style.opacity = 1;
+//             positionFilterBtn.style.cursor = 'pointer';
+//             positionFilterBtn.disabled = false;
+//         });
 
-        // Set buttons in web page
-        buttonContainer.appendChild(checkBtn);
-        buttonContainer.appendChild(cancelBtn);
-        selectLocationContainer.appendChild(buttonContainer);
-    }
+//         // Set buttons in web page
+//         buttonContainer.appendChild(checkBtn);
+//         buttonContainer.appendChild(cancelBtn);
+//         selectLocationContainer.appendChild(buttonContainer);
+//     }
 
-    // Remove location buttons
-    function clearLocationButtons() {
-        const buttonContainer = document.getElementById('locationButtons');
-        if (buttonContainer) {
-            buttonContainer.remove();
-        }
-    }
+//     // Remove location buttons
+//     function clearLocationButtons() {
+//         const buttonContainer = document.getElementById('locationButtons');
+//         if (buttonContainer) {
+//             buttonContainer.remove();
+//         }
+//     }
 
-    // Link radius input with map circle
-    radiusInput.addEventListener('input', function () {
-        if (circle) {
-            const newRadius = parseFloat(radiusInput.value);
-            circle.setRadius(newRadius);
-        }
-    });
+//     // Link radius input with map circle
+//     radiusInput.addEventListener('input', function () {
+//         if (circle) {
+//             const newRadius = parseFloat(radiusInput.value);
+//             circle.setRadius(newRadius);
+//         }
+//     });
 
-    // Enable map click
-    function enableMapClick() {
-        map.addListener('click', handleMapClick);
-    }
+//     // Enable map click
+//     function enableMapClick() {
+//         map.addListener('click', handleMapClick);
+//     }
 
-    // Disable map click
-    function disableMapClick() {
-        google.maps.event.clearListeners(map, 'click');
-    }
+//     // Disable map click
+//     function disableMapClick() {
+//         google.maps.event.clearListeners(map, 'click');
+//     }
 
-    // Manage clicking on map
-    function handleMapClick(event) {
-        selectedPosition = event.latLng;
-        clearMap();
-        drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
-    }
+//     // Manage clicking on map
+//     function handleMapClick(event) {
+//         selectedPosition = event.latLng;
+//         clearMap();
+//         drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
+//     }
 
-    // Draw circle on map
-    function drawCircle(position, radius, isEditable) {
-        clearMap();
+//     // Draw circle on map
+//     function drawCircle(position, radius, isEditable) {
+//         clearMap();
 
-        circle = new google.maps.Circle({
-            center: position,
-            radius: radius,
-            strokeColor: '#6309CE',
-            strokeOpacity: 0.5,
-            strokeWeight: 2,
-            fillColor: '#C3AAff',
-            fillOpacity: 0.25,
-            map: map,
-            editable: isEditable,
-            draggable: isEditable
-        });
+//         circle = new google.maps.Circle({
+//             center: position,
+//             radius: radius,
+//             strokeColor: '#6309CE',
+//             strokeOpacity: 0.5,
+//             strokeWeight: 2,
+//             fillColor: '#C3AAff',
+//             fillOpacity: 0.25,
+//             map: map,
+//             editable: isEditable,
+//             draggable: isEditable
+//         });
 
-        if (isEditable) {
-            // Update radius input with edited on map values 
-            circle.addListener('radius_changed', function () {
-                const updatedRadius = Math.round(circle.getRadius());
-                document.getElementById('radiusInput').value = updatedRadius;
-            });
+//         if (isEditable) {
+//             // Update radius input with edited on map values 
+//             circle.addListener('radius_changed', function () {
+//                 const updatedRadius = Math.round(circle.getRadius());
+//                 document.getElementById('radiusInput').value = updatedRadius;
+//             });
 
-            // Change selected position with new center
-            circle.addListener('center_changed', function () {
-                selectedPosition = circle.getCenter();
-            });
-        }
-    }
-});
+//             // Change selected position with new center
+//             circle.addListener('center_changed', function () {
+//                 selectedPosition = circle.getCenter();
+//             });
+//         }
+//     }
+// });
 
-// Clear map
-function clearMap() {
-    clearCircles();
-    clearMarkers();
-    clearPolylines();
-}
+// // Clear map
+// function clearMap() {
+//     clearCircles();
+//     clearMarkers();
+//     clearPolylines();
+// }
 
-// Clear markers
-function clearMarkers() {
-    markers.forEach(marker => {
-        marker.setMap(null);
-    });
-    markers = [];
-}
+// // Clear markers
+// function clearMarkers() {
+//     markers.forEach(marker => {
+//         marker.setMap(null);
+//     });
+//     markers = [];
+// }
 
-// Clear circles
-function clearCircles() {
-    if (circle) {
-        circle.setMap(null);
-        circle = null;
-    }
-}
+// // Clear circles
+// function clearCircles() {
+//     if (circle) {
+//         circle.setMap(null);
+//         circle = null;
+//     }
+// }
 
-// Clear polylines
-function clearPolylines() {
-    polylines.forEach(polyline => {
-        polyline.setMap(null);
-    });
-    polylines = [];
-}
+// // Clear polylines
+// function clearPolylines() {
+//     polylines.forEach(polyline => {
+//         polyline.setMap(null);
+//     });
+//     polylines = [];
+// }
 
-// Filter by position
-document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
-    const radiusInput = document.getElementById('radiusInput');
+// // Filter by position
+// document.getElementById('positionFilterBtn').addEventListener('click', function (e) { 
+//     const radiusInput = document.getElementById('radiusInput');
 
-    e.preventDefault();
+//     e.preventDefault();
 
-    // Print warning if position or radius aren't selected
-    if (!selectedPosition || !radiusInput.value) {
-        Swal.fire({
-            text: 'Please set a location and define a radius',
-            icon: 'error',
-            iconColor: '#6309CE',
-            confirmButtonText: 'Accept',
-            confirmButtonColor: '#6309CE',
-            customClass: {
-                popup: 'swal2-custom-font',
-                icon: 'swal2-icon-info-custom'
-            }
-        });
-        return;
-    }
+//     // Print warning if position or radius aren't selected
+//     if (!selectedPosition || !radiusInput.value) {
+//         Swal.fire({
+//             text: 'Please set a location and define a radius',
+//             icon: 'error',
+//             iconColor: '#6309CE',
+//             confirmButtonText: 'Accept',
+//             confirmButtonColor: '#6309CE',
+//             customClass: {
+//                 popup: 'swal2-custom-font',
+//                 icon: 'swal2-icon-info-custom'
+//             }
+//         });
+//         return;
+//     }
 
-    const position = {
-        latitude: selectedPosition.lat(),
-        longitude: selectedPosition.lng(),
-        radius: parseFloat(radiusInput.value)
-    };
+//     const position = {
+//         latitude: selectedPosition.lat(),
+//         longitude: selectedPosition.lng(),
+//         radius: parseFloat(radiusInput.value)
+//     };
 
-    radiusInput.disabled = true;
+//     radiusInput.disabled = true;
 
-    // Request position filtered data to server
-    fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const bounds = new google.maps.LatLngBounds();
-                let paths = []; 
-                let currentPath = []; 
-                let previousTime = null; 
-                let startTime = null;
-                let endTime = null;
+//     // Request position filtered data to server
+//     fetch(`/api/filterDataByPosition?latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.length > 0) {
+//                 const bounds = new google.maps.LatLngBounds();
+//                 let paths = []; 
+//                 let currentPath = []; 
+//                 let previousTime = null; 
+//                 let startTime = null;
+//                 let endTime = null;
 
-                // Check recieved data
-                data.forEach((point, index) => {
-                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+//                 // Check recieved data
+//                 data.forEach((point, index) => {
+//                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
 
-                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
-                    const currentTime = new Date(currentTimeString);
+//                     const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
+//                     const currentTime = new Date(currentTimeString);
                     
-                    // Compare time between data
-                    if (previousTime) {
-                        const timeDifference = (currentTime - previousTime) / 1000; 
+//                     // Compare time between data
+//                     if (previousTime) {
+//                         const timeDifference = (currentTime - previousTime) / 1000; 
 
-                        if (timeDifference > 60) {
-                            if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, startTime: startTime, endTime: endTime }); 
-                            }
-                            currentPath = []; 
-                        }
-                    }
+//                         if (timeDifference > 60) {
+//                             if (currentPath.length > 0) {
+//                                 paths.push({ path: currentPath, startTime: startTime, endTime: endTime }); 
+//                             }
+//                             currentPath = []; 
+//                         }
+//                     }
 
-                    if (!currentPath.length) {
-                        startTime = currentTime; 
-                    }
-                    endTime = currentTime; 
-                    currentPath.push(latLng); 
-                    bounds.extend(latLng); 
-                    previousTime = currentTime; 
-                });
+//                     if (!currentPath.length) {
+//                         startTime = currentTime; 
+//                     }
+//                     endTime = currentTime; 
+//                     currentPath.push(latLng); 
+//                     bounds.extend(latLng); 
+//                     previousTime = currentTime; 
+//                 });
 
-                if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
-                }
+//                 if (currentPath.length > 0) {
+//                     paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
+//                 }
                 
-                // Create windows for path selecting
-                createPathSelector(paths);
-                selectPath(0, paths);
-                map.fitBounds(bounds);
+//                 // Create windows for path selecting
+//                 createPathSelector(paths);
+//                 selectPath(0, paths);
+//                 map.fitBounds(bounds);
 
-                if (paths.length > 1){
-                    // Tell user that more than one path was found
-                    Swal.fire({
-                        text: 'More than one path found. Select a path to view in the lower window.',
-                        confirmButtonText: 'Accept',
-                        confirmButtonColor: '#6309CE',
-                        customClass: {
-                            popup: 'swal2-custom-font',
-                        }
-                    });
-                }
-            } else {
-                // Print warning that no data was found
-                Swal.fire({
-                    text: 'No data found in the specified area.',
-                    icon: 'info',
-                    iconColor: '#6309CE',
-                    confirmButtonText: 'Accept',
-                    confirmButtonColor: '#6309CE',
-                    customClass: {
-                        popup: 'swal2-custom-font',
-                        icon: 'swal2-icon-info-custom'
-                    }
-                });
-            }
-        })
-        .catch(error => {
-            clearMap();
+//                 if (paths.length > 1){
+//                     // Tell user that more than one path was found
+//                     Swal.fire({
+//                         text: 'More than one path found. Select a path to view in the lower window.',
+//                         confirmButtonText: 'Accept',
+//                         confirmButtonColor: '#6309CE',
+//                         customClass: {
+//                             popup: 'swal2-custom-font',
+//                         }
+//                     });
+//                 }
+//             } else {
+//                 // Print warning that no data was found
+//                 Swal.fire({
+//                     text: 'No data found in the specified area.',
+//                     icon: 'info',
+//                     iconColor: '#6309CE',
+//                     confirmButtonText: 'Accept',
+//                     confirmButtonColor: '#6309CE',
+//                     customClass: {
+//                         popup: 'swal2-custom-font',
+//                         icon: 'swal2-icon-info-custom'
+//                     }
+//                 });
+//             }
+//         })
+//         .catch(error => {
+//             clearMap();
 
-            // Print warning if error filtering data
-            Swal.fire({
-                text: 'Error fetching filtered data: ' + error,
-                icon: 'error',
-                iconColor: '#6309CE',
-                confirmButtonText: 'Accept',
-                confirmButtonColor: '#6309CE',
-                customClass: {
-                    popup: 'swal2-custom-font',
-                    icon: 'swal2-icon-info-custom'
-                }
-            });
-            console.error('Error fetching filtered data: ', error);
-        });
-});
+//             // Print warning if error filtering data
+//             Swal.fire({
+//                 text: 'Error fetching filtered data: ' + error,
+//                 icon: 'error',
+//                 iconColor: '#6309CE',
+//                 confirmButtonText: 'Accept',
+//                 confirmButtonColor: '#6309CE',
+//                 customClass: {
+//                     popup: 'swal2-custom-font',
+//                     icon: 'swal2-icon-info-custom'
+//                 }
+//             });
+//             console.error('Error fetching filtered data: ', error);
+//         });
+// });
 
-function createPathSelector(paths) {
-    const pathSelectorContainer = document.getElementById('pathSelector');
-    const pathButtonsContainer = document.getElementById('pathButtons');
-    pathButtonsContainer.innerHTML = ''; 
+// function createPathSelector(paths) {
+//     const pathSelectorContainer = document.getElementById('pathSelector');
+//     const pathButtonsContainer = document.getElementById('pathButtons');
+//     pathButtonsContainer.innerHTML = ''; 
 
-    if (paths.length === 0) {
-        pathSelectorContainer.style.display = 'none';
-        return;
-    }
-    pathSelectorContainer.style.display = 'block'; 
+//     if (paths.length === 0) {
+//         pathSelectorContainer.style.display = 'none';
+//         return;
+//     }
+//     pathSelectorContainer.style.display = 'block'; 
 
-    paths.forEach((pathInfo, index) => {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.style.display = 'flex'; 
-        buttonContainer.style.alignItems = 'center';
+//     paths.forEach((pathInfo, index) => {
+//         const buttonContainer = document.createElement('div');
+//         buttonContainer.style.display = 'flex'; 
+//         buttonContainer.style.alignItems = 'center';
 
-        const button = document.createElement('button');
-        button.className = 'pathButton';
-        button.id = `pathButton-${index}`;
-        button.innerText = `Path ${index + 1}`;
-        button.onclick = () => selectPath(index, paths);
+//         const button = document.createElement('button');
+//         button.className = 'pathButton';
+//         button.id = `pathButton-${index}`;
+//         button.innerText = `Path ${index + 1}`;
+//         button.onclick = () => selectPath(index, paths);
         
-        // Format date and time for UX
-        const startDate = new Date(pathInfo.startTime);
-        const endDate = new Date(pathInfo.endTime);
-        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
+//         // Format date and time for UX
+//         const startDate = new Date(pathInfo.startTime);
+//         const endDate = new Date(pathInfo.endTime);
+//         const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
+//         const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
         
-        const timeText = document.createElement('span');
-        timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
-        timeText.style.marginLeft = '5px'; 
+//         const timeText = document.createElement('span');
+//         timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
+//         timeText.style.marginLeft = '5px'; 
 
-        buttonContainer.appendChild(button);
-        buttonContainer.appendChild(timeText);
-        pathButtonsContainer.appendChild(buttonContainer);
-    });
-}
+//         buttonContainer.appendChild(button);
+//         buttonContainer.appendChild(timeText);
+//         pathButtonsContainer.appendChild(buttonContainer);
+//     });
+// }
 
-// Set selected or not selected button class
-function SelectButtonOrNo(index) {
-    const allButtons = document.querySelectorAll('#pathButtons .pathButton');
-    allButtons.forEach(button => button.classList.remove('selected'));
+// // Set selected or not selected button class
+// function SelectButtonOrNo(index) {
+//     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
+//     allButtons.forEach(button => button.classList.remove('selected'));
 
-    const selectedButton = document.getElementById(`pathButton-${index}`);
-    selectedButton.classList.add('selected');
-}
+//     const selectedButton = document.getElementById(`pathButton-${index}`);
+//     selectedButton.classList.add('selected');
+// }
 
-// Select path
-function selectPath(index, paths) {
-    SelectButtonOrNo(index); 
-    clearPolylines();
-    clearMarkers(); 
+// // Select path
+// function selectPath(index, paths) {
+//     SelectButtonOrNo(index); 
+//     clearPolylines();
+//     clearMarkers(); 
 
-    const polyline = new google.maps.Polyline({
-        path: paths[index].path,
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-        icons: [{
-            icon: {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                scale: 3,
-                strokeColor: '#6309CE',
-                strokeWeight: 2,
-                fillColor: '#6309CE',
-                fillOpacity: 1.0,
-            },
-            offset: '100%',
-            repeat: '100px'
-        }]
-    });
+//     const polyline = new google.maps.Polyline({
+//         path: paths[index].path,
+//         strokeColor: '#6309CE',
+//         strokeOpacity: 1.0,
+//         strokeWeight: 5,
+//         icons: [{
+//             icon: {
+//                 path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+//                 scale: 3,
+//                 strokeColor: '#6309CE',
+//                 strokeWeight: 2,
+//                 fillColor: '#6309CE',
+//                 fillOpacity: 1.0,
+//             },
+//             offset: '100%',
+//             repeat: '100px'
+//         }]
+//     });
 
-    polyline.setMap(map); 
-    polylines.push(polyline);
+//     polyline.setMap(map); 
+//     polylines.push(polyline);
 
-    markers.push(new google.maps.Marker({
-        position: paths[index].path[0],
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: `Start of path ${index + 1}`
-    }));
+//     markers.push(new google.maps.Marker({
+//         position: paths[index].path[0],
+//         map: map,
+//         icon: {
+//             path: google.maps.SymbolPath.CIRCLE,
+//             scale: 5,
+//             fillColor: "#C3AAff",
+//             fillOpacity: 1,
+//             strokeWeight: 2,
+//             strokeColor: "#6309CE"
+//         },
+//         title: `Start of path ${index + 1}`
+//     }));
 
-    markers.push(new google.maps.Marker({
-        position: paths[index].path[paths[index].path.length - 1],
-        map: map,
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 5,
-            fillColor: "#C3AAff",
-            fillOpacity: 1,
-            strokeWeight: 2,
-            strokeColor: "#6309CE"
-        },
-        title: `End of path ${index + 1}`
-    }));
-}
+//     markers.push(new google.maps.Marker({
+//         position: paths[index].path[paths[index].path.length - 1],
+//         map: map,
+//         icon: {
+//             path: google.maps.SymbolPath.CIRCLE,
+//             scale: 5,
+//             fillColor: "#C3AAff",
+//             fillOpacity: 1,
+//             strokeWeight: 2,
+//             strokeColor: "#6309CE"
+//         },
+//         title: `End of path ${index + 1}`
+//     }));
+// }

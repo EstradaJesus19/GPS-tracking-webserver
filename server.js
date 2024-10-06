@@ -119,7 +119,7 @@ app.get('/api/filterData', (req, res) => {
     const tableName = process.env.db_table;
 
     db.query(
-        `SELECT latitude, longitude FROM ?? WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?`,
+        `SELECT latitude, longitude, date, time FROM ?? WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?`,
         [tableName, startTime, endTime],
         (err, results) => {
             if (err) {
