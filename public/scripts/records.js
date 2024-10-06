@@ -393,6 +393,7 @@ function disableMapClick() {
 // Manage clicking on map
 function handleMapClick(event) {
     selectedPosition = event.latLng;
+    clearCircles();
     drawCircle(selectedPosition, 500, true);
 }
 
