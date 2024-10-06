@@ -382,6 +382,7 @@ function selectPath(index, paths) {
 // Enable map click
 function enableMapClick() {
     map.addListener('click', handleMapClick);
+    map.setOptions({ draggableCursor: 'crosshair' });
 }
 
 // Disable map click
@@ -392,14 +393,11 @@ function disableMapClick() {
 // Manage clicking on map
 function handleMapClick(event) {
     selectedPosition = event.latLng;
-    clearMap();
     drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
 }
 
 // Draw circle on map
 function drawCircle(position, radius, isEditable) {
-    clearMap();
-
     circle = new google.maps.Circle({
         center: position,
         radius: radius,
