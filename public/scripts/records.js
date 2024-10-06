@@ -164,6 +164,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 const bounds = new google.maps.LatLngBounds();
                 let paths = [];
                 let currentPath = [];
+                let previousTime = null;
                 let lastPoint = null;
 
                 // Separate data in paths
