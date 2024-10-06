@@ -289,16 +289,12 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
 
         if (isEditable) {
-            // Update radius
-            circle.addListener('radius_changed', function () {
+            // Evento para ejecutar solo al soltar el clic
+            google.maps.event.addListener(circle, 'mouseup', function () {
                 radius = Math.round(circle.getRadius());
-            });
-                
-            // Change selected position with new center
-            circle.addListener('center_changed', function () {
                 selectedPosition = circle.getCenter();
-                filterByPosition(radius, selectedPosition, startTime, endTime);
-        });
+                filterByPosition(radius, selectedPosition, startTime, endTime); 
+            });
         }
     }
 });
