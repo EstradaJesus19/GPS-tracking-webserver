@@ -166,6 +166,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 let currentPath = [];
                 let previousTime = null;
                 let lastPoint = null;
+                let startTimePath = null;
+                let endTimePath = null;
 
                 // Separate data in paths
                 data.forEach(point => {
@@ -192,25 +194,25 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     // Crate new path if time differences > 60 or distance > 1000
                     if (timeDifference > 60 || distance > 1000) {
                         if (currentPath.length > 0) {
-                            paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
+                            paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
                         }
                         currentPath = [];
                     }
 
                     if (!currentPath.length) {
-                        startTime = currentTime; 
+                        startTimePath = currentTime; 
                     }
                     
-                    endTime = currentTime; 
+                    endTimePath = currentTime; 
+                    previousTime = currentTime; 
                     currentPath.push(latLng); 
                     bounds.extend(latLng); 
-                    previousTime = currentTime; 
                     lastPoint = latLng;         
                 });
 
                 // Add data to paths
                 if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, startTime: startTime, endTime: endTime });
+                    paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
                 }
                                     
                 // Create windows for path selecting
