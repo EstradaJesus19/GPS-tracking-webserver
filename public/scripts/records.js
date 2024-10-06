@@ -273,6 +273,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         drawCircle(selectedPosition, 500, true);
     }
 
+    let isDragging = false;
+
     // Draw circle on map
     function drawCircle(position, radius, isEditable) {
         circle = new google.maps.Circle({
@@ -289,11 +291,23 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
 
         if (isEditable) {
-            // Evento para ejecutar solo al soltar el clic
+            // Detect when the user is dragging or changing the radius
+            circle.addListener('radius_changed', function () {
+                isDragging = true;  // Flag set to true when changing radius
+            });
+
+            circle.addListener('center_changed', function () {
+                isDragging = true;  // Flag set to true when moving the circle
+            });
+
+            // Apply filter when mouse is released after dragging or changing radius
             google.maps.event.addListener(circle, 'mouseup', function () {
-                radius = Math.round(circle.getRadius());
-                selectedPosition = circle.getCenter();
-                filterByPosition(radius, selectedPosition, startTime, endTime); 
+                if (isDragging) {
+                    isDragging = false;  // Reset the flag after mouse release
+                    radius = Math.round(circle.getRadius());
+                    selectedPosition = circle.getCenter();
+                    filterByPosition(radius, selectedPosition, startTime, endTime);
+                }
             });
         }
     }
