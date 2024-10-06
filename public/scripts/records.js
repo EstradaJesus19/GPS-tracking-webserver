@@ -253,6 +253,54 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             });
             console.error('Error getting filtered data: ', error);
         });
+        
+    // Enable map click
+    function enableMapClick() {
+        map.addListener('click', handleMapClick);
+        map.setOptions({ draggableCursor: 'crosshair' });
+    }
+
+    // Disable map click
+    function disableMapClick() {
+        google.maps.event.clearListeners(map, 'click');
+    }
+
+    // Manage clicking on map
+    function handleMapClick(event) {
+        selectedPosition = event.latLng;
+        clearCircles();
+        drawCircle(selectedPosition, 500, true);
+    }
+
+    // Draw circle on map
+    function drawCircle(position, radius, isEditable) {
+        circle = new google.maps.Circle({
+            center: position,
+            radius: radius,
+            strokeColor: '#6309CE',
+            strokeOpacity: 0.5,
+            strokeWeight: 2,
+            fillColor: '#C3AAff',
+            fillOpacity: 0.25,
+            map: map,
+            editable: isEditable,
+            draggable: isEditable
+        });
+
+        if (isEditable) {
+            // Update radius input with edited on map values 
+            circle.addListener('radius_changed', function () {
+                const updatedRadius = Math.round(circle.getRadius());
+                document.getElementById('radiusInput').value = updatedRadius;
+            });
+
+            // Change selected position with new center
+            circle.addListener('center_changed', function () {
+                selectedPosition = circle.getCenter();
+            });
+        }
+    }
+    
 });
 
 // Convert date and time into database format
@@ -379,52 +427,7 @@ function selectPath(index, paths) {
     }));
 }
 
-// Enable map click
-function enableMapClick() {
-    map.addListener('click', handleMapClick);
-    map.setOptions({ draggableCursor: 'crosshair' });
-}
 
-// Disable map click
-function disableMapClick() {
-    google.maps.event.clearListeners(map, 'click');
-}
-
-// Manage clicking on map
-function handleMapClick(event) {
-    selectedPosition = event.latLng;
-    clearCircles();
-    drawCircle(selectedPosition, 500, true);
-}
-
-// Draw circle on map
-function drawCircle(position, radius, isEditable) {
-    circle = new google.maps.Circle({
-        center: position,
-        radius: radius,
-        strokeColor: '#6309CE',
-        strokeOpacity: 0.5,
-        strokeWeight: 2,
-        fillColor: '#C3AAff',
-        fillOpacity: 0.25,
-        map: map,
-        editable: isEditable,
-        draggable: isEditable
-    });
-
-    if (isEditable) {
-        // Update radius input with edited on map values 
-        circle.addListener('radius_changed', function () {
-            const updatedRadius = Math.round(circle.getRadius());
-            document.getElementById('radiusInput').value = updatedRadius;
-        });
-
-        // Change selected position with new center
-        circle.addListener('center_changed', function () {
-            selectedPosition = circle.getCenter();
-        });
-    }
-}
 
 // Clear map
 function clearMap() {
