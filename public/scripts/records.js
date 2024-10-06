@@ -290,31 +290,18 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             draggable: isEditable
         });
 
-        let radiusChanged = false;
-        let positionChanged = false;
-
         if (isEditable) {
-            // Detect if radius has changed
             google.maps.event.addListener(circle, 'radius_changed', function () {
-                radiusChanged = true;
+                radius = Math.round(circle.getRadius());
+                filterByPosition(radius, selectedPosition, startTime, endTime);
             });
 
-            // Detect if center position has changed
-            google.maps.event.addListener(circle, 'center_changed', function () {
-                positionChanged = true;
-            });
 
             // Handle the 'mouseup' event to execute filterByPosition only when the click is released
             google.maps.event.addListener(circle, 'mouseup', function () {
-                if (radiusChanged || positionChanged) {
-                    radius = Math.round(circle.getRadius());
-                    selectedPosition = circle.getCenter();
-                    filterByPosition(radius, selectedPosition, startTime, endTime);
-
-                    // Reset flags
-                    radiusChanged = false;
-                    positionChanged = false;
-                }
+                radius = Math.round(circle.getRadius());
+                selectedPosition = circle.getCenter();
+                filterByPosition(radius, selectedPosition, startTime, endTime);
             });
         }
     }
