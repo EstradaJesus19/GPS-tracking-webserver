@@ -670,13 +670,27 @@ function createPathSelector(paths) {
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
         
+
+
         // Format date and time for UX
+        function formatDateAndTime(date) {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const day = date.getDate();
+        const month = months[date.getMonth()]; // Obtener el nombre corto del mes en inglés
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0'); // Asegura que haya dos dígitos en las horas
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Asegura que haya dos dígitos en los minutos
+
+        return `${day} ${month} ${year} at ${hours}:${minutes}`;
+    }
+
         const startDate = new Date(pathInfo.startTime);
         const endDate = new Date(pathInfo.endTime);
-        const startTimeFormatted = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear().toString().slice(-2)} ${startDate.getHours()}:${startDate.getMinutes().toString().padStart(2, '0')}`;
-        const endTimeFormatted = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear().toString().slice(-2)} ${endDate.getHours()}:${endDate.getMinutes().toString().padStart(2, '0')}`;
-        
-        const timeText = document.createElement('span');
+        const startTimeFormatted = formatDateAndTime(startDate);
+        const endTimeFormatted = formatDateAndTime(endDate);
+
+        const timeText = `From ${startTimeFormatted} to ${endTimeFormatted}`;
         timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
         timeText.style.marginLeft = '5px'; 
 
