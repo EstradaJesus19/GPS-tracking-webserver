@@ -289,10 +289,10 @@ input[type="number"] {
 /* Path selector */ 
 .pathSelectors {
     display: none;
-    position: absolute;
-    bottom: 20px;
-    left: 30px;
-    width: 350px;
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    /*width: 350px;*/
     background-color: white;
     border-radius: 10px;
     padding: 10px;
@@ -303,9 +303,10 @@ input[type="number"] {
 /* Media query para dispositivos móviles */
 @media (max-width: 768px) {
     .pathSelectors {
-        position: static; 
-        margin-top: 20px; 
-        width: 90%; 
+        left: 50%; /* Centrar horizontalmente */
+        transform: translateX(-50%); /* Mover el elemento al centro exacto */
+        width: 90%; /* Ajustar el ancho para móviles, dejando algo de espacio en los bordes */
+        bottom: 1rem; /* Mantener el mismo espacio en la parte inferior */
     }
 }
 
