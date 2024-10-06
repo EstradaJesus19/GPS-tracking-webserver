@@ -288,12 +288,11 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             draggable: isEditable
         });
 
-        filterByPosition(radius, selectedPosition, startTime, endTime);
-
         if (isEditable) {
             // Change selected position with new center
             circle.addListener('center_changed', function () {
             selectedPosition = circle.getCenter();
+            filterByPosition(radius, selectedPosition, startTime, endTime);
         });
         }
     }
