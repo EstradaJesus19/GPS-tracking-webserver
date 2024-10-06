@@ -219,6 +219,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 createPathSelector(paths);
                 selectPath(0, paths);
                 map.fitBounds(bounds);
+                enableMapClick();
 
             } else {
                 // Print warning if no data was found
@@ -378,6 +379,53 @@ function selectPath(index, paths) {
     }));
 }
 
+// Enable map click
+function enableMapClick() {
+    map.addListener('click', handleMapClick);
+}
+
+// Disable map click
+function disableMapClick() {
+    google.maps.event.clearListeners(map, 'click');
+}
+
+// Manage clicking on map
+function handleMapClick(event) {
+    selectedPosition = event.latLng;
+    clearMap();
+    drawCircle(selectedPosition, parseFloat(radiusInput.value), true);
+}
+
+// Draw circle on map
+function drawCircle(position, radius, isEditable) {
+    clearMap();
+
+    circle = new google.maps.Circle({
+        center: position,
+        radius: radius,
+        strokeColor: '#6309CE',
+        strokeOpacity: 0.5,
+        strokeWeight: 2,
+        fillColor: '#C3AAff',
+        fillOpacity: 0.25,
+        map: map,
+        editable: isEditable,
+        draggable: isEditable
+    });
+
+    if (isEditable) {
+        // Update radius input with edited on map values 
+        circle.addListener('radius_changed', function () {
+            const updatedRadius = Math.round(circle.getRadius());
+            document.getElementById('radiusInput').value = updatedRadius;
+        });
+
+        // Change selected position with new center
+        circle.addListener('center_changed', function () {
+            selectedPosition = circle.getCenter();
+        });
+    }
+}
 
 // Clear map
 function clearMap() {
