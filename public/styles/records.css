@@ -321,10 +321,23 @@ input[type="number"] {
     font-size: 16px;
 }
 
+
 #pathButtons {
-    max-height: 200px; 
-    overflow-y: auto; 
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
 }
+
+#pathButtons::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(transparent, white); /* Degradado que indica más contenido */
+}
+
 
 .pathButton {
     display: block;
