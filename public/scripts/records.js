@@ -315,8 +315,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     radius: radius
                 };
 
-                radiusInput.disabled = true;
-
                 // Request position filtered data to server
                 fetch(`/api/filterDataByPosition?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
                     .then(response => response.json())
