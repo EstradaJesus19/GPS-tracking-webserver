@@ -289,6 +289,11 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         });
 
         if (isEditable) {
+            // Update radius
+            circle.addListener('radius_changed', function () {
+                radius = Math.round(circle.getRadius());
+            });
+                
             // Change selected position with new center
             circle.addListener('center_changed', function () {
                 selectedPosition = circle.getCenter();
