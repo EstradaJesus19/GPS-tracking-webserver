@@ -228,6 +228,46 @@ main {
     color: white;
 }
 
+/* Tooltip text */
+.tooltipText {
+    visibility: hidden;
+    width: 220px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    
+    /* Positioning the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Adjust this value to position the tooltip above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Fade in effect */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltipText::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Arrow pointing down */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+/* Show the tooltip when hovering */
+.pathButton:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+}
+
 
 /* Flatpickr styles */
 .flatpickr-day.selected,
