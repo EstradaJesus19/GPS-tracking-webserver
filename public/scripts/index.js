@@ -62,10 +62,6 @@ function initMap() {
         streetViewControl: false
     });
 
-    // Enable street view button
-    // document.getElementById('streetViewButton').style.display = 'block';
-    // document.getElementById('streetViewButton').disabled = false;
-
     // Build polyline
     polyline = new google.maps.Polyline({
         strokeColor: '#6309CE',
@@ -88,6 +84,10 @@ function initMap() {
     document.getElementById('streetViewButton').addEventListener('click', toggleStreetView);
 
     loadLastLocation();
+
+    // Enable street view button
+    document.getElementById('streetViewButton').style.display = 'block';
+    document.getElementById('streetViewButton').disabled = false;
 
     setInterval(fetchLatestData, 100);
 }
