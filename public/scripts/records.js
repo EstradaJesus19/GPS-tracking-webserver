@@ -213,7 +213,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
                 // Add data to paths
                 if (currentPath.length > 0) {
-                    paths.push([...currentPath]);
+                    paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
                 }
 
                 // Print polylines
