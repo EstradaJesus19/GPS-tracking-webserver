@@ -320,7 +320,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     function handleMapClick(event) {
         selectedPosition = event.latLng;
         clearCircles();
-        drawCircle(selectedPosition, 500, true);
+        radius = 500;
+        drawCircle(selectedPosition, radius, true);
         filterByPosition(radius, selectedPosition, startTime, endTime);
     }
 
@@ -344,7 +345,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         if (isEditable) {
             google.maps.event.addListener(circle, 'radius_changed', function () {
                 radius = Math.round(circle.getRadius());
-                clearCircles();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
             });
 
@@ -353,7 +353,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             google.maps.event.addListener(circle, 'mouseup', function () {
                 radius = Math.round(circle.getRadius());
                 selectedPosition = circle.getCenter();
-                clearCircles();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
             });
         }
@@ -433,6 +432,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 map.fitBounds(bounds);
 
             } else {
+                clearMap();
+                
                 // Print warning that no data was found
                 Swal.fire({
                     text: 'No data found in the specified area.',
