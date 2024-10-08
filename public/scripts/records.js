@@ -349,9 +349,13 @@ function handleMapClick(event) {
 document.getElementById('radiusInput').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         if (circle) {
+            if (radiusInput.value <=500){
+                radiusInput.value = 500;
+            }
             radius = parseFloat(radiusInput.value);
             circle.setRadius(radius);
         }
+        
     }
 });
 
