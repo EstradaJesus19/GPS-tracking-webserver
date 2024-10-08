@@ -167,7 +167,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     paths = [];
 
     pathSelectorContainer.style.display = 'none';
-    pathControl.style.display = 'block'; 
+    pathControl.style.display = 'none'; 
     positionControl.style.display = 'block';
 
 
