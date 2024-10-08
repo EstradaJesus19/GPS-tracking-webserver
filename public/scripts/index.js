@@ -67,7 +67,8 @@ function initMap() {
         position: { lat: 10.98, lng: -74.81 },
         pov: { heading: 165, pitch: 0 },
         zoom: 1,
-        visible: false
+        visible: false,
+        streetViewControl: false
     });
 
     map.setStreetView(panorama);
@@ -130,9 +131,7 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     map.setCenter(position);
 
-    if (isStreetViewActive) {
-        panorama.setPosition(position);
-    }
+    panorama.setPosition(position);
 
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
