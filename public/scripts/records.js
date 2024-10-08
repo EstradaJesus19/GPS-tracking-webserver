@@ -5,6 +5,7 @@ let polylines = [];
 let markers = [];
 let circle = null;
 let isSelectingLocation = false;
+let positionFiltering = false;
 let selectedPosition = null;
 let radius = null;
 
@@ -487,12 +488,14 @@ function convertToDatabaseFormat(dateTimeStr) {
 
 document.getElementById("toggleButton").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
-    if (positionOptions.classList.contains("visible")) {
+    if (positionFiltering) {
+        positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");
+        positionFiltering = !positionFiltering;
     }
 });
 
