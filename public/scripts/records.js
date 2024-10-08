@@ -359,6 +359,13 @@ document.getElementById('radiusInput').addEventListener('keydown', function (eve
     }
 });
 
+document.getElementById('radiusInput').addEventListener('change', function () {
+    if (circle) {
+        radius = parseFloat(radiusInput.value);
+        circle.setRadius(radius);
+    }
+});
+
 // Draw circle on map
 function drawCircle(position, radius, isEditable) {
     radiusInput = document.getElementById('radiusInput');
