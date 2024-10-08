@@ -688,7 +688,7 @@ function selectPath(index, paths) {
     currentPathIndex = index;
     currentPointIndex = 0;
 
-    updateDateTime();
+    updateDateTime(paths);
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
@@ -743,7 +743,7 @@ function selectPath(index, paths) {
 
 
 // Actualiza la fecha y hora en el HTML según el punto actual
-function updateDateTime() {
+function updateDateTime(paths) {
     console.log(paths[currentPathIndex].metadata[currentPointIndex]);
     const metadata = paths[currentPathIndex].metadata[currentPointIndex];
     
