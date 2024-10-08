@@ -63,8 +63,8 @@ function initMap() {
     });
 
     // Enable street view button
-    document.getElementById('streetViewButton').style.display = 'block';
-    document.getElementById('streetViewButton').disabled = false;
+    // document.getElementById('streetViewButton').style.display = 'block';
+    // document.getElementById('streetViewButton').disabled = false;
 
     // Build polyline
     polyline = new google.maps.Polyline({
