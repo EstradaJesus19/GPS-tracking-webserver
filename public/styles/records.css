@@ -142,10 +142,10 @@ main {
 
 /* Path selector */
 .pathSelectors {
-    display: none;
-    position: fixed;
+    /* display: none; */
+    position: absolute;
     bottom: 40px;
-    left: 20px;
+    left: 10px;
     justify-content: center;
     text-align: center;
     background-color: white;
@@ -154,15 +154,6 @@ main {
     z-index: 3;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
-
-/* @media (max-width: 768px) {
-    .pathSelectors {
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        bottom: 1rem;
-    }
-} */
 
 .pathSelectors:hover,
 .pathSelectors:focus {
@@ -174,7 +165,6 @@ main {
     margin: 0 0 10px 0;
     font-size: 16px;
 }
-
 
 #pathButtons {
     max-height: 200px;
@@ -231,6 +221,85 @@ main {
     background-color: #5b0b97;
     border: 2px solid #5b0b97;
     color: white;
+}
+
+/*Position controls*/
+.positionControls {
+    /* display: none; */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 10px 0px 10px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.positionControls:hover,
+.positionControls:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+/* Flecha de despliegue */
+.positionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 0;
+    margin-right: 10px;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+
+.toggleButton.collapsed {
+    transform: rotate(-90deg); /* Girar la flecha a la izquierda cuando esté colapsado */
+}
+
+/* Esconder las opciones inicialmente */
+#positionOptions {
+    display: block; /* Se inicia mostrando */
+}
+
+#positionOptions.hidden {
+    display: none;
+}
+
+.positionDataContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Para espaciar los campos */
+}
+
+.positionDataContainer label {
+    flex-shrink: 0; /* Evitar que las etiquetas se encogen */
+    margin-right: 5px; /* Espacio entre el label y el input */
+}
+
+.positionData {
+    flex-grow: 1; 
+    min-width: 0; 
+    max-width: 100%; 
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    outline: none;
+    width: 150px;
+    transition: box-shadow 0.3s ease;
+    color: #505050;
 }
 
 /* Flatpickr styles */

@@ -156,7 +156,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     clearMap();
     path = [];
     paths = [];
-    pathSelectorContainer.style.display = 'none';
+    closeWindows();
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
@@ -481,6 +481,18 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
+document.getElementById("toggleButton").addEventListener("click", function() {
+    var positionOptions = document.getElementById("positionOptions");
+    if (positionOptions.classList.contains("hidden")) {
+        positionOptions.classList.remove("hidden");
+        this.classList.remove("collapsed");
+    } else {
+        positionOptions.classList.add("hidden");
+        this.classList.add("collapsed");
+    }
+});
+
+
 // Create path selector
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
@@ -638,6 +650,10 @@ function clearPolylines() {
          polyline.setMap(null);
     });
     polylines = [];
+}
+
+function closeWindows() {
+    pathSelectorContainer.style.display = 'none';
 }
 
 //Filtering by position

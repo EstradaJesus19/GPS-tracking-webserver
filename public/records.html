@@ -38,6 +38,26 @@
                     <h4>Select a path</h4>
                     <div id="pathButtons"></div>
                 </div>
+                <div id="positionControl" class="positionControls">
+                    <div class="positionHeader">
+                        <button id="toggleButton" class="toggleButton">&#9664;</button>
+                        <h4>Position filtering</h4>
+                    </div>
+                    <div id="positionOptions">
+                        <div id="latitudeContainer" class="positionDataContainer">
+                            <label for="latitude">Latitude:</label>
+                            <input type="number" class="positionData" id="latitude" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="longitudeContainer" class="positionDataContainer">
+                            <label for="longitude">Longitude:</label>
+                            <input type="number" class="positionData" id="longitude" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="radiusContainer" class="positionDataContainer">
+                            <label for="radius">Radius:</label>
+                            <input type="number" class="positionData" id="radius" maxlength="8" min="500" step="50" value="500">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
