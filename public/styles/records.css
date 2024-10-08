@@ -143,8 +143,8 @@ main {
 .pathSelectors {
     /* display: none; */
     position: fixed;
-    bottom: 30px;
-    left: 50px;
+    bottom: 40px;
+    left: 10px;
     /*width: 350px;*/
     background-color: white;
     border-radius: 10px;
