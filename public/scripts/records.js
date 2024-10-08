@@ -439,6 +439,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 const bounds = new google.maps.LatLngBounds();
                 let paths = []; 
                 let currentPath = []; 
+                let currentMetadata = [];
                 let previousTime = null; 
                 let startTimePath = null;
                 let endTimePath = null;
@@ -456,9 +457,10 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
 
                         if (timeDifference > 60) {
                             if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath }); 
+                                paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
                             }
                             currentPath = []; 
+                            currentMetadata = [];
                         }
                     }
 
@@ -467,12 +469,13 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                     }
                     endTimePath = currentTime; 
                     currentPath.push(latLng); 
+                    currentMetadata.push({ date: point.date.split('T')[0], time: point.time }); 
                     bounds.extend(latLng); 
                     previousTime = currentTime; 
                 });
 
                 if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                    paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
                 }
                 
                 // Create windows for path selecting
@@ -684,8 +687,6 @@ function selectPath(index, paths) {
 
     currentPathIndex = index;
     currentPointIndex = 0;
-
-    console.log(paths[currentPathIndex].path[currentPointIndex]);
     updateDateTime();
 
     const polyline = new google.maps.Polyline({
@@ -742,9 +743,10 @@ function selectPath(index, paths) {
 
 // Actualiza la fecha y hora en el HTML según el punto actual
 function updateDateTime() {
-    const currentPoint = paths[currentPathIndex].path[currentPointIndex];
-    document.getElementById('pointDate').value = currentPoint.date;
-    document.getElementById('pointTime').value = currentPoint.time;
+    const metadata = paths[currentPathIndex].metadata[currentPointIndex];
+    
+    document.getElementById('pointDate').value = metadata.date;
+    document.getElementById('pointTime').value = metadata.time;
 }
 
 // Funciones para los botones
