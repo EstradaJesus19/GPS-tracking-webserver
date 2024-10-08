@@ -321,6 +321,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         selectedPosition = event.latLng;
         clearCircles();
         drawCircle(selectedPosition, 500, true);
+        filterByPosition(radius, selectedPosition, startTime, endTime);
     }
 
     let isDragging = false;
@@ -343,6 +344,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
         if (isEditable) {
             google.maps.event.addListener(circle, 'radius_changed', function () {
                 radius = Math.round(circle.getRadius());
+                clearCircles();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
             });
 
@@ -351,6 +353,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             google.maps.event.addListener(circle, 'mouseup', function () {
                 radius = Math.round(circle.getRadius());
                 selectedPosition = circle.getCenter();
+                clearCircles();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
             });
         }
