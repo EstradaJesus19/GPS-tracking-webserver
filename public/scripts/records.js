@@ -432,7 +432,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 map.fitBounds(bounds);
 
             } else {
-                document.getElementById('timeFilterBtn').click();
+                clearPolylines();
+                clearMarkers();
 
                 // Print warning that no data was found
                 Swal.fire({
@@ -449,7 +450,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
             }
         })
         .catch(error => {
-            document.getElementById('timeFilterBtn').click();
+            clearPolylines();
+            clearMarkers();
 
             // Print warning if error filtering data
             Swal.fire({
