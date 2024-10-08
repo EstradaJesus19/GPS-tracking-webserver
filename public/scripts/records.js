@@ -530,7 +530,7 @@ function createPathSelector(paths) {
 
         // Add the button and tooltip to the container
         buttonContainer.appendChild(button);
-        buttonContainer.appendChild(tooltip);
+        button.appendChild(tooltip);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 }
