@@ -230,7 +230,7 @@ main {
 
 /* Tooltip styling */
 .tooltip {
-    visibility: visible;
+    display: block;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -259,7 +259,7 @@ main {
 
 /* Show the tooltip on hover */
 .pathButton:hover .tooltip {
-    visibility: visible;
+    display: block;
     opacity: 1;
 }
 
