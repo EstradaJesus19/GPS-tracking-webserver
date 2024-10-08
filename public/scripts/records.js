@@ -522,24 +522,23 @@ function createPathSelector(paths) {
         const startTimeFormatted = formatDateAndTime(startDate);
         const endTimeFormatted = formatDateAndTime(endDate);
 
-        // Crear el tooltip en lugar del texto normal
         button.setAttribute('data-tippy-content', `Path ${index + 1}: ${startTimeFormatted} to ${endTimeFormatted}`);
 
         buttonContainer.appendChild(button);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 
-    // Inicializar Tippy.js en todos los botones de path
+    // Initialize Tippy.js in each path button
     tippy('.pathButton', {
         theme: 'light', 
-        placement: 'right', // Cambiar la posición a la derecha
+        placement: 'right', 
         animation: 'scale',
-        duration: [200, 100], // Duración de la animación: 200ms abrir, 100ms cerrar
-        delay: [0, 50], // Sin retraso para abrir, 50ms para cerrar
-        hideOnClick: true, // Cerrar rápidamente al hacer clic
-        trigger: 'mouseenter focus', // Activar con hover y focus
-        interactive: true, // Permitir interacción en el tooltip
-        appendTo: document.body // Colocar el tooltip directamente en el body
+        duration: [100, 100], 
+        delay: [0, 0], 
+        hideOnClick: true, 
+        trigger: 'mouseenter focus', 
+        interactive: true, 
+        appendTo: document.body 
     });
 }
 
