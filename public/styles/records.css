@@ -180,7 +180,7 @@ main {
     position: relative;
 }
 
-#pathButtons::-webkit-scrollbar {
+/* #pathButtons::-webkit-scrollbar {
     width: 8px;
 }
 
@@ -191,7 +191,7 @@ main {
 
 #pathButtons::-webkit-scrollbar-track {
     background-color: #ffffff;
-}
+} */
 
 .pathButton {
     display: block;
