@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const positionControl = document.getElementById('positionControl');
+    const pathControl = document.getElementById('pathControl');
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
@@ -166,6 +167,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     paths = [];
 
     pathSelectorContainer.style.display = 'none';
+    pathControl.style.display = 'block'; 
     positionControl.style.display = 'block';
 
 
@@ -603,6 +605,7 @@ document.getElementById("hiderPath").addEventListener("click", function() {
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
+    const pathControl = document.getElementById('pathControl');
     pathButtonsContainer.innerHTML = ''; 
 
     if (paths.length === 0) {
@@ -610,6 +613,7 @@ function createPathSelector(paths) {
         return;
     }
     pathSelectorContainer.style.display = 'block'; 
+    pathControl.style.display = 'block'; 
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
