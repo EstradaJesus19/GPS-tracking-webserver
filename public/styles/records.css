@@ -142,7 +142,7 @@ main {
 
 /* Path selector */
 .pathSelectors {
-    /* display: none; */
+    display: none;
     position: absolute;
     bottom: 40px;
     left: 10px;
@@ -225,15 +225,16 @@ main {
 
 /*Position controls*/
 .positionControls {
-    /* display: none; */
+    display: none;
     position: absolute;
     top: 10px;
     right: 10px;
+    width: 180px;
     justify-content: center;
     text-align: center;
     background-color: white;
     border-radius: 10px;
-    padding: 10px 10px 0px 10px;
+    padding: 10px;
     z-index: 3;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
@@ -248,42 +249,47 @@ main {
 .positionHeader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin: -5px;
+}
+
+.positionHeader h4 {
+    line-height: 0%;
 }
 
 .toggleButton {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 20px;
     padding: 0;
-    margin-right: 10px;
     transform: rotate(0deg);
     transition: transform 0.3s ease;
 }
 
 .toggleButton.collapsed {
-    transform: rotate(-90deg); /* Girar la flecha a la izquierda cuando esté colapsado */
+    transform: rotate(90deg);
 }
 
-/* Esconder las opciones inicialmente */
 #positionOptions {
-    display: block; /* Se inicia mostrando */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; 
 }
 
-#positionOptions.hidden {
-    display: none;
+#positionOptions.visible {
+    max-height: 300px; 
+    transition: max-height 0.3s ease-in; 
 }
 
 .positionDataContainer {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Para espaciar los campos */
+    margin-bottom: 10px;
 }
 
 .positionDataContainer label {
-    flex-shrink: 0; /* Evitar que las etiquetas se encogen */
-    margin-right: 5px; /* Espacio entre el label y el input */
+    flex-shrink: 0;
+    margin-right: 5px; 
 }
 
 .positionData {

@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Filter by time
 document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
     const pathSelectorContainer = document.getElementById('pathSelector');
+    const positionControl = document.getElementById('positionControl');
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
@@ -156,7 +157,10 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     clearMap();
     path = [];
     paths = [];
-    closeWindows();
+
+    pathSelectorContainer.style.display = 'none';
+    pathSelectorContainer.style.display = 'block';
+
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
@@ -483,11 +487,11 @@ function convertToDatabaseFormat(dateTimeStr) {
 
 document.getElementById("toggleButton").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
-    if (positionOptions.classList.contains("hidden")) {
-        positionOptions.classList.remove("hidden");
+    if (positionOptions.classList.contains("visible")) {
+        positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
     } else {
-        positionOptions.classList.add("hidden");
+        positionOptions.classList.add("visible");
         this.classList.add("collapsed");
     }
 });
@@ -652,9 +656,6 @@ function clearPolylines() {
     polylines = [];
 }
 
-function closeWindows() {
-    pathSelectorContainer.style.display = 'none';
-}
 
 //Filtering by position
 // document.addEventListener('DOMContentLoaded', function () {
