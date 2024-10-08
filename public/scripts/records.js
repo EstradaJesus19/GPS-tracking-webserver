@@ -40,7 +40,8 @@ function initMap() {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
         fullscreenControl: false,
-        streetViewControl: false
+        streetViewControl: false,
+        mapTypeControl: false
     });
 
     // Define polyline features
