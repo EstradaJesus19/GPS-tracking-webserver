@@ -346,10 +346,12 @@ function handleMapClick(event) {
 }
 
 // Link radius input with map circle
-document.getElementById('radiusInput').addEventListener('input', function () {
-    if (circle) {
-        radius = parseFloat(radiusInput.value);
-        circle.setRadius(radius);
+document.getElementById('radiusInput').addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        if (circle) {
+            radius = parseFloat(radiusInput.value);
+            circle.setRadius(radius);
+        }
     }
 });
 
