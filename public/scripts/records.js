@@ -39,7 +39,8 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
-        fullscreenControl: false
+        fullscreenControl: false,
+        streetViewControl: false
     });
 
     // Define polyline features

@@ -52,7 +52,8 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
-        fullscreenControl: false
+        fullscreenControl: false,
+        streetViewControl: false
     });
 
     polyline = new google.maps.Polyline({
@@ -143,9 +144,13 @@ function updateMarkerAndInfo(lat, lng, data) {
 }
 
 function toggleStreetView() {
+    const toggleButton = document.getElementById('streetViewButton');
     isStreetViewActive = !isStreetViewActive;
     panorama.setVisible(isStreetViewActive);
     if (!isStreetViewActive) {
         map.setCenter(marker.getPosition());
+        toggleButton.innerText = 'Street View';
+    } else{
+        toggleButton.innerText = 'Map View';
     }
 }
