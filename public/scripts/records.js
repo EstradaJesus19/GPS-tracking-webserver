@@ -10,6 +10,7 @@ let selectedPosition = null;
 let radius = null;
 let startTime = null;
 let endTime = null;
+let controlOptionsVisible = true;
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -511,9 +512,12 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
     if (positionFiltering) {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
-        this.classList.remove("collapsed");
-
-        document.getElementById('hiderContainer').style.display = 'none';
+        
+        document.getElementById('hiderContainer').classList.remove("visible");
+        setTimeout(function() {
+            document.getElementById('hiderContainer').style.display = 'none';
+            document.getElementById('hider').classList.add("collapsed");
+        }, 200);
 
         disableMapClick();
         clearMap();
@@ -522,10 +526,14 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         
     } else {
         positionOptions.classList.add("visible");
-        this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
+        controlOptionsVisible = true;
 
-        document.getElementById('hiderContainer').style.display = 'static';
+        document.getElementById('hiderContainer').classList.add("visible");
+        setTimeout(function() {
+            document.getElementById('hiderContainer').style.display = 'block';
+        }, 200);
+        
         
         enableMapClick();
 
@@ -540,6 +548,21 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         setTimeout(function() {
             infoBox.style.display = "none"; 
         }, 1000); 
+    }
+});
+
+document.getElementById("hider").addEventListener("click", function() {
+    var positionOptions = document.getElementById("positionOptions");
+
+    if (controlOptionsVisible) {
+        controlOptionsVisible = !controlOptionsVisible;
+        positionOptions.classList.remove("visible");
+        document.getElementById('hider').classList.remove("collapsed");
+        
+    } else {
+        controlOptionsVisible = !controlOptionsVisible;
+        positionOptions.classList.add("visible");
+        document.getElementById('hider').classList.add("collapsed");
     }
 });
 

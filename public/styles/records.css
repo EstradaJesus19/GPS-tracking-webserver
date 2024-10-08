@@ -307,7 +307,6 @@ border-radius: 34px;
 border-radius: 50%;
 }
   
-
 #positionOptions {
     max-height: 0;
     overflow: hidden;
@@ -346,8 +345,17 @@ border-radius: 50%;
     color: #505050;
 }
 
-#hiderContainer{
+#hiderContainer {
     display: none;
+    opacity: 0; /* Comienza invisible */
+    visibility: hidden; /* Oculta el elemento */
+    transition: opacity 0.3s ease-out, visibility 0s linear 0.3s; /* La visibilidad cambia después de la opacidad */
+}
+
+#hiderContainer.visible {
+    opacity: 1; /* Se vuelve visible */
+    visibility: visible; /* Asegúrate de que el elemento sea visible */
+    transition: opacity 0.3s ease-in; /* Solo la opacidad cambia al entrar */
 }
 
 #hider {
@@ -359,13 +367,13 @@ border-radius: 50%;
 }
 
 #hider img {
-    transform: rotate(-90deg);
+    transform: rotate(90deg);
     scale: 1.5;
     transition: transform 0.3s ease;
 }
 
 #hider.collapsed img {
-    transform: rotate(-180deg);
+    transform: rotate(-90deg);
 } 
 
 .infoBox {
