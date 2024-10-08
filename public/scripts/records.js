@@ -219,7 +219,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 // Print polylines
                 paths.forEach((path, index) => {
                     const polyline = new google.maps.Polyline({
-                        path: path,
+                        path: paths[index].path,
                         strokeColor: '#6309CE',
                         strokeOpacity: 1.0,
                         strokeWeight: 5,
@@ -241,7 +241,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     polylines.push(polyline);
 
                     markers.push(new google.maps.Marker({
-                        position: path[0], 
+                        position: paths[index].path[0], 
                         map: map,
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
@@ -255,7 +255,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     }));
 
                     markers.push(new google.maps.Marker({
-                        position: path[path.length - 1], 
+                        position: paths[index].path[path.length - 1], 
                         map: map,
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
