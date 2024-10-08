@@ -145,5 +145,5 @@ main {
     position: absolute;
     right: 30px;
     top: 110px;
-    z-index: 1000;
+    z-index: 2;
 }
