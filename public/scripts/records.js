@@ -481,6 +481,7 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
+// Create path selector
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
@@ -503,7 +504,7 @@ function createPathSelector(paths) {
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
 
-        // Format date and time for tooltip
+        // Format date and time for UX
         const startDate = new Date(pathInfo.startTimePath);
         const endDate = new Date(pathInfo.endTimePath);
 
@@ -520,15 +521,13 @@ function createPathSelector(paths) {
 
         const startTimeFormatted = formatDateAndTime(startDate);
         const endTimeFormatted = formatDateAndTime(endDate);
-        const tooltipText = `Path from ${startTimeFormatted} to ${endTimeFormatted}`;
 
-        // Create tooltip
-        const tooltip = document.createElement('span');
-        tooltip.className = 'tooltipText';
-        tooltip.innerText = tooltipText;
+        const timeText = document.createElement('span');
+        timeText.innerText = `: ${startTimeFormatted} to ${endTimeFormatted}`;
+        timeText.style.marginLeft = '5px'; 
 
-        button.appendChild(tooltip);
         buttonContainer.appendChild(button);
+        buttonContainer.appendChild(timeText);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 }
