@@ -6,6 +6,7 @@ let oldPath = [];
 let panorama;
 let isStreetViewActive = false;
 
+// Load last location in database
 function loadLastLocation() {
     fetch('/api/getAllData')
         .then(response => response.json())
@@ -25,6 +26,7 @@ function loadLastLocation() {
         .catch(error => console.error('Error fetching data:', error));
 }
 
+// Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
     .then(response => response.json())
     .then(data => {
@@ -32,6 +34,7 @@ fetch('/api/getOwner')
     })
     .catch(error => console.error('Error fetching owner:', error));
 
+// Load Google Maps API    
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
@@ -39,6 +42,7 @@ function loadGoogleMapsApi(apiKey) {
     document.head.appendChild(script);
 }
 
+// Get APIKEY and load map API
 fetch('/api/getApiKey')
     .then(response => response.json())
     .then(data => {
@@ -48,7 +52,9 @@ fetch('/api/getApiKey')
         console.error('Error getting API key:', error);
     });
 
+// Init map
 function initMap() {
+    // Build initial map
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
@@ -56,6 +62,11 @@ function initMap() {
         streetViewControl: false
     });
 
+    // Enable street view button
+    document.getElementById('streetViewButton').style.display = 'block';
+    document.getElementById('streetViewButton').disabled = false;
+
+    // Build polyline
     polyline = new google.maps.Polyline({
         strokeColor: '#6309CE',
         strokeOpacity: 1.0,
@@ -63,6 +74,7 @@ function initMap() {
     });
     polyline.setMap(map);
 
+    // Update street view data
     panorama = new google.maps.StreetViewPanorama(document.getElementById('map'), {
         position: { lat: 10.98, lng: -74.81 },
         pov: { heading: 165, pitch: 0 },
@@ -80,6 +92,7 @@ function initMap() {
     setInterval(fetchLatestData, 100);
 }
 
+// Fetch latest data from database
 function fetchLatestData() {
     fetch('/api/getAllData')
         .then(response => response.json())
@@ -109,6 +122,7 @@ function fetchLatestData() {
         .catch(error => console.error('Error fetching latest data:', error));
 }
 
+// Update marker and info window
 function updateMarkerAndInfo(lat, lng, data) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
@@ -142,6 +156,7 @@ function updateMarkerAndInfo(lat, lng, data) {
     document.getElementById('time').textContent = data.time;
 }
 
+// Toggle street view/map view
 function toggleStreetView() {
     const toggleButton = document.getElementById('streetViewButton');
     isStreetViewActive = !isStreetViewActive;
