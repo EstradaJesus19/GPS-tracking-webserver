@@ -482,7 +482,6 @@ function convertToDatabaseFormat(dateTimeStr) {
 }
 
 // Create path selector
-// Create path selector
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
@@ -496,7 +495,6 @@ function createPathSelector(paths) {
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'buttonContainer';
         buttonContainer.style.display = 'flex'; 
         buttonContainer.style.alignItems = 'center';
 
@@ -506,7 +504,7 @@ function createPathSelector(paths) {
         button.innerText = `Path ${index + 1}`;
         button.onclick = () => selectPath(index, paths);
 
-        // Format date and time for tooltip
+        // Format date and time for UX
         const startDate = new Date(pathInfo.startTimePath);
         const endDate = new Date(pathInfo.endTimePath);
 
@@ -524,15 +522,18 @@ function createPathSelector(paths) {
         const startTimeFormatted = formatDateAndTime(startDate);
         const endTimeFormatted = formatDateAndTime(endDate);
 
-        // Create a tooltip text (hidden by default)
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerText = `From ${startTimeFormatted} to ${endTimeFormatted}`;
+        // Crear el tooltip en lugar del texto normal
+        button.setAttribute('data-tippy-content', `Path ${index + 1}: ${startTimeFormatted} to ${endTimeFormatted}`);
 
-        // Add the button and tooltip to the container
         buttonContainer.appendChild(button);
-        buttonContainer.appendChild(tooltip);
         pathButtonsContainer.appendChild(buttonContainer);
+    });
+
+    // Inicializar Tippy.js en todos los botones de path
+    tippy('.pathButton', {
+        theme: 'light', 
+        placement: 'top',
+        animation: 'scale',
     });
 }
 
