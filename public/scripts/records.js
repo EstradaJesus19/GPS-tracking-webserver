@@ -340,7 +340,7 @@ function handleMapClick(event) {
     latitudeInput.value = selectedPosition.lat().toFixed(4);
     longitudeInput.value = selectedPosition.lng().toFixed(4);
     clearCircles();
-    drawCircle(selectedPosition, 500, true);
+    drawCircle(selectedPosition, radius, true);
     filterByPosition(radius, selectedPosition, startTime, endTime);
 }
 
