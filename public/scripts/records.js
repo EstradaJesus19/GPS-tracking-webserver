@@ -8,6 +8,8 @@ let isSelectingLocation = false;
 let positionFiltering = false;
 let selectedPosition = null;
 let radius = null;
+let startTime = null;
+let endTime = null;
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -163,8 +165,8 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     positionControl.style.display = 'block';
 
 
-    const startTime = convertToDatabaseFormat(startInput.value);
-    const endTime = convertToDatabaseFormat(endInput.value);
+    startTime = convertToDatabaseFormat(startInput.value);
+    endTime = convertToDatabaseFormat(endInput.value);
 
     // Request time filtered data to server
     fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
@@ -315,60 +317,70 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             });
             console.error('Error getting filtered data: ', error);
         });
+});
 
-    // Enable map click
-    function enableMapClick() {
-        map.addListener('click', handleMapClick);
-        map.setOptions({ draggableCursor: 'crosshair' });
-    }
+// Enable map click
+function enableMapClick() {
+    map.addListener('click', handleMapClick);
+    map.setOptions({ draggableCursor: 'crosshair' });
+}
 
-    // Disable map click
-    function disableMapClick() {
-        google.maps.event.clearListeners(map, 'click');
-    }
+// Disable map click
+function disableMapClick() {
+    google.maps.event.clearListeners(map, 'click');
+    map.setOptions({ draggableCursor: 'null' });
+}
 
-    // Manage clicking on map
-    function handleMapClick(event) {
-        selectedPosition = event.latLng;
-        clearCircles();
-        radius = 500;
-        drawCircle(selectedPosition, radius, true);
-        filterByPosition(radius, selectedPosition, startTime, endTime);
-    }
+// Manage clicking on map
+function handleMapClick(event) {
+    radiusInput = document.getElementById('radiusInput');
+    latitudeInput = document.getElementById('latitudeInput');
+    longitudeInput = document.getElementById('longitudeInput');
+    radius = radiusInput.value;
+    selectedPosition = event.latLng;
+    latitudeInput.value = selectedLatitude.lat();
+    longitudeInput.value = selectedLatitude.lng();
+    clearCircles();
+    drawCircle(selectedPosition, radius, true);
+    filterByPosition(radius, selectedPosition, startTime, endTime);
+}
 
-    let isDragging = false;
+// Draw circle on map
+function drawCircle(position, radius, isEditable) {
+    radiusInput = document.getElementById('radiusInput');
+    latitudeInput = document.getElementById('latitudeInput');
+    longitudeInput = document.getElementById('longitudeInput');
 
-    // Draw circle on map
-    function drawCircle(position, radius, isEditable) {
-        circle = new google.maps.Circle({
-            center: position,
-            radius: radius,
-            strokeColor: '#6309CE',
-            strokeOpacity: 0.5,
-            strokeWeight: 2,
-            fillColor: '#C3AAff',
-            fillOpacity: 0.25,
-            map: map,
-            editable: isEditable,
-            draggable: isEditable
+    circle = new google.maps.Circle({
+        center: position,
+        radius: radius,
+        strokeColor: '#6309CE',
+        strokeOpacity: 0.5,
+        strokeWeight: 2,
+        fillColor: '#C3AAff',
+        fillOpacity: 0.25,
+        map: map,
+        editable: isEditable,
+        draggable: isEditable
+    });
+
+    if (isEditable) {
+        google.maps.event.addListener(circle, 'radius_changed', function () {
+            radius = Math.round(circle.getRadius());
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            radiusInput.value = radius;
         });
 
-        if (isEditable) {
-            google.maps.event.addListener(circle, 'radius_changed', function () {
-                radius = Math.round(circle.getRadius());
-                filterByPosition(radius, selectedPosition, startTime, endTime);
-            });
 
-
-            // Handle the 'mouseup' event to execute filterByPosition only when the click is released
-            google.maps.event.addListener(circle, 'mouseup', function () {
-                radius = Math.round(circle.getRadius());
-                selectedPosition = circle.getCenter();
-                filterByPosition(radius, selectedPosition, startTime, endTime);
-            });
-        }
+        // Handle the 'mouseup' event to execute filterByPosition only when the click is released
+        google.maps.event.addListener(circle, 'mouseup', function () {
+            selectedPosition = circle.getCenter();
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            latitudeInput.value = selectedLatitude.lat();
+            longitudeInput.value = selectedLatitude.lng();
+        });
     }
-});
+}
 
 function filterByPosition(radius, selectedPosition, startTime, endTime){
     // Print warning if position or radius aren't selected
@@ -492,10 +504,12 @@ document.getElementById("toggleButton").addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
+        enableMapClick();
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
+        disableMapClick();
     }
 });
 
