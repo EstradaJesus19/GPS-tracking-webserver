@@ -203,7 +203,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                     if (!currentPath.length) {
                         startTimePath = currentTime; 
                     }
-                    
+
                     endTimePath = currentTime; 
                     previousTime = currentTime; 
                     currentPath.push(latLng); 
@@ -213,14 +213,63 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
                 // Add data to paths
                 if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                    paths.push([...currentPath]);
                 }
-                                    
-                // Create windows for path selecting
-                createPathSelector(paths);
-                selectPath(0, paths);
+
+                // Print polylines
+                paths.forEach((path, index) => {
+                    const polyline = new google.maps.Polyline({
+                        path: path,
+                        strokeColor: '#6309CE',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        icons: [{
+                            icon: {
+                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                scale: 3,
+                                strokeColor: '#6309CE',
+                                strokeWeight: 2,
+                                fillColor: '#6309CE',
+                                fillOpacity: 1.0,
+                            },
+                            offset: '100%',
+                            repeat: '100px'
+                        }]
+                    });
+
+                    polyline.setMap(map);
+                    polylines.push(polyline);
+
+                    markers.push(new google.maps.Marker({
+                        position: path[0], 
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: `Start of Path ${index + 1}`
+                    }));
+
+                    markers.push(new google.maps.Marker({
+                        position: path[path.length - 1], 
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 5,
+                            fillColor: "#C3AAff",
+                            fillOpacity: 1,
+                            strokeWeight: 2,
+                            strokeColor: "#6309CE"
+                        },
+                        title: `End of Path ${index + 1}`
+                    }));
+                });
+
                 map.fitBounds(bounds);
-                enableMapClick();
 
             } else {
                 // Print warning if no data was found
