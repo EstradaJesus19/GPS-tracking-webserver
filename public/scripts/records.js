@@ -687,6 +687,9 @@ function selectPath(index, paths) {
 
     currentPathIndex = index;
     currentPointIndex = 0;
+
+    console.log(paths[currentPathIndex].metadata[currentPointIndex]);
+    
     updateDateTime();
 
     const polyline = new google.maps.Polyline({
