@@ -379,9 +379,9 @@ border-radius: 50%;
 .infoBox {
     display: none; 
     position: absolute;
-    top: 50%;
+    top: 10px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%);
     background-color: rgba(255, 255, 255, 0.8);
     padding: 5px 10px;
     border: 1px solid #dddddd;
@@ -390,6 +390,14 @@ border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     opacity: 1; 
     transition: opacity 1s ease-out; 
+}
+
+@media (max-width: 720px) {
+    .infoBox {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
 }
 
 /* Flatpickr styles */
