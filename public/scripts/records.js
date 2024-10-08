@@ -504,12 +504,12 @@ document.getElementById("toggleButton").addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
-        enableMapClick();
+        disableMapClick();
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
-        disableMapClick();
+        enableMapClick();
     }
 });
 
