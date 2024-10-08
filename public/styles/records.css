@@ -230,7 +230,7 @@ main {
 
 /* Tooltip styling */
 .tooltip {
-    visibility: hidden;
+    visibility: visible;
     background-color: black;
     color: #fff;
     text-align: center;
