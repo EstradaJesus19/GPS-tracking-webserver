@@ -523,9 +523,15 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         
         var infoBox = document.getElementById("infoBox");
         infoBox.style.display = "block";
+        infoBox.style.opacity = 1;
+
         setTimeout(function() {
-            infoBox.style.display = "none";
-        }, 500); 
+            infoBox.style.opacity = 0;
+        }, 0);
+
+        setTimeout(function() {
+            infoBox.style.display = "none"; 
+        }, 1000); 
     }
 });
 
