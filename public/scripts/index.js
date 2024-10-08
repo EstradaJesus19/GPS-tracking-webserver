@@ -3,8 +3,8 @@ let marker;
 let polyline;
 let path = [];
 let oldPath = [];
-let panorama;  // Variable para el Street View
-let isStreetViewActive = false; // Estado inicial para la vista de Street View
+let panorama;
+let isStreetViewActive = false;
 
 function loadLastLocation() {
     fetch('/api/getAllData')
@@ -67,12 +67,12 @@ function initMap() {
         position: { lat: 10.98, lng: -74.81 },
         pov: { heading: 165, pitch: 0 },
         zoom: 1,
-        visible: false // Street View oculto por defecto
+        visible: false
     });
 
     map.setStreetView(panorama);
 
-    document.getElementById('toggleStreetView').addEventListener('click', toggleStreetView);
+    document.getElementById('streetViewButton').addEventListener('click', toggleStreetView);
 
     loadLastLocation();
 
