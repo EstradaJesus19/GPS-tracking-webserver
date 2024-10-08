@@ -4,6 +4,8 @@ let polyline;
 let path = [];
 let oldPath = [];
 let streetViewPanorama;
+let streetViewActive = false; // Variable para controlar si Street View está activo
+let latestPosition = null; // Última posición recibida
 
 function loadLastLocation() {
     fetch('/api/getAllData')
@@ -11,12 +13,12 @@ function loadLastLocation() {
         .then(data => {
             if (data.length > 0) {
                 const latestData = data[data.length - 1];
-                const initialPosition = {
+                latestPosition = {
                     lat: parseFloat(latestData.latitude),
                     lng: parseFloat(latestData.longitude)
                 };
-                path.push(initialPosition);
-                oldPath.push(initialPosition);
+                path.push(latestPosition);
+                oldPath.push(latestPosition);
                 polyline.setPath(path);
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
             }
@@ -61,17 +63,22 @@ function initMap() {
     });
     polyline.setMap(map);
 
+    // Inicializa Street View pero no lo muestra hasta que se haga clic en el botón
     streetViewPanorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'), {
         position: { lat: 10.98, lng: -74.81 },
         pov: { heading: 165, pitch: 0 },
-        zoom: 1
+        zoom: 1,
+        visible: false // Oculto por defecto
     });
-
-    map.setStreetView(streetViewPanorama);
 
     loadLastLocation();
 
     setInterval(fetchLatestData, 100);
+    
+    // Agrega el botón para habilitar Street View
+    document.getElementById('street-view-button').addEventListener('click', () => {
+        toggleStreetView();
+    });
 }
 
 function fetchLatestData() {
@@ -80,25 +87,27 @@ function fetchLatestData() {
         .then(data => {
             if (data.length > 0) {
                 const latestData = data[data.length - 1];
+                latestPosition = {
+                    lat: parseFloat(latestData.latitude),
+                    lng: parseFloat(latestData.longitude)
+                };
 
                 const lastPosition = path.length > 0 ? path[path.length - 1] : null;
-                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
+                if (!lastPosition || lastPosition.lat !== latestPosition.lat || lastPosition.lng !== latestPosition.lng) {
                     if (oldPath.length > 0) {
                         oldPath = [];
                         path = [];
                     }
 
-                    const position = {
-                        lat: parseFloat(latestData.latitude),
-                        lng: parseFloat(latestData.longitude)
-                    };
-
-                    path.push(position);
+                    path.push(latestPosition);
                     polyline.setPath(path);
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                    
-                    streetViewPanorama.setPosition(position);
+
+                    // Actualiza la posición de Street View si está activo
+                    if (streetViewActive) {
+                        streetViewPanorama.setPosition(latestPosition);
+                    }
                 }
             }
         })
@@ -134,4 +143,13 @@ function updateMarkerAndInfo(lat, lng, data) {
     document.getElementById('longitude').textContent = data.longitude;
     document.getElementById('date').textContent = formattedDate;
     document.getElementById('time').textContent = data.time;
+}
+
+// Función para alternar el Street View
+function toggleStreetView() {
+    if (!latestPosition) return; // Si no hay datos aún, no hace nada
+
+    streetViewActive = !streetViewActive;
+    streetViewPanorama.setPosition(latestPosition); // Comienza en la última posición recibida
+    streetViewPanorama.setVisible(streetViewActive); // Activa o desactiva el modo Street View
 }
