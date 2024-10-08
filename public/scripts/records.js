@@ -368,7 +368,8 @@ function drawCircle(position, radius, isEditable) {
         fillOpacity: 0.25,
         map: map,
         editable: isEditable,
-        draggable: false
+        draggable: isEditable,
+        clickable: false 
     });
 
     if (isEditable) {
