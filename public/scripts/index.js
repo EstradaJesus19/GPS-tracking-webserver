@@ -3,6 +3,8 @@ let marker;
 let polyline;
 let path = [];
 let oldPath = [];
+let panorama;  // Variable para el Street View
+let isStreetViewActive = false; // Estado inicial para la vista de Street View
 
 function loadLastLocation() {
     fetch('/api/getAllData')
@@ -60,6 +62,17 @@ function initMap() {
     });
     polyline.setMap(map);
 
+    panorama = new google.maps.StreetViewPanorama(document.getElementById('map'), {
+        position: { lat: 10.98, lng: -74.81 },
+        pov: { heading: 165, pitch: 0 },
+        zoom: 1,
+        visible: false // Street View oculto por defecto
+    });
+
+    map.setStreetView(panorama);
+
+    document.getElementById('toggleStreetView').addEventListener('click', toggleStreetView);
+
     loadLastLocation();
 
     setInterval(fetchLatestData, 100);
@@ -116,6 +129,10 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     map.setCenter(position);
 
+    if (isStreetViewActive) {
+        panorama.setPosition(position);
+    }
+
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
 
@@ -123,4 +140,12 @@ function updateMarkerAndInfo(lat, lng, data) {
     document.getElementById('longitude').textContent = data.longitude;
     document.getElementById('date').textContent = formattedDate;
     document.getElementById('time').textContent = data.time;
+}
+
+function toggleStreetView() {
+    isStreetViewActive = !isStreetViewActive;
+    panorama.setVisible(isStreetViewActive);
+    if (!isStreetViewActive) {
+        map.setCenter(marker.getPosition());
+    }
 }
