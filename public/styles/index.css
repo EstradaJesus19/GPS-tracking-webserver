@@ -147,6 +147,6 @@ main {
 #streetViewButton{
     position: absolute;
     right: 30px;
-    top: 115px;
+    top: 112px;
     z-index: 2;
 }
