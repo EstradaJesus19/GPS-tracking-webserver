@@ -212,7 +212,7 @@ main {
 .pathButton.selected {
     display: block;
     width: 80px;
-    margin: 5px 0;
+    margin: 5px auto;
     padding: 5px 10px;
     background-color: #6309CE;
     color: white;
@@ -224,6 +224,7 @@ main {
 
 .pathButton:hover {
     background-color: #5b0b97;
+    border: 2px solid #5b0b97;
     color: white;
 }
 
