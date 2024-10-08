@@ -685,6 +685,8 @@ function selectPath(index, paths) {
     currentPathIndex = index;
     currentPointIndex = 0;
 
+    updateDateTime();
+
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
         strokeColor: '#6309CE',
