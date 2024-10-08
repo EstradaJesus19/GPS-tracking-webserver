@@ -496,6 +496,7 @@ function createPathSelector(paths) {
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'buttonContainer';
         buttonContainer.style.display = 'flex'; 
         buttonContainer.style.alignItems = 'center';
 
@@ -530,7 +531,7 @@ function createPathSelector(paths) {
 
         // Add the button and tooltip to the container
         buttonContainer.appendChild(button);
-        button.appendChild(tooltip);
+        buttonContainer.appendChild(tooltip);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 }

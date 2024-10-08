@@ -197,6 +197,10 @@ main {
     background-color: #ffffff;
 }
 
+.buttonContainer{
+    background-color: #ffffff;
+}
+
 .pathButton {
     display: block;
     width: 80px;
@@ -260,7 +264,7 @@ main {
 }
 
 /* Muestra el tooltip cuando se hace hover en el botón */
-.pathButton:hover .tooltip {
+.buttonContainer:hover .tooltip {
     visibility: visible;
     opacity: 1;
 }
