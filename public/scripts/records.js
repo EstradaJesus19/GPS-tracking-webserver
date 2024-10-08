@@ -154,6 +154,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
 
     clearMap();
     path = [];
+    paths = [];
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
@@ -432,8 +433,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 // Create windows for path selecting
                 createPathSelector(paths);
                 selectPath(0, paths);
-
-                // map.fitBounds(bounds);
 
             } else {
                 clearPolylines();

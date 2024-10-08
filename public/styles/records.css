@@ -146,6 +146,7 @@ main {
     bottom: 40px;
     left: 20px;
     justify-content: center;
+    text-align: center;
     background-color: white;
     border-radius: 10px;
     padding: 10px;
@@ -176,6 +177,7 @@ main {
 
 #pathButtons {
     max-height: 200px;
+    width: 125px;
     overflow-y: auto;
     position: relative;
     justify-content: center;
