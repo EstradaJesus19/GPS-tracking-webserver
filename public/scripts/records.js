@@ -533,7 +533,7 @@ function createPathSelector(paths) {
         theme: 'light', 
         placement: 'right', 
         animation: 'scale',
-        duration: [100, 100], 
+        duration: [0, 0], 
         delay: [0, 0], 
         hideOnClick: true, 
         trigger: 'mouseenter focus', 
