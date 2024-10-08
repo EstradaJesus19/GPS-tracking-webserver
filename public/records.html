@@ -60,9 +60,46 @@
                             <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
                         </div>
                     </div>
-                    <div class="hiderContainers" id="hiderContainer">
-                        <button id="hider" class="collapsed">
-                            <img id="arrowIcon" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                    <div class="hiderContainers" id="hiderContainerPosition">
+                        <button id="hiderPosition" class="collapsed">
+                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+                <div id="pathControl" class="pathControls">
+                    <div class="pathHeader">
+                        <h4>Point selector</h4>
+                    </div>
+                    <div id="pathOptions" class="visible">
+                        <div id="dateContainer" class="pointDataContainer">
+                            <label for="pointDate">Date:</label>
+                            <input type="number" class="pointData" id="pointDate" placeholder="NA">
+                        </div>
+                        <div id="timeContainer" class="pointDataContainer">
+                            <label for="pointTime">Time:</label>
+                            <input type="number" class="pointData" id="pointTime" placeholder="NA">
+                        </div>
+                        <div id="pointControls">
+                            <button id="previousPath" class="pathControlButton">
+                                <img id="previous2" src="media/previous-path.svg" alt="Previous path">
+                            </button>
+
+                            <button id="previousPoint" class="pathControlButton">
+                                <img id="previous" src="media/previous-point.svg" alt="Previous point">
+                            </button>
+
+                            <button id="nextPoint" class="pathControlButton">
+                                <img id="next" src="media/next-point.svg" alt="Next point">
+                            </button>
+
+                            <button id="nextPath" class="pathControlButton">
+                                <img id="next2" src="media/next-path.svg" alt="Next path">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hiderContainers">
+                        <button id="hiderPath" class="collapsed">
+                            <img id="arrowIconPath" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
                         </button>
                     </div>
                 </div>

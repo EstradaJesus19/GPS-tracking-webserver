@@ -10,7 +10,10 @@ let selectedPosition = null;
 let radius = null;
 let startTime = null;
 let endTime = null;
-let controlOptionsVisible = true;
+let positionOptionsVisible = true;
+let pathOptionsVisible = true;
+let currentPathIndex = 0;
+let currentPointIndex = 0;
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -526,10 +529,10 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         
-        document.getElementById('hiderContainer').classList.remove("visible");
+        document.getElementById('hiderContainerPosition').classList.remove("visible");
         setTimeout(function() {
-            document.getElementById('hiderContainer').style.display = 'none';
-            document.getElementById('hider').classList.add("collapsed");
+            document.getElementById('hiderContainerPosition').style.display = 'none';
+            document.getElementById('hiderPosition').classList.add("collapsed");
         }, 200);
 
         disableMapClick();
@@ -540,11 +543,11 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
     } else {
         positionOptions.classList.add("visible");
         positionFiltering = !positionFiltering;
-        controlOptionsVisible = true;
+        positionOptionsVisible = true;
 
-        document.getElementById('hiderContainer').classList.add("visible");
+        document.getElementById('hiderContainerPosition').classList.add("visible");
         setTimeout(function() {
-            document.getElementById('hiderContainer').style.display = 'block';
+            document.getElementById('hiderContainerPosition').style.display = 'block';
         }, 200);
         
         
@@ -564,18 +567,35 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
     }
 });
 
-document.getElementById("hider").addEventListener("click", function() {
+document.getElementById("hiderPosition").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
 
-    if (controlOptionsVisible) {
-        controlOptionsVisible = !controlOptionsVisible;
+    if (positionOptionsVisible) {
+        positionOptionsVisible = !positionOptionsVisible;
         positionOptions.classList.remove("visible");
-        document.getElementById('hider').classList.remove("collapsed");
+        document.getElementById('hiderPosition').classList.remove("collapsed");
         
     } else {
-        controlOptionsVisible = !controlOptionsVisible;
+        positionOptionsVisible = !positionOptionsVisible;
         positionOptions.classList.add("visible");
-        document.getElementById('hider').classList.add("collapsed");
+        document.getElementById('hiderPosition').classList.add("collapsed");
+    }
+});
+
+document.getElementById("hiderPath").addEventListener("click", function() {
+    var pathOptions = document.getElementById("pathOptions");
+    document.getElementById('pointDate').disabled = true;
+    document.getElementById('pointTime').disabled = true;
+
+    if (pathOptionsVisible) {
+        pathOptionsVisible = !pathOptionsVisible;
+        pathOptions.classList.remove("visible");
+        document.getElementById('hiderPath').classList.remove("collapsed");
+        
+    } else {
+        pathOptionsVisible = !pathOptionsVisible;
+        pathOptions.classList.add("visible");
+        document.getElementById('hiderPath').classList.add("collapsed");
     }
 });
 
@@ -706,6 +726,63 @@ function selectPath(index, paths) {
         title: `End of path ${index + 1}`
     }));
 }
+
+
+// Actualiza la fecha y hora en el HTML según el punto actual
+function updateDateTime() {
+    const currentPoint = paths[currentPathIndex].path[currentPointIndex];
+    document.getElementById('pointDate').value = currentPoint.date;
+    document.getElementById('pointTime').value = currentPoint.time;
+}
+
+// Funciones para los botones
+function previousPoint() {
+    if (currentPointIndex > 0) {
+        currentPointIndex--;
+        updateDateTime();
+    } else {
+        alert('No previous point in this path.');
+    }
+}
+
+function nextPoint() {
+    const currentPath = paths[currentPathIndex].path;
+    if (currentPointIndex < currentPath.length - 1) {
+        currentPointIndex++;
+        updateDateTime();
+    } else {
+        alert('No more points in this path.');
+    }
+}
+
+function previousPath() {
+    if (currentPathIndex > 0) {
+        currentPathIndex--;
+        currentPointIndex = 0;
+        updateDateTime();
+    } else {
+        alert('No previous path.');
+    }
+}
+
+function nextPath() {
+    if (currentPathIndex < paths.length - 1) {
+        currentPathIndex++;
+        currentPointIndex = 0;
+        updateDateTime();
+    } else {
+        alert('No more paths.');
+    }
+}
+
+// Event Listeners para los botones
+document.getElementById('previousPoint').addEventListener('click', previousPoint);
+document.getElementById('nextPoint').addEventListener('click', nextPoint);
+document.getElementById('previousPath').addEventListener('click', previousPath);
+document.getElementById('nextPath').addEventListener('click', nextPath);
+
+// Inicializa la fecha y hora del primer punto
+updateDateTime();
 
 // Delays
 function delay(ms) {

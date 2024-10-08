@@ -225,7 +225,7 @@ main {
 
 /*Position controls*/
 .positionControls {
-    display: none;
+    display: block;
     position: absolute;
     top: 10px;
     right: 10px;
@@ -345,20 +345,20 @@ border-radius: 50%;
     color: #505050;
 }
 
-#hiderContainer {
+#hiderContainerPosition {
     display: none;
-    opacity: 0; /* Comienza invisible */
-    visibility: hidden; /* Oculta el elemento */
-    transition: opacity 0.3s ease-out, visibility 0s linear 0.3s; /* La visibilidad cambia después de la opacidad */
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease-out, visibility 0s linear 0.3s; 
 }
 
-#hiderContainer.visible {
-    opacity: 1; /* Se vuelve visible */
-    visibility: visible; /* Asegúrate de que el elemento sea visible */
-    transition: opacity 0.3s ease-in; /* Solo la opacidad cambia al entrar */
+#hiderContainerPosition.visible {
+    opacity: 1; 
+    visibility: visible;
+    transition: opacity 0.3s ease-in;
 }
 
-#hider {
+#hiderPosition {
     background: none;
     border: none;
     cursor: pointer;
@@ -366,13 +366,148 @@ border-radius: 50%;
     transition: transform 0.3s ease;
 }
 
-#hider img {
+#hiderPosition img {
     transform: rotate(90deg);
     scale: 1.5;
     transition: transform 0.3s ease;
 }
 
-#hider.collapsed img {
+#hiderPosition.collapsed img {
+    transform: rotate(-90deg);
+} 
+
+.infoBox {
+    display: none; 
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    z-index: 3; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    opacity: 1; 
+    transition: opacity 1s ease-out; 
+}
+
+@media (max-width: 720px) {
+    .infoBox {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+}
+
+/*Path controls*/
+.pathControls {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 180px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.pathControls:hover,
+.pathControls:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.pathHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: -5px;
+}
+
+.pathHeader h4 {
+    line-height: 0%;
+}
+  
+#pathOptions {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; 
+}
+
+#pathOptions.visible {
+    max-height: 300px; 
+    transition: max-height 0.3s ease-in; 
+}
+
+.pointDataContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pointDataContainer label {
+    flex-shrink: 0;
+    margin-right: 5px; 
+}
+
+.pointData {
+    flex-grow: 1; 
+    min-width: 0; 
+    max-width: 100%; 
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    outline: none;
+    width: 150px;
+    transition: box-shadow 0.3s ease;
+    color: #505050;
+}
+
+#pointControls{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.pathControlButton {
+    align-items: center;
+    font-size: 1.05em;
+    padding: 5px 10px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.pathControlButton:hover {
+    background-color:#6309CE;
+}
+
+#hiderPath {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+#hiderPath img {
+    transform: rotate(90deg);
+    scale: 1.5;
+    transition: transform 0.3s ease;
+}
+
+#hiderPath.collapsed img {
     transform: rotate(-90deg);
 } 
 
