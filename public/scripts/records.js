@@ -505,7 +505,7 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
-document.getElementById("toggleButton").addEventListener("click", function() {
+document.getElementById("toggleSwitch").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
     if (positionFiltering) {
         positionFiltering = !positionFiltering;
@@ -521,7 +521,6 @@ document.getElementById("toggleButton").addEventListener("click", function() {
         enableMapClick();
     }
 });
-
 
 // Create path selector
 function createPathSelector(paths) {
