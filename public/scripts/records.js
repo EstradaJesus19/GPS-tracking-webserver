@@ -527,7 +527,7 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
 
         setTimeout(function() {
             infoBox.style.opacity = 0;
-        }, 0);
+        }, 500);
 
         setTimeout(function() {
             infoBox.style.display = "none"; 
