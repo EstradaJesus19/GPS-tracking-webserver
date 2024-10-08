@@ -1,7 +1,8 @@
 let map; 
 let polyline;
-let path = [];
 let polylines = [];
+let path = [];
+let paths = [];
 let markers = [];
 let circle = null;
 let isSelectingLocation = false;
