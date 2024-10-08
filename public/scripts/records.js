@@ -270,6 +270,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
                 });
 
                 map.fitBounds(bounds);
+                enableMapClick();
 
             } else {
                 // Print warning if no data was found
