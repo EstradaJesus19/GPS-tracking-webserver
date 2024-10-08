@@ -68,7 +68,7 @@ function initMap() {
         pov: { heading: 165, pitch: 0 },
         zoom: 1,
         visible: false,
-        streetViewControl: false
+        fullscreenControl: false
     });
 
     map.setStreetView(panorama);
