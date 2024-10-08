@@ -347,8 +347,8 @@ function handleMapClick(event) {
 // Link radius input with map circle
 document.getElementById('radiusInput').addEventListener('input', function () {
     if (circle) {
-        const newRadius = parseFloat(radiusInput.value);
-        circle.setRadius(newRadius);
+        radius = parseFloat(radiusInput.value);
+        circle.setRadius(radius);
     }
 });
 
