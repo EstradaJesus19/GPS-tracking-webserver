@@ -228,33 +228,28 @@ main {
     color: white;
 }
 
-/* Tooltip text */
-.tooltipText {
+/* Tooltip styling */
+.tooltip {
     visibility: hidden;
-    width: 220px;
     background-color: black;
     color: #fff;
     text-align: center;
-    padding: 5px;
-    border-radius: 5px;
-    
-    /* Positioning the tooltip */
+    border-radius: 6px;
+    padding: 5px 10px;
     position: absolute;
     z-index: 1;
-    bottom: 125%; /* Adjust this value to position the tooltip above the button */
+    bottom: 125%; /* Position above the button */
     left: 50%;
     transform: translateX(-50%);
-    
-    /* Fade in effect */
     opacity: 0;
     transition: opacity 0.3s;
 }
 
 /* Tooltip arrow */
-.tooltipText::after {
+.tooltip::after {
     content: "";
     position: absolute;
-    top: 100%; /* Arrow pointing down */
+    top: 100%; /* At the bottom of the tooltip */
     left: 50%;
     margin-left: -5px;
     border-width: 5px;
@@ -262,12 +257,11 @@ main {
     border-color: black transparent transparent transparent;
 }
 
-/* Show the tooltip when hovering */
-.pathButton:hover .tooltipText {
+/* Show the tooltip on hover */
+.pathButton:hover .tooltip {
     visibility: visible;
     opacity: 1;
 }
-
 
 /* Flatpickr styles */
 .flatpickr-day.selected,
