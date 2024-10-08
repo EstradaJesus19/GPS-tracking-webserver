@@ -124,8 +124,9 @@ main {
 .mapButton {
     padding: 10px 15px;
     border-radius: 3px;
-    font-family: Roboto;
-    font-size: 1.05em;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
     color: #4c4c4c;
     background-color: #ffffff;
     border: 1px solid #ebebeb;
