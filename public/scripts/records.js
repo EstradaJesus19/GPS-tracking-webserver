@@ -432,7 +432,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 // Create windows for path selecting
                 createPathSelector(paths);
                 selectPath(0, paths);
-                map.fitBounds(bounds);
+
+                // map.fitBounds(bounds);
 
             } else {
                 clearPolylines();
