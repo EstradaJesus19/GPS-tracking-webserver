@@ -532,8 +532,13 @@ function createPathSelector(paths) {
     // Inicializar Tippy.js en todos los botones de path
     tippy('.pathButton', {
         theme: 'light', 
-        placement: 'top',
+        placement: 'right', // Cambiar la posición a la derecha
         animation: 'scale',
+        duration: [200, 100], // Duración de la animación: 200ms abrir, 100ms cerrar
+        delay: [0, 50], // Sin retraso para abrir, 50ms para cerrar
+        hideOnClick: true, // Cerrar rápidamente al hacer clic
+        trigger: 'mouseenter focus', // Activar con hover y focus
+        interactive: true // Permitir interacción en el tooltip
     });
 }
 
