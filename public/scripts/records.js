@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Filter by time
 document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
+    const pathSelectorContainer = document.getElementById('pathSelector');
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
@@ -155,6 +156,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     clearMap();
     path = [];
     paths = [];
+    pathSelectorContainer.style.display = 'none';
 
     const startTime = convertToDatabaseFormat(startInput.value);
     const endTime = convertToDatabaseFormat(endInput.value);
