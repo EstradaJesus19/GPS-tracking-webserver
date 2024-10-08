@@ -335,7 +335,7 @@ function handleMapClick(event) {
     radiusInput = document.getElementById('radiusInput');
     latitudeInput = document.getElementById('latitudeInput');
     longitudeInput = document.getElementById('longitudeInput');
-    radius = radiusInput.value;
+    radius = parseFloat(radiusInput.value);
     selectedPosition = event.latLng;
     latitudeInput.value = selectedPosition.lat().toFixed(4);
     longitudeInput.value = selectedPosition.lng().toFixed(4);
