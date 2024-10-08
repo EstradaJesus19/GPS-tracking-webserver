@@ -3,6 +3,7 @@ let polyline;
 let polylines = [];
 let path = [];
 let paths = [];
+let selectedPath = [];
 let markers = [];
 let circle = null;
 let isSelectingLocation = false;
@@ -681,7 +682,6 @@ function selectPath(index, paths) {
     clearPolylines();
     clearMarkers(); 
 
-    path = paths[index].path;
     currentPathIndex = index;
     currentPointIndex = 0;
 
