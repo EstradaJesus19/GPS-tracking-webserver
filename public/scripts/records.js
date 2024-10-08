@@ -159,7 +159,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     paths = [];
 
     pathSelectorContainer.style.display = 'none';
-    pathSelectorContainer.style.display = 'block';
+    positionControl.style.display = 'block';
 
 
     const startTime = convertToDatabaseFormat(startInput.value);
