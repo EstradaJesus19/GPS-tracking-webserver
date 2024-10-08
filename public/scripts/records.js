@@ -336,12 +336,11 @@ function handleMapClick(event) {
     latitudeInput = document.getElementById('latitudeInput');
     longitudeInput = document.getElementById('longitudeInput');
     radius = radiusInput.value;
-    console.log(radius);
     selectedPosition = event.latLng;
-    latitudeInput.value = selectedPosition.lat();
-    longitudeInput.value = selectedPosition.lng();
+    latitudeInput.value = selectedPosition.lat().toFixed(4);
+    longitudeInput.value = selectedPosition.lng().toFixed(4);
     clearCircles();
-    drawCircle(selectedPosition, radius, true);
+    drawCircle(selectedPosition, 500, true);
     filterByPosition(radius, selectedPosition, startTime, endTime);
 }
 
@@ -376,8 +375,8 @@ function drawCircle(position, radius, isEditable) {
         google.maps.event.addListener(circle, 'mouseup', function () {
             selectedPosition = circle.getCenter();
             filterByPosition(radius, selectedPosition, startTime, endTime);
-            latitudeInput.value = selectedLatitude.lat();
-            longitudeInput.value = selectedLatitude.lng();
+            latitudeInput.value = selectedPosition.lat().toFixed(4);
+            longitudeInput.value = selectedPosition.lng().toFixed(4);
         });
     }
 }
