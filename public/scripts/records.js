@@ -520,11 +520,12 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
         enableMapClick();
-        const message = document.createElement('div');
-        message.id = `infoMessage`;
-        message.innerText = `Select area on map`;
-        delay(2000);
-        message.remove();
+        
+        var infoBox = document.getElementById("infoBox");
+        infoBox.style.display = "block";
+        setTimeout(function() {
+            infoBox.style.display = "none";
+        }, 500); 
     }
 });
 
