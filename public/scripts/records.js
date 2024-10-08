@@ -538,7 +538,8 @@ function createPathSelector(paths) {
         delay: [0, 50], // Sin retraso para abrir, 50ms para cerrar
         hideOnClick: true, // Cerrar rápidamente al hacer clic
         trigger: 'mouseenter focus', // Activar con hover y focus
-        interactive: true // Permitir interacción en el tooltip
+        interactive: true, // Permitir interacción en el tooltip
+        appendTo: document.body // Colocar el tooltip directamente en el body
     });
 }
 
