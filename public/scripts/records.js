@@ -524,7 +524,7 @@ function createPathSelector(paths) {
         timeText.style.marginLeft = '5px'; 
 
         buttonContainer.appendChild(button);
-        buttonContainer.appendChild(timeText);
+        // buttonContainer.appendChild(timeText);
         pathButtonsContainer.appendChild(buttonContainer);
     });
 }

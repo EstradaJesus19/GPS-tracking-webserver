@@ -3,7 +3,7 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
-    overflow: hidden; 
+    overflow: hidden;
     font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -81,7 +81,7 @@ main {
 }
 
 .contentCard:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); 
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 .filterContainer {
@@ -128,23 +128,110 @@ main {
 
 /*Map*/
 .mapContainer {
-    flex-grow: 1;
+    position: relative;
     width: 100%;
+    flex-grow: 1;
 }
 
 #map {
     width: 100%;
     height: 100%;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
-/* Flatpickr styles */
-.flatpickr-day.selected, 
-.flatpickr-day.selected:hover, 
-.flatpickr-day.selected:focus {
-    background-color: #530aa8; 
+/* Path selector */
+.pathSelectors {
+    /* display: none; */
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    /*width: 350px;*/
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* @media (max-width: 768px) {
+    .pathSelectors {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        bottom: 1rem;
+    }
+} */
+
+.pathSelectors:hover,
+.pathSelectors:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
     border-color: #530aa8;
-    color: white; 
+}
+
+.pathSelectors h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+
+#pathButtons {
+    max-height: 200px;
+    overflow-y: auto;
+    position: relative;
+}
+
+#pathButtons::-webkit-scrollbar {
+    width: 8px;
+}
+
+#pathButtons::-webkit-scrollbar-thumb {
+    background-color: #bfbfbf;
+    border-radius: 4px;
+}
+
+#pathButtons::-webkit-scrollbar-track {
+    background-color: #ffffff;
+}
+
+.pathButton {
+    display: block;
+    width: 80px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background-color: white;
+    color: #6309CE;
+    border: 2px solid #6309CE;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pathButton.selected {
+    display: block;
+    width: 80px;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background-color: #6309CE;
+    color: white;
+    border: 2px solid #6309CE;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pathButton:hover {
+    background-color: #5b0b97;
+    color: white;
+}
+
+
+/* Flatpickr styles */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.selected:focus {
+    background-color: #530aa8;
+    border-color: #530aa8;
+    color: white;
 }
 
 .flatpickr-input {
@@ -173,15 +260,15 @@ input[type="number"] {
 }
 
 .flatpickr-calendar {
-    border-radius: 15px; 
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /*Alert messages*/
 .swal2-custom-font {
     font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 16px; 
-    text-align: center; 
+    font-size: 16px;
+    text-align: center;
 }
 
 .swal2-confirm {
@@ -189,103 +276,15 @@ input[type="number"] {
     font-weight: 500;
     font-size: 16px;
     padding: 10px 24px;
-    background-color: #6309CE !important; 
+    background-color: #6309CE !important;
     color: white !important;
-    border-radius: 12px; 
+    border-radius: 12px;
 }
 
 .swal2-icon.swal2-info {
-    border-color: #6309CE !important; 
+    border-color: #6309CE !important;
 }
 
 .swal2-icon-info-custom .swal2-icon-content {
-    color: #6309CE !important; 
-}
-
-/* Path selector */ 
-.pathSelectors {
-    display: none;
-    position: fixed;
-    bottom: 30px;
-    left: 50px;
-    /*width: 350px;*/
-    background-color: white;
-    border-radius: 10px;
-    padding: 10px;
-    z-index: 1000; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Media query para dispositivos móviles */
-@media (max-width: 768px) {
-    .pathSelectors {
-        left: 50%; /* Centrar horizontalmente */
-        transform: translateX(-50%); /* Mover el elemento al centro exacto */
-        width: 90%; /* Ajustar el ancho para móviles, dejando algo de espacio en los bordes */
-        bottom: 1rem; /* Mantener el mismo espacio en la parte inferior */
-    }
-}
-
-.pathSelectors:hover, 
-.pathSelectors:focus {
-    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
-    border-color: #530aa8;
-}
-
-.pathSelectors h4 {
-    margin: 0 0 10px 0;
-    font-size: 16px;
-}
-
-
-#pathButtons {
-    max-height: 200px;
-    overflow-y: auto;
-    position: relative;
-}
-
-/* Para navegadores basados en WebKit (como Safari en MacOS y Chrome) */
-#pathButtons::-webkit-scrollbar {
-    width: 8px; /* Grosor de la barra de desplazamiento */
-}
-
-#pathButtons::-webkit-scrollbar-thumb {
-    background-color: #bfbfbf; /* Color del scrollbar */
-    border-radius: 4px; /* Redondeado */
-}
-
-#pathButtons::-webkit-scrollbar-track {
-    background-color: #ffffff; /* Color del fondo */
-}
-
-
-.pathButton {
-    display: block;
-    width: 80px;
-    margin: 5px 0;
-    padding: 5px 10px;
-    background-color: white; 
-    color: #6309CE; 
-    border: 2px solid #6309CE; 
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; 
-}
-
-.pathButton.selected {
-    display: block;
-    width: 80px;
-    margin: 5px 0;
-    padding: 5px 10px;
-    background-color: #6309CE;
-    color: white;
-    border: 2px solid #6309CE;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.pathButton:hover {
-    background-color: #5b0b97;
-    color: white;
+    color: #6309CE !important;
 }
