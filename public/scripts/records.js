@@ -512,16 +512,23 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
+
+        document.getElementById('hiderContainer').style.display = 'none';
+
         disableMapClick();
         clearMap();
+
         document.getElementById('timeFilterBtn').click();
         
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
-        enableMapClick();
+
+        document.getElementById('hiderContainer').style.display = 'static';
         
+        enableMapClick();
+
         var infoBox = document.getElementById("infoBox");
         infoBox.style.display = "block";
         infoBox.style.opacity = 1;
