@@ -199,7 +199,7 @@ main {
 .pathButton {
     display: block;
     width: 80px;
-    margin: 5px 0;
+    margin: 5px auto;
     padding: 5px 10px;
     background-color: white;
     color: #6309CE;
