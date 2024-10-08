@@ -259,7 +259,7 @@ main {
 }
 
 /* Muestra el tooltip cuando se hace hover en el botón */
-.pathSelectors:hover .tooltip {
+.button:hover .tooltip {
     visibility: visible;
     opacity: 1;
 }
