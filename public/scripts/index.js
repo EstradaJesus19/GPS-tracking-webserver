@@ -3,6 +3,7 @@ let marker;
 let polyline;
 let path = [];
 let oldPath = [];
+let streetViewPanorama;
 
 function loadLastLocation() {
     fetch('/api/getAllData')
@@ -50,6 +51,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
+        fullscreenControl: false
     });
 
     polyline = new google.maps.Polyline({
@@ -58,6 +60,14 @@ function initMap() {
         strokeWeight: 5,
     });
     polyline.setMap(map);
+
+    streetViewPanorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'), {
+        position: { lat: 10.98, lng: -74.81 },
+        pov: { heading: 165, pitch: 0 },
+        zoom: 1
+    });
+
+    map.setStreetView(streetViewPanorama);
 
     loadLastLocation();
 
@@ -87,6 +97,8 @@ function fetchLatestData() {
                     polyline.setPath(path);
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                    
+                    streetViewPanorama.setPosition(position);
                 }
             }
         })
