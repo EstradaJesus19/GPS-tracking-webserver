@@ -245,23 +245,6 @@ main {
     transition: opacity 0.3s;
 }
 
-/* Tooltip arrow */
-.tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%; /* At the bottom of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: black transparent transparent transparent;
-}
-
-/* Show the tooltip on hover */
-.pathButton:hover .tooltip {
-    display: block;
-    opacity: 1;
-}
 
 /* Flatpickr styles */
 .flatpickr-day.selected,
