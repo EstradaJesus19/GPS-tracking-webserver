@@ -505,6 +505,9 @@ function convertToDatabaseFormat(dateTimeStr) {
 
 document.getElementById("toggleSwitch").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
+    document.getElementById('latitudeInput').disabled = true;
+    document.getElementById('longitudeInput').disabled = true;
+
     if (positionFiltering) {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
