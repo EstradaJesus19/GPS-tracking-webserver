@@ -515,6 +515,7 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         disableMapClick();
         clearMap();
         document.getElementById('timeFilterBtn').click();
+        
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");

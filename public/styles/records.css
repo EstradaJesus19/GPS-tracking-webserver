@@ -225,7 +225,7 @@ main {
 
 /*Position controls*/
 .positionControls {
-    display: none;
+    display: block;
     position: absolute;
     top: 10px;
     right: 10px;
@@ -346,8 +346,30 @@ border-radius: 50%;
     color: #505050;
 }
 
+/* .hiderContainers{
+    display: none;
+}
+
+#hider {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+#hider img {
+    transform: rotate(-90deg);
+    scale: 1.5;
+    transition: transform 0.3s ease;
+}
+
+#hider.collapsed img {
+    transform: rotate(-180deg);
+} */
+
 .infoBox {
-    display: b; 
+    display: none; 
     position: absolute;
     top: 10px;
     left: 50%;
