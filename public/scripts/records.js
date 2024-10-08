@@ -344,6 +344,14 @@ function handleMapClick(event) {
     filterByPosition(radius, selectedPosition, startTime, endTime);
 }
 
+// Link radius input with map circle
+document.getElementById('radiusInput').addEventListener('input', function () {
+    if (circle) {
+        const newRadius = parseFloat(radiusInput.value);
+        circle.setRadius(newRadius);
+    }
+});
+
 // Draw circle on map
 function drawCircle(position, radius, isEditable) {
     radiusInput = document.getElementById('radiusInput');
@@ -504,6 +512,8 @@ document.getElementById("toggleButton").addEventListener("click", function() {
         positionOptions.classList.remove("visible");
         this.classList.remove("collapsed");
         disableMapClick();
+        clearMap();
+        document.getElementById('timeFilterBtn').click();
     } else {
         positionOptions.classList.add("visible");
         this.classList.add("collapsed");
