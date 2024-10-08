@@ -141,7 +141,7 @@ main {
 
 /* Path selector */
 .pathSelectors {
-    /* display: none; */
+    display: none;
     position: fixed;
     bottom: 40px;
     left: 20px;
