@@ -245,7 +245,6 @@ main {
     border-color: #530aa8;
 }
 
-/* Flecha de despliegue */
 .positionHeader {
     display: flex;
     align-items: center;
@@ -300,7 +299,6 @@ input:checked + .slider:before {
 transform: translateX(14px);
 }
 
-/* Redondear el switch */
 .slider.round {
 border-radius: 34px;
 }
@@ -346,6 +344,15 @@ border-radius: 50%;
     width: 150px;
     transition: box-shadow 0.3s ease;
     color: #505050;
+}
+
+#infoMessage{
+    position: absolute;
+    top: 10px;
+    border-radius: 2px;
+    font-size: 1em;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
 }
 
 /* Flatpickr styles */

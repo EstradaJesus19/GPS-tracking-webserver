@@ -520,6 +520,11 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         this.classList.add("collapsed");
         positionFiltering = !positionFiltering;
         enableMapClick();
+        const message = document.createElement('div');
+        message.id = `infoMessage`;
+        message.innerText = `Select area on map`;
+        delay(2000);
+        message.remove();
     }
 });
 
@@ -649,6 +654,11 @@ function selectPath(index, paths) {
         },
         title: `End of path ${index + 1}`
     }));
+}
+
+// Delays
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // Clear map
