@@ -181,7 +181,7 @@ main {
     justify-content: center;
 }
 
-/* #pathButtons::-webkit-scrollbar {
+#pathButtons::-webkit-scrollbar {
     width: 8px;
 }
 
@@ -192,7 +192,7 @@ main {
 
 #pathButtons::-webkit-scrollbar-track {
     background-color: #ffffff;
-} */
+}
 
 .pathButton {
     display: block;
