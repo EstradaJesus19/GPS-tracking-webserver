@@ -3,6 +3,7 @@ let polyline;
 let polylines = [];
 let path = [];
 let paths = [];
+let usedPaths = [];
 let selectedPath = [];
 let markers = [];
 let circle = null;
@@ -481,6 +482,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                 // Create windows for path selecting
                 createPathSelector(paths);
                 selectPath(0, paths);
+                usedPaths = paths;
 
             } else {
                 clearPolylines();
@@ -762,38 +764,38 @@ function updateDateTime(paths) {
 }
 
 document.getElementById('previousPath').addEventListener('click', () => {
-    console.log(paths);
-    console.log(paths.length);
+    console.log(usedPaths);
+    console.log(usedPaths.length);
     if (currentPathIndex > 0) {
         currentPathIndex--;
         console.log(currentPathIndex);
-        selectPath(currentPathIndex, paths);
+        selectPath(currentPathIndex, usedPaths);
     }
 });
 
 document.getElementById('nextPath').addEventListener('click', () => {
-    console.log(paths);
-    console.log(paths.length);
-    if (currentPathIndex < paths.length - 1) {
+    console.log(usedPaths);
+    console.log(usedPaths.length);
+    if (currentPathIndex < usedPaths.length - 1) {
         currentPathIndex++;
         console.log(currentPathIndex);
-        selectPath(currentPathIndex, paths);
+        selectPath(currentPathIndex, usedPaths);
     }
 });
 
 document.getElementById('previousPoint').addEventListener('click', () => {
     if (currentPointIndex > 0) {
         currentPointIndex--;
-        updateDateTime(paths);
-        updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
+        updateDateTime(usedPaths);
+        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
     }
 });
 
 document.getElementById('nextPoint').addEventListener('click', () => {
-    if (currentPointIndex < paths[currentPathIndex].path.length - 1) {
+    if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
         currentPointIndex++;
-        updateDateTime(paths);
-        updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
+        updateDateTime(usedPaths);
+        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
     }
 });
 
