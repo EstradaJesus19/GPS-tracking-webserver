@@ -1,4 +1,4 @@
-import { fetchLatestData } from './fetch-data.js';
+import { fetchLatestData, loadLastLocation } from './fetch-data.js';
 import { toggleStreetView } from './street-view.js';
 
 // Define variables 
