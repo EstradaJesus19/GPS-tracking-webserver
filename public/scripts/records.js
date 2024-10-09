@@ -1,4 +1,4 @@
-import { getApiOwner, getApiKey, map, markers, polylines} from "./records-scripts/init.js";
+import { getApiOwner, getApiKey, map, markers, polylines, circle } from "./records-scripts/init.js";
 import { linkCalendars } from "./records-scripts/calendars.js";
 import { timeFiltering } from "./records-scripts/time-filtering.js";
 import { positionFiltering, positionOptionsVisible, usedPaths } from "./records-scripts/position-filtering.js";
