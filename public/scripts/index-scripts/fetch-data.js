@@ -3,7 +3,7 @@ import { map, polyline, panorama } from './init.js';
 // Define variables 
 let path = [];
 let oldPath = [];
-let marker;
+export let marker;
 
 const latitudeText = document.getElementById('latitude');
 const longitudeText = document.getElementById('longitude');

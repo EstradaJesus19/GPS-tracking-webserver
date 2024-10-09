@@ -1,4 +1,3 @@
-import { getServerOwner, getApiKey } from './index-scripts/init.js';
+import { mainProcess } from './index-scripts/init.js';
 
-getServerOwner();
-getApiKey();
+mainProcess();

@@ -21,7 +21,7 @@ export function getServerOwner(){
 }
 
 // Get APIKEY and load map API
-export function getApiKey() {
+function getApiKey() {
     fetch('/api/getApiKey')
         .then(response => response.json())
         .then(data => {
@@ -80,6 +80,11 @@ function initMap() {
     streetViewButton.disabled = false;
 
     setInterval(fetchLatestData, 100);
+}
+
+export function mainProcess(){
+    getServerOwner();
+    getApiKey();
 }
 
 window.initMap = initMap;

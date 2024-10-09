@@ -1,3 +1,4 @@
+import { marker } from './fetch-data.js';
 import { panorama } from './init.js';
 
 // Define variables 
