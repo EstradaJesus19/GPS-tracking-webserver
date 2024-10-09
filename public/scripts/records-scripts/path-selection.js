@@ -1,7 +1,6 @@
 import { map, markers, polylines } from "./init.js";
 import { clearPolylines, clearMarkers } from './clear-options.js';
 import { usedPaths } from "./position-filtering.js";
-import { updateDateTime, updateMarkerPosition } from '../records.js';
 
 // Define variables
 let currentPathIndex = 0;
