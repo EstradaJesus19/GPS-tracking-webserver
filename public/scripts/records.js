@@ -672,7 +672,6 @@ function createPathSelector(paths) {
     });
 }
 
-
 // Set selected or not selected button class
 function SelectButtonOrNo(index) {
     const allButtons = document.querySelectorAll('#pathButtons .pathButton');
@@ -766,7 +765,7 @@ function updateDateTime(paths) {
 function previousPoint() {
     if (currentPointIndex > 0) {
         currentPointIndex--;
-        updateDateTime();
+        updateDateTime(paths);
     } else {
         alert('No previous point in this path.');
     }
@@ -776,7 +775,7 @@ function nextPoint() {
     const currentPath = paths[currentPathIndex].path;
     if (currentPointIndex < currentPath.length - 1) {
         currentPointIndex++;
-        updateDateTime();
+        updateDateTime(paths);
     } else {
         alert('No more points in this path.');
     }
@@ -786,7 +785,7 @@ function previousPath() {
     if (currentPathIndex > 0) {
         currentPathIndex--;
         currentPointIndex = 0;
-        updateDateTime();
+        updateDateTime(paths);
     } else {
         alert('No previous path.');
     }
@@ -796,7 +795,7 @@ function nextPath() {
     if (currentPathIndex < paths.length - 1) {
         currentPathIndex++;
         currentPointIndex = 0;
-        updateDateTime();
+        updateDateTime(paths);
     } else {
         alert('No more paths.');
     }
