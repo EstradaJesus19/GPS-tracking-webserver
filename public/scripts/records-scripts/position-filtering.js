@@ -140,7 +140,7 @@ function drawCircle(position, radius, isEditable) {
         fillColor: '#C3AAff',
         fillOpacity: 0.25,
         map: map,
-        editable: isEditable,
+        editable: !isEditable,
         draggable: isEditable,
     });
 
@@ -151,7 +151,7 @@ function drawCircle(position, radius, isEditable) {
             radiusInput.value = radius;
         });
         
-        google.maps.event.addListener(circle, 'mouseup', function () {
+        google.maps.event.addListener(circle, 'center_changed', function () {
             selectedPosition = circle.getCenter();
             filterByPosition(radius, selectedPosition, startTime, endTime);
             latitudeInput.value = selectedPosition.lat().toFixed(4);
