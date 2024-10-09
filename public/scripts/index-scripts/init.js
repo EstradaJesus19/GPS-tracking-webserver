@@ -35,8 +35,8 @@ function getApiKey() {
 // Load Google Maps API    
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
     script.async = true;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
     document.head.appendChild(script);
 }
 
