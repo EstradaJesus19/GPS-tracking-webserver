@@ -1,3 +1,5 @@
+import { getApiOwner } from "./records-scripts/init.js";
+
 // Define variables
 let map; 
 let polyline;
@@ -48,13 +50,7 @@ const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
 
-// Get server owner and print it in the web page tittle
-fetch('/api/getOwner')
-    .then(response => response.json())
-    .then(data => {
-        document.title = `Records - ${data.owner}`;
-    })
-    .catch(error => console.error('Error fetching owner:', error));
+getApiOwner();
 
 // Load Google Maps API
 function loadGoogleMapsApi(apiKey) {
@@ -105,6 +101,8 @@ function initMap() {
 
     polyline.setMap(map);
 }
+
+window.initMap = initMap;
 
 //Filtering by time
 // Link calendars and dates
