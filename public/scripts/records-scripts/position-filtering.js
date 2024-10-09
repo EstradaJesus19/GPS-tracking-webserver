@@ -1,9 +1,8 @@
-import { map } from './init.js';
+import { map, setPositionOptionsVisible } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { selectPath, createPathSelector, clearMap, clearCircles, clearPolylines, clearMarkers } from '../records.js';
 
 // Define variables
-export let positionOptionsVisible = null;
 export let usedPaths = [];
 export let circle = null;
 let positionFilteringAction = false;
@@ -44,7 +43,7 @@ export function positionFiltering(){
         } else {
             positionOptions.classList.add("visible");
             positionFilteringAction = !positionFilteringAction;
-            positionOptionsVisible = true;
+            setPositionOptionsVisible();
 
             hiderContainerPosition.classList.add("visible");
             setTimeout(function() {

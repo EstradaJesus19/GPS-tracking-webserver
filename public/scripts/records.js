@@ -1,7 +1,7 @@
-import { getApiOwner, getApiKey, map, markers, polylines } from "./records-scripts/init.js";
+import { getApiOwner, getApiKey, map, markers, polylines, positionOptionsVisible, togglePositionOptionsVisible } from "./records-scripts/init.js";
 import { linkCalendars } from "./records-scripts/calendars.js";
 import { timeFiltering } from "./records-scripts/time-filtering.js";
-import { positionFiltering, positionOptionsVisible, usedPaths, circle } from "./records-scripts/position-filtering.js";
+import { positionFiltering, usedPaths, circle } from "./records-scripts/position-filtering.js";
 
 // Define variables
 let pathOptionsVisible = true;
@@ -42,12 +42,12 @@ positionFiltering();
 
 hiderPosition.addEventListener("click", function() {
     if (positionOptionsVisible) {
-        positionOptionsVisible = !positionOptionsVisible;
+        togglePositionOptionsVisible;
         positionOptions.classList.remove("visible");
         hiderPosition.classList.remove("collapsed");
         
     } else {
-        positionOptionsVisible = !positionOptionsVisible;
+        togglePositionOptionsVisible;
         positionOptions.classList.add("visible");
         hiderPosition.classList.add("collapsed");
     }

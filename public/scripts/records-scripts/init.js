@@ -70,3 +70,15 @@ function initMap() {
 }
 
 window.initMap = initMap;
+
+export function togglePositionOptionsVisible() {
+    positionOptionsVisible = !positionOptionsVisible;
+}
+
+export function setPositionOptionsVisible() {
+    positionOptionsVisible = true;
+}
+
+export function clearPositionOptionsVisible() {
+    positionOptionsVisible = false;
+}
