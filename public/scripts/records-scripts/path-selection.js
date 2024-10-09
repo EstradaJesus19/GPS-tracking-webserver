@@ -118,6 +118,10 @@ export function selectPath(index, paths) {
     clearPolylines();
     clearMarkers(); 
 
+    if (isPlaying) {
+        playOption.click();
+    }
+
     currentPathIndex = index;
     currentPointIndex = 0;
 
