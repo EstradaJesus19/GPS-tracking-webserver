@@ -156,13 +156,6 @@ function drawCircle(position, radius, isEditable) {
             filterByPosition(radius, selectedPosition, startTime, endTime);
             radiusInput.value = radius;
         });
-        
-        google.maps.event.addListener(circle, 'dragend', function () {
-            selectedPosition = circle.getCenter();
-            filterByPosition(radius, selectedPosition, startTime, endTime);
-            latitudeInput.value = selectedPosition.lat().toFixed(4);
-            longitudeInput.value = selectedPosition.lng().toFixed(4);
-        });
 
         google.maps.event.addListener(circle, 'center_changed', function () {
             if  (!isMouseDown){
