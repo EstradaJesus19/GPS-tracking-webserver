@@ -749,6 +749,7 @@ function formatDateAndTimeControl(date) {
     const year = date.getFullYear();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
 
     return { day, month, year, hours, minutes };
 }
@@ -761,8 +762,64 @@ function updateDateTime() {
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}`;
 }
 
-// Inicializa la fecha y hora del primer punto
-updateDateTime();
+document.getElementById('previousPath').addEventListener('click', () => {
+    if (currentPathIndex > 0) {
+        currentPathIndex--;
+        selectPath(currentPathIndex, paths);
+    }
+});
+
+document.getElementById('nextPath').addEventListener('click', () => {
+    if (currentPathIndex < paths.length - 1) {
+        currentPathIndex++;
+        selectPath(currentPathIndex, paths);
+    }
+});
+
+document.getElementById('previousPoint').addEventListener('click', () => {
+    if (currentPointIndex > 0) {
+        currentPointIndex--;
+        updateDateTime(paths);
+        updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
+    }
+});
+
+document.getElementById('nextPoint').addEventListener('click', () => {
+    if (currentPointIndex < paths[currentPathIndex].path.length - 1) {
+        currentPointIndex++;
+        updateDateTime(paths);
+        updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
+    }
+});
+
+function updateDateTime(paths) {
+    const pointMetadata = paths[currentPathIndex].metadata[currentPointIndex]; 
+    const [date, time] = pointMetadata.split('T');
+    
+    document.getElementById('pointDate').value = date;
+    document.getElementById('pointTime').value = time;
+}
+
+function updateMarkerPosition(latLng) {
+    if (markers.length > 2) {
+        markers[1].setPosition(latLng); // Usa el marcador de final para el punto actual
+    } else {
+        markers.push(new google.maps.Marker({
+            position: latLng,
+            map: map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 5,
+                fillColor: "#C3AAff",
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: "#6309CE"
+            },
+            title: `Point ${currentPointIndex + 1} of Path ${currentPathIndex + 1}`
+        }));
+    }
+}
+
 
 // Delays
 function delay(ms) {
