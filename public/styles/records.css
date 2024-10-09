@@ -169,6 +169,8 @@ main {
 #pathButtons {
     display: flex;
     flex-direction: row;
+    max-width: 180px;
+    gap: 5px;
     width: 100%; 
     overflow-x: auto; 
     white-space: nowrap; 
