@@ -760,7 +760,7 @@ function updateDateTime(paths) {
     document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 
-    updateButtonStates();
+    updateButtonStates(paths);
 }
 
 // document.getElementById('previousPath').addEventListener('click', () => {
@@ -789,7 +789,7 @@ function stopHolding() {
     intervalId = null;
 }
 
-function updateButtonStates() {
+function updateButtonStates(paths) {
     if (currentPointIndex === 0) {
         document.getElementById('previousPoint').disabled = true;
         document.getElementById('previousPoint').style.cursor = 'not-allowed';
@@ -800,7 +800,7 @@ function updateButtonStates() {
         document.getElementById('previousPoint').style.opacity = 1;
     }
 
-    if (currentPointIndex === usedPaths[currentPathIndex].path.length - 1) {
+    if (currentPointIndex === paths[currentPathIndex].path.length - 1) {
         document.getElementById('nextPoint').disabled = true;
         document.getElementById('nextPoint').style.cursor = 'not-allowed';
         document.getElementById('nextPoint').style.opacity = 0.5;
@@ -817,7 +817,7 @@ document.getElementById('previousPoint').addEventListener('mousedown', () => {
             currentPointIndex--;
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-            updateButtonStates(); 
+            updateButtonStates(usedPaths); 
         }
     });
 });
@@ -832,7 +832,7 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
             currentPointIndex++;
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-            updateButtonStates(); 
+            updateButtonStates(usedPaths); 
         }
     });
 });
@@ -840,7 +840,6 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
 document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
 
-// updateButtonStates();
 
 
 function updateMarkerPosition(latLng) {
