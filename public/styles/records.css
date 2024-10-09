@@ -118,6 +118,7 @@ main {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-around;
+    margin-bottom: 20px;
 }
 
 #timeFilterBtn{
