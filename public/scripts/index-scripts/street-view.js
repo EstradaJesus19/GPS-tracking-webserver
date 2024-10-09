@@ -1,12 +1,12 @@
 import { marker } from './fetch-data.js';
-import { panorama } from './init.js';
+import { panorama, map } from './init.js';
 
 // Define variables 
 let isStreetViewActive = false;
 
 const streetViewButton = document.getElementById('streetViewButton');
 
-// Toggle street view/map view
+// Toggle street vie view
 export function toggleStreetView() {
     isStreetViewActive = !isStreetViewActive;
     panorama.setVisible(isStreetViewActive);
