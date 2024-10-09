@@ -2,7 +2,7 @@
 export let map; 
 export let polyline;
 export let polylines = [];
-export let markers = [];
+export var markers = [];
 
 const mapElement = document.getElementById('map');
 
