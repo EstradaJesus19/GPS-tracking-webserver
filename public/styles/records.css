@@ -1,0 +1,577 @@
+/* Body */
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* background-color: hotpink; */
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 97.5%;
+    box-sizing: border-box;
+    padding: 0px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#logo {
+    height: 40px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav ul {
+    display: flex;
+    margin: 0;
+    padding: 8px 16px;
+    border-radius: 5px;
+    list-style: none;
+    background-color: #530aa8;
+}
+
+nav li {
+    font-size: 1em;
+}
+
+nav a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* Main */
+main {
+    padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.contentCard {
+    position: absolute;
+    height: calc(103vh - 103px);
+    width: 97%;
+    left: 50%;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 20px;
+    padding: 10px;
+    margin: auto;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contentCard:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.filterContainer {
+    text-align: center;
+    margin-bottom: 1px;
+}
+
+.filterContainer h2 {
+    color: #530aa8;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+    line-height: 0px;
+}
+
+.filterContainer label {
+    font-size: 1.1em;
+    margin-right: 10px;
+}
+
+.filterContainer input {
+    font-size: 1.1em;
+    margin-right: 20px;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#timeFilterBtn{
+    font-size: 1.05em;
+    padding: 8px 16px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+#timeFilterBtn:hover {
+    background-color: #6309CE;
+}
+
+/*Map*/
+.mapContainer {
+    position: relative;
+    width: 100%;
+    flex-grow: 1;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/* Path selector */
+.pathSelectors {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    left: 10px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.pathSelectors:hover,
+.pathSelectors:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.pathSelectors h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+#pathButtons {
+    width: 100%; /* Ajusta el ancho según sea necesario */
+    overflow-x: auto; /* Habilita scroll horizontal */
+    white-space: nowrap; /* Mantiene los botones en una sola línea */
+    position: relative;
+    justify-content: center;
+    max-height: none; /* Elimina la restricción de altura */
+}
+
+#pathButtons::-webkit-scrollbar {
+    height: 8px; /* Cambia la altura del scrollbar */
+}
+
+#pathButtons::-webkit-scrollbar-thumb {
+    background-color: #bfbfbf;
+    border-radius: 4px;
+}
+
+#pathButtons::-webkit-scrollbar-track {
+    background-color: #ffffff;
+}
+
+.buttonContainer{
+    background-color: #ffffff;
+}
+
+.pathButton {
+    display: block;
+    width: 80px;
+    margin: 5px auto;
+    padding: 5px 10px;
+    background-color: white;
+    color: #6309CE;
+    border: 2px solid #6309CE;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pathButton.selected {
+    display: block;
+    width: 80px;
+    margin: 5px auto;
+    padding: 5px 10px;
+    background-color: #6309CE;
+    color: white;
+    border: 2px solid #6309CE;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pathButton:hover {
+    background-color: #5b0b97;
+    border: 2px solid #5b0b97;
+    color: white;
+}
+
+/*Position controls*/
+.positionControls {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 180px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.positionControls:hover,
+.positionControls:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.positionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: -5px;
+}
+
+.positionHeader h4 {
+    line-height: 0%;
+}
+
+.switch {
+position: relative;
+display: inline-block;
+width: 34px;
+height: 20px;
+}
+
+.switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 14px;
+width: 14px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: #530aa8;
+}
+
+input:checked + .slider:before {
+transform: translateX(14px);
+}
+
+.slider.round {
+border-radius: 34px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
+  
+#positionOptions {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; 
+}
+
+#positionOptions.visible {
+    max-height: 300px; 
+    transition: max-height 0.3s ease-in; 
+}
+
+.positionDataContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.positionDataContainer label {
+    flex-shrink: 0;
+    margin-right: 5px; 
+}
+
+.positionData {
+    flex-grow: 1; 
+    min-width: 0; 
+    max-width: 100%; 
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    outline: none;
+    width: 150px;
+    transition: box-shadow 0.3s ease;
+    color: #505050;
+}
+
+#hiderContainerPosition {
+    display: none;
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s ease-out, visibility 0s linear 0.3s; 
+}
+
+#hiderContainerPosition.visible {
+    opacity: 1; 
+    visibility: visible;
+    transition: opacity 0.3s ease-in;
+}
+
+#hiderPosition {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+#hiderPosition img {
+    transform: rotate(90deg);
+    scale: 1.5;
+    transition: transform 0.3s ease;
+}
+
+#hiderPosition.collapsed img {
+    transform: rotate(-90deg);
+} 
+
+.infoBox {
+    display: none; 
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    z-index: 3; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    opacity: 1; 
+    transition: opacity 1s ease-out; 
+}
+
+@media (max-width: 720px) {
+    .infoBox {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+}
+
+/*Path controls*/
+.pathControls {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 180px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.pathControls:hover,
+.pathControls:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.pathHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: -5px;
+}
+
+.pathHeader h4 {
+    line-height: 0%;
+}
+  
+#pathOptions {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; 
+}
+
+#pathOptions.visible {
+    max-height: 300px; 
+    transition: max-height 0.3s ease-in; 
+}
+
+.pointDataContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pointDataContainer label {
+    flex-shrink: 0;
+    margin-right: 5px; 
+}
+
+.pointData {
+    flex-grow: 1; 
+    min-width: 0; 
+    max-width: 100%; 
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    outline: none;
+    width: 150px;
+    transition: box-shadow 0.3s ease;
+    color: #505050;
+}
+
+#pointControls{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.pathControlButton {
+    align-items: center;
+    font-size: 1.05em;
+    padding: 5px 10px;
+    background-color: #530aa8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+}
+
+.pathControlButton:hover {
+    background-color:#6309CE;
+}
+
+#hiderPath {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+#hiderPath img {
+    transform: rotate(90deg);
+    scale: 1.5;
+    transition: transform 0.3s ease;
+}
+
+#hiderPath.collapsed img {
+    transform: rotate(-90deg);
+} 
+
+/* Flatpickr styles */
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.selected:focus {
+    background-color: #530aa8;
+    border-color: #530aa8;
+    color: white;
+}
+
+.flatpickr-input {
+    font-size: 1.1em;
+    margin-right: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    outline: none;
+    width: 150px;
+    transition: box-shadow 0.3s ease;
+    color: #505050;
+}
+
+input[type="number"] {
+  font-size: 1.1em;
+  width: 80px;
+  font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.flatpickr-input:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
+.flatpickr-calendar {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/*Alert messages*/
+.swal2-custom-font {
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 16px;
+    text-align: center;
+}
+
+.swal2-confirm {
+    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px 24px;
+    background-color: #6309CE !important;
+    color: white !important;
+    border-radius: 12px;
+}
+
+.swal2-icon.swal2-info {
+    border-color: #6309CE !important;
+}
+
+.swal2-icon-info-custom .swal2-icon-content {
+    color: #6309CE !important;
+}
