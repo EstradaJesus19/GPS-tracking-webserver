@@ -6,6 +6,8 @@ let map;
 let panorama;
 let polyline;
 
+window.polyline = polyline;
+
 // Rename document objects
 const mapElement = document.getElementById('map');
 const streetViewButton = document.getElementById('streetViewButton');
@@ -83,4 +85,3 @@ function initMap() {
 }
 
 window.initMap = initMap;
-window.polyline = polyline;
