@@ -660,7 +660,7 @@ function createPathSelector(paths) {
     // Initialize Tippy.js in each path button
     tippy('.pathButton', {
         theme: 'light', 
-        placement: 'down', 
+        placement: 'top', 
         animation: 'scale',
         duration: [0, 0], 
         delay: [0, 0], 
