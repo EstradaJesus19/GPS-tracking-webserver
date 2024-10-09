@@ -641,5 +641,5 @@ function clearPolylines() {
     polylines.forEach(polyline => {
          polyline.setMap(null);
     });
-    polylines = [];
+    polylines.length = 0;
 }
