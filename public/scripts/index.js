@@ -1,4 +1,4 @@
-// Define variables
+// Define variables 
 let map;
 let marker;
 let polyline;
