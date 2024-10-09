@@ -137,7 +137,7 @@ function drawCircle(position, radius, isEditable) {
     });
 
     document.addEventListener('mousedown', function() {
-        isMouseDown = false;
+        isMouseDown = true;
         console.log("Mouse button is released inside the element");
     });
 
