@@ -2,7 +2,9 @@
 export let map; 
 export let polyline;
 export let polylines = [];
-export var markers = [];
+export let markers = [];
+export let positionFiltering = false;
+export let positionOptionsVisible = true;
 
 const mapElement = document.getElementById('map');
 
