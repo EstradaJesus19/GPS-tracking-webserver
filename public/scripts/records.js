@@ -668,7 +668,7 @@ function createPathSelector(paths) {
         trigger: 'mouseenter focus', 
         interactive: true, 
         appendTo: document.body,
-        maxWidth: '150px'
+        maxWidth: '160px'
     });
 }
 
@@ -746,7 +746,7 @@ function selectPath(index, paths) {
 
 function formatDateAndTimeControl(date) {
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Suma 1 porque los meses comienzan desde 0
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
     const year = date.getFullYear();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -756,7 +756,8 @@ function formatDateAndTimeControl(date) {
 
 function updateDateTime(paths) {
     const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
-
+    
+    console.log(`${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`);
     document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}`;
 }
