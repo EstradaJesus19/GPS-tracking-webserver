@@ -1,4 +1,4 @@
-import { map, positionFilteringAction, circle } from './init.js';
+import { map, circle } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { selectPath, createPathSelector, clearMap, clearCircles, clearPolylines, clearMarkers } from '../records.js';
 
