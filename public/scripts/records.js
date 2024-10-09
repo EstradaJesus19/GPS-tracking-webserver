@@ -23,7 +23,6 @@ let isPlaying = false;
 let playIntervalId = null;
 let currentVelocity = 200; 
 
-const mapElement = document.getElementById('map');
 const startInput = document.getElementById('startDateTime');
 const endInput = document.getElementById('endDateTime');
 const timeFilterBtn = document.getElementById('timeFilterBtn');

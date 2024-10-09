@@ -1,6 +1,8 @@
 export let map; 
 export let polyline;
 
+const mapElement = document.getElementById('map');
+
 // Get server owner and print it in the web page tittle
 export function getApiOwner() {
     fetch('/api/getOwner')
