@@ -761,52 +761,6 @@ function updateDateTime() {
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}`;
 }
 
-// Funciones para los botones
-function previousPoint() {
-    if (currentPointIndex > 0) {
-        currentPointIndex--;
-        updateDateTime(paths);
-    } else {
-        alert('No previous point in this path.');
-    }
-}
-
-function nextPoint() {
-    const currentPath = paths[currentPathIndex].path;
-    if (currentPointIndex < currentPath.length - 1) {
-        currentPointIndex++;
-        updateDateTime(paths);
-    } else {
-        alert('No more points in this path.');
-    }
-}
-
-function previousPath() {
-    if (currentPathIndex > 0) {
-        currentPathIndex--;
-        currentPointIndex = 0;
-        updateDateTime(paths);
-    } else {
-        alert('No previous path.');
-    }
-}
-
-function nextPath() {
-    if (currentPathIndex < paths.length - 1) {
-        currentPathIndex++;
-        currentPointIndex = 0;
-        updateDateTime(paths);
-    } else {
-        alert('No more paths.');
-    }
-}
-
-// Event Listeners para los botones
-document.getElementById('previousPoint').addEventListener('click', previousPoint);
-document.getElementById('nextPoint').addEventListener('click', nextPoint);
-document.getElementById('previousPath').addEventListener('click', previousPath);
-document.getElementById('nextPath').addEventListener('click', nextPath);
-
 // Inicializa la fecha y hora del primer punto
 updateDateTime();
 
