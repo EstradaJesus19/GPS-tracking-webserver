@@ -61,7 +61,7 @@ main {
     justify-content: space-between;
 }
 
-.content-wrapper {
+.contentCard {
     position: absolute;
     height: calc(100vh - 80px);
     width: 98%;
@@ -80,42 +80,42 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.content-wrapper:hover {
+.contentCard:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
 
-.location-info {
+.locationInfo {
     margin-bottom: 10px;
     margin-top: 2px;
     text-align: center;
 }
 
-.location-info h1 {
+.locationInfo h1 {
     padding-bottom: 5px;
     line-height: 25%;
     font-size: 1.4em;
     color: #530aa8;
 }
 
-.location-data {
+.locationData {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     font-size: 1.2em;
 }
 
-.location-data p {
+.locationData p {
     margin: 8px;
     font-size: 1em;
     font-weight: bold;
 }
 
-.location-info span {
+.locationInfo span {
     font-weight: normal;
 }
 
-.map-container {
+.mapContainer {
     position: relative;
     width: 100%;
     flex-grow: 1;
