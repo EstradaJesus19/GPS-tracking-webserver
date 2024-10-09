@@ -177,7 +177,7 @@ export function selectPath(index, paths) {
         title: `End of path ${index + 1}`
     }));
 
-    updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex],currentPointIndex);
+    updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
 }
 
 function formatDateAndTimeControl(date) {
@@ -239,7 +239,7 @@ previousPoint.addEventListener('mousedown', () => {
         if (currentPointIndex > 0) {
             currentPointIndex--;
             updateDateTime(usedPaths);
-            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex],currentPointIndex);
+            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
             updateButtonStates(usedPaths); 
         }
     });
@@ -253,7 +253,7 @@ nextPoint.addEventListener('mousedown', () => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
             currentPointIndex++;
             updateDateTime(usedPaths);
-            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex],currentPointIndex);
+            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
             updateButtonStates(usedPaths); 
         }
     });
@@ -262,7 +262,7 @@ nextPoint.addEventListener('mousedown', () => {
 nextPoint.addEventListener('mouseup', stopHolding);
 nextPoint.addEventListener('mouseleave', stopHolding);
 
-function updateMarkerPosition(latLng, index) {
+function updateMarkerPosition(latLng) {
     const icon = {
         url: 'media/favicon.svg',
         scaledSize: new google.maps.Size(40, 40),
@@ -276,7 +276,7 @@ function updateMarkerPosition(latLng, index) {
             position: latLng,
             map: map,
             icon: icon,
-            title: `Point ${index + 1} of Path ${currentPathIndex + 1}`
+            title: `Point ${currentPointIndex + 1} of Path ${currentPathIndex + 1}`
         }));
     }
 }
@@ -294,7 +294,7 @@ playPoint.addEventListener('click', () => {
             if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
                 currentPointIndex++;
                 updateDateTime(usedPaths);
-                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex],currentPointIndex);
+                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {
                 clearInterval(playIntervalId);
@@ -324,7 +324,7 @@ velocityPoint.addEventListener('click', () => {
             if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
                 currentPointIndex++;
                 updateDateTime(usedPaths);
-                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex],currentPointIndex);
+                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {
                 clearInterval(playIntervalId);
