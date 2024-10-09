@@ -143,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const positionControl = document.getElementById('positionControl');
-    const pathControl = document.getElementById('pathControl');
     const startInput = document.getElementById('startDateTime');
     const endInput = document.getElementById('endDateTime');
 
@@ -170,7 +169,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     paths = [];
 
     pathSelectorContainer.style.display = 'none';
-    pathControl.style.display = 'none'; 
     positionControl.style.display = 'block';
 
 
@@ -768,7 +766,6 @@ function updateDateTime(paths) {
 document.getElementById('previousPath').addEventListener('click', () => {
     if (currentPathIndex > 0) {
         currentPathIndex--;
-        console.log(currentPathIndex);
         selectPath(currentPathIndex, usedPaths);
     }
 });
@@ -776,28 +773,23 @@ document.getElementById('previousPath').addEventListener('click', () => {
 document.getElementById('nextPath').addEventListener('click', () => {
     if (currentPathIndex < usedPaths.length - 1) {
         currentPathIndex++;
-        console.log(currentPathIndex);
         selectPath(currentPathIndex, usedPaths);
     }
 });
 
-let intervalId = null; // Para almacenar el ID del intervalo
+let intervalId = null;
 
 function startHolding(action) {
-    // Ejecutar la acción inmediatamente
     action();
 
-    // Configurar un intervalo para repetir la acción cada 100ms
     intervalId = setInterval(action, 100);
 }
 
 function stopHolding() {
-    // Detener el intervalo
     clearInterval(intervalId);
     intervalId = null;
 }
 
-// Botón de previousPoint
 document.getElementById('previousPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex > 0) {
@@ -809,9 +801,8 @@ document.getElementById('previousPoint').addEventListener('mousedown', () => {
 });
 
 document.getElementById('previousPoint').addEventListener('mouseup', stopHolding);
-document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding); // Para cuando el mouse sale del botón
+document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding); 
 
-// Botón de nextPoint
 document.getElementById('nextPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {

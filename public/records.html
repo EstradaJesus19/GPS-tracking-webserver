@@ -35,38 +35,6 @@
             <div class="mapContainer">
                 <div id="map"></div>
                 <div id="pathSelector" class="pathSelectors">
-                    <h4>Select a path</h4>
-                    <div id="pathButtons"></div>
-                </div>
-                <div id="positionControl" class="positionControls">
-                    <div class="positionHeader">
-                        <label class="switch">
-                            <input type="checkbox" id="toggleSwitch">
-                            <span class="slider round"></span>
-                        </label>
-                        <h4>Position filtering</h4>
-                    </div>
-                    <div id="positionOptions">
-                        <div id="latitudeContainer" class="positionDataContainer">
-                            <label for="latitudeInput">Latitude:</label>
-                            <input type="number" class="positionData" id="latitudeInput" placeholder="NA" maxlength="8">
-                        </div>
-                        <div id="longitudeContainer" class="positionDataContainer">
-                            <label for="longitudeInput">Longitude:</label>
-                            <input type="number" class="positionData" id="longitudeInput" placeholder="NA" maxlength="8">
-                        </div>
-                        <div id="radiusContainer" class="positionDataContainer">
-                            <label for="radiusInput">Radius:</label>
-                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
-                        </div>
-                    </div>
-                    <div class="hiderContainers" id="hiderContainerPosition">
-                        <button id="hiderPosition" class="collapsed">
-                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
-                        </button>
-                    </div>
-                </div>
-                <div id="pathControl" class="pathControls">
                     <div class="pathHeader">
                         <h4>Point selector</h4>
                     </div>
@@ -102,6 +70,39 @@
                             <img id="arrowIconPath" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
                         </button>
                     </div>
+                    <h4>Select a path</h4>
+                    <div id="pathButtons"></div>
+                </div>
+                <div id="positionControl" class="positionControls">
+                    <div class="positionHeader">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4>Position filtering</h4>
+                    </div>
+                    <div id="positionOptions">
+                        <div id="latitudeContainer" class="positionDataContainer">
+                            <label for="latitudeInput">Latitude:</label>
+                            <input type="number" class="positionData" id="latitudeInput" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="longitudeContainer" class="positionDataContainer">
+                            <label for="longitudeInput">Longitude:</label>
+                            <input type="number" class="positionData" id="longitudeInput" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="radiusContainer" class="positionDataContainer">
+                            <label for="radiusInput">Radius:</label>
+                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
+                        </div>
+                    </div>
+                    <div class="hiderContainers" id="hiderContainerPosition">
+                        <button id="hiderPosition" class="collapsed">
+                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+                <div id="pathControl" class="pathControls">
+                    
                 </div>
                 <div id="infoBox" class="infoBox">Select area on map</div>
             </div>
