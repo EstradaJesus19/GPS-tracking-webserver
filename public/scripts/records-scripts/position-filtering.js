@@ -10,7 +10,7 @@ let positionOptionsVisible = true;
 let positionFilteringAction = false;
 let selectedPosition = null;
 let radius = null;
-
+let isMouseDown = false;
 
 const radiusInput = document.getElementById('radiusInput');
 const latitudeInput = document.getElementById('latitudeInput');
