@@ -469,7 +469,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                     }
                     endTimePath = currentTime; 
                     currentPath.push(latLng); 
-                    currentMetadata.push({ date: point.date.split('T')[0], time: point.time }); 
+                    currentMetadata.push(`${point.date.split('T')[0]}T${point.time}`); 
                     bounds.extend(latLng); 
                     previousTime = currentTime; 
                 });
@@ -744,25 +744,21 @@ function selectPath(index, paths) {
     }));
 }
 
-function formatTimeTo24Hours(time) {
-    const formattedHours = time.getHours().toString().padStart(2, '0');  
-    const formattedMinutes = time.getMinutes().toString().padStart(2, '0'); 
-    return `${formattedHours}:${formattedMinutes}`;
-}
-
-function formatDate(date) {
-    const day = date.getDate();
-    const month = date.getMonth(); 
+function formatDateAndTimeControl(date) {
+    const day = date.getDate().toString().padStart(2, '0'); 
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return { day, month, year, hours, minutes };
 }
 
-// Actualiza la fecha y hora en el HTML según el punto actual
 function updateDateTime(paths) {
-    const metadata = paths[currentPathIndex].metadata[currentPointIndex];
-    
-    document.getElementById('pointDate').value = formatDate(metadata.date);
-    document.getElementById('pointTime').value = formatTimeTo24Hours(metadata.time);
+    const metadata = formatDateAndTimeControl(paths[currentPathIndex].metadata[currentPointIndex]);
+
+    document.getElementById('pointDate').value = `${metadata.day}-${metadata.month}-${metadata.year}`;
+    document.getElementById('pointTime').value = `${metadata.hours}:${metadata.minutes}`;
 }
 
 // Funciones para los botones
