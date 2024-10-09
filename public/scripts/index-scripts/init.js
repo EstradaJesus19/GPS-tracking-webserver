@@ -7,6 +7,7 @@ let panorama;
 let polyline;
 
 window.polyline = polyline;
+window.map = map;
 
 // Rename document objects
 const mapElement = document.getElementById('map');
