@@ -1,7 +1,8 @@
 import { getApiOwner, getApiKey, map, markers, polylines } from "./records-scripts/init.js";
 import { linkCalendars } from "./records-scripts/calendars.js";
 import { timeFiltering } from "./records-scripts/time-filtering.js";
-import { positionFiltering, usedPaths, circle } from "./records-scripts/position-filtering.js";
+import { positionFiltering, usedPaths } from "./records-scripts/position-filtering.js";
+import { clearPolylines, clearMarkers } from './clear-options.js';
 
 // Define variables
 let pathOptionsVisible = true;
@@ -11,12 +12,8 @@ let isPlaying = false;
 let playIntervalId = null;
 let currentVelocity = 200; 
 
-
-
 const pathSelectorContainer = document.getElementById('pathSelector');
 const pathButtonsContainer = document.getElementById('pathButtons');
-const positionOptions = document.getElementById('positionOptions');
-const hiderPosition = document.getElementById('hiderPosition');
 const hiderPath = document.getElementById('hiderPath');
 const pathOptions = document.getElementById('pathOptions');
 const pointDate = document.getElementById('pointDate');
@@ -342,39 +339,3 @@ velocityPoint.addEventListener('click', () => {
         }, currentVelocity);
     }
 });
-
-
-// Delays
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Clear map
-export function clearMap() {
-    clearCircles();
-    clearMarkers();
-    clearPolylines();
-}
-
-// Clear markers
-export function clearMarkers() {
-    markers.forEach(marker => {
-        marker.setMap(null);
-    });
-    markers.length = 0;
-}
-
-// Clear circles
-export function clearCircles() {
-    if (circle) {
-        circle.setMap(null);
-    }
-}
-
-// Clear polylines
-export function clearPolylines() {
-    polylines.forEach(polyline => {
-         polyline.setMap(null);
-    });
-    polylines.length = 0;
-}
