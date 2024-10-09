@@ -796,16 +796,15 @@ document.getElementById('nextPoint').addEventListener('click', () => {
 });
 
 function updateMarkerPosition(latLng) {
+    const icon = {
+        url: 'media/favicon.svg',
+        scaledSize: new google.maps.Size(40, 40),
+        anchor: new google.maps.Point(20, 35)
+    };
+
     if (markers.length > 2) {
         markers[1].setPosition(latLng); 
     } else {
-
-        const icon = {
-            url: 'media/favicon.svg',
-            scaledSize: new google.maps.Size(40, 40),
-            anchor: new google.maps.Point(20, 35)
-        };
-
         markers.push(new google.maps.Marker({
             position: latLng,
             map: map,
