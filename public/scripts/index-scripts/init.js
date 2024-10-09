@@ -4,6 +4,7 @@ import { toggleStreetView } from './street-view.js';
 // Define variables 
 let map;
 let panorama;
+let polyline;
 
 // Rename document objects
 const mapElement = document.getElementById('map');
@@ -56,6 +57,7 @@ function initMap() {
         strokeOpacity: 1.0,
         strokeWeight: 5,
     });
+
     polyline.setMap(map);
 
     // Update street view data
@@ -81,3 +83,4 @@ function initMap() {
 }
 
 window.initMap = initMap;
+window.polyline = polyline;
