@@ -803,7 +803,7 @@ function updateMarkerPosition(latLng) {
     };
 
     if (markers.length > 2) {
-        markers[-1].setPosition(latLng); 
+        markers[length(markers)-1].setPosition(latLng); 
     } else {
         markers.push(new google.maps.Marker({
             position: latLng,
