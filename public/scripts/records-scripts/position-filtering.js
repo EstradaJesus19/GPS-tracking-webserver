@@ -90,12 +90,12 @@ export function positionFiltering(){
 
     hiderPosition.addEventListener("click", function() {
         if (positionOptionsVisible) {
-            togglePositionOptionsVisible();
+            positionOptionsVisible = !positionOptionsVisible;
             positionOptions.classList.remove("visible");
             hiderPosition.classList.remove("collapsed");
             
         } else {
-            togglePositionOptionsVisible();
+            positionOptionsVisible = !positionOptionsVisible;
             positionOptions.classList.add("visible");
             hiderPosition.classList.add("collapsed");
         }
