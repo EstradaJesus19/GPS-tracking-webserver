@@ -169,7 +169,7 @@ main {
 #pathButtons {
     max-height: 200px;
     width: 125px;
-    overflow-y: auto;
+    overflow-x: auto;
     position: relative;
     justify-content: center;
 }
