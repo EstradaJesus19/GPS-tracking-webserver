@@ -2,12 +2,9 @@ import { fetchLatestData, loadLastLocation } from './fetch-data.js';
 import { toggleStreetView } from './street-view.js';
 
 // Define variables 
-let map;
-let panorama;
-let polyline;
-
-window.polyline = polyline;
-window.map = map;
+export let map;
+export let panorama;
+export let polyline;
 
 // Rename document objects
 const mapElement = document.getElementById('map');
@@ -23,14 +20,6 @@ export function getServerOwner(){
         .catch(error => console.error('Error fetching owner:', error));
 }
 
-// Load Google Maps API    
-function loadGoogleMapsApi(apiKey) {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
-    script.async = true;
-    document.head.appendChild(script);
-}
-
 // Get APIKEY and load map API
 export function getApiKey() {
     fetch('/api/getApiKey')
@@ -41,6 +30,14 @@ export function getApiKey() {
         .catch(error => {
             console.error('Error getting API key:', error);
         });
+}
+
+// Load Google Maps API    
+function loadGoogleMapsApi(apiKey) {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
+    script.async = true;
+    document.head.appendChild(script);
 }
 
 // Init map

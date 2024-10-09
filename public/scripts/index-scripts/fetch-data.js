@@ -1,3 +1,5 @@
+import { map, polyline } from './init.js';
+
 // Define variables 
 let path = [];
 let oldPath = [];
