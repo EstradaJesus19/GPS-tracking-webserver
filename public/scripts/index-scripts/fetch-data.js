@@ -1,4 +1,4 @@
-import { map, polyline } from './init.js';
+import { map, polyline, panorama } from './init.js';
 
 // Define variables 
 let path = [];
