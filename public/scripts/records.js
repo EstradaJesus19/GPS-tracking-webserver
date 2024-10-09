@@ -781,21 +781,49 @@ document.getElementById('nextPath').addEventListener('click', () => {
     }
 });
 
-document.getElementById('previousPoint').addEventListener('click', () => {
-    if (currentPointIndex > 0) {
-        currentPointIndex--;
-        updateDateTime(usedPaths);
-        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-    }
+let intervalId = null; // Para almacenar el ID del intervalo
+
+function startHolding(action) {
+    // Ejecutar la acción inmediatamente
+    action();
+
+    // Configurar un intervalo para repetir la acción cada 100ms
+    intervalId = setInterval(action, 100);
+}
+
+function stopHolding() {
+    // Detener el intervalo
+    clearInterval(intervalId);
+    intervalId = null;
+}
+
+// Botón de previousPoint
+document.getElementById('previousPoint').addEventListener('mousedown', () => {
+    startHolding(() => {
+        if (currentPointIndex > 0) {
+            currentPointIndex--;
+            updateDateTime(usedPaths);
+            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        }
+    });
 });
 
-document.getElementById('nextPoint').addEventListener('click', () => {
-    if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
-        currentPointIndex++;
-        updateDateTime(usedPaths);
-        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-    }
+document.getElementById('previousPoint').addEventListener('mouseup', stopHolding);
+document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding); // Para cuando el mouse sale del botón
+
+// Botón de nextPoint
+document.getElementById('nextPoint').addEventListener('mousedown', () => {
+    startHolding(() => {
+        if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
+            currentPointIndex++;
+            updateDateTime(usedPaths);
+            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        }
+    });
 });
+
+document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
+document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
 
 function updateMarkerPosition(latLng) {
     const icon = {
