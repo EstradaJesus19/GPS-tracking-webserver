@@ -762,6 +762,8 @@ function updateDateTime(paths) {
 }
 
 document.getElementById('previousPath').addEventListener('click', () => {
+    console.log(paths);
+    console.log(paths.length);
     if (currentPathIndex > 0) {
         currentPathIndex--;
         console.log(currentPathIndex);
@@ -770,6 +772,8 @@ document.getElementById('previousPath').addEventListener('click', () => {
 });
 
 document.getElementById('nextPath').addEventListener('click', () => {
+    console.log(paths);
+    console.log(paths.length);
     if (currentPathIndex < paths.length - 1) {
         currentPathIndex++;
         console.log(currentPathIndex);
