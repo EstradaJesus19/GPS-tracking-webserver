@@ -811,7 +811,7 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
             document.getElementById('nextPoint').disabled = 'false';
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-        } else if (currentPointIndex == 0) {
+        } else if (currentPointIndex == usedPaths[currentPathIndex].path.length - 1) {
             document.getElementById('nextPoint').disabled = 'true';
         }
     });
