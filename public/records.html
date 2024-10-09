@@ -3,20 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Records - TrackIT locator</title>
-    <link rel="stylesheet" href="index.css"> <!-- Si quieres aplicar el mismo estilo que en index.css -->
+    <title>Records</title>
+    <link rel="icon" href="media/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6/themes/light.css">
+    <link rel="stylesheet" href="styles/records.css">
 </head>
 <body>
     <header>
-        <a href="index.html"><img src="media/TrackIt.png" alt="Logo del grupo estudiantil" id="logo"></a>
+        <a href="index.html"><img src="media/TrackIt.svg" alt="TrackIt_logo" id="logo"></a>
         <nav>
             <ul id="menu">
-                <li><a href="index.html" class="active main">>Real Time</a></li>
+                <li><a href="index.html">Real time</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <h1>Aquí van los históricos</h1>
+        <div class="contentCard">
+            <div class="filterContainer">
+                <form id="timeFilterForm">
+                    <h2>Records filtering</h2>
+                    <label for="startDateTime">Start time:</label>
+                    <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
+                    
+                    <label for="endDateTime">End time:</label>
+                    <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
+                    
+                    <button id="timeFilterBtn">Apply filter</button>
+                </form>
+            </div>
+            <div class="mapContainer">
+                <div id="map"></div>
+                <div id="pathSelector" class="pathSelectors">
+                    <h4>Select a path</h4>
+                    <div id="pathButtons"></div>
+                </div>
+                <div id="positionControl" class="positionControls">
+                    <div class="positionHeader">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4>Position filtering</h4>
+                    </div>
+                    <div id="positionOptions">
+                        <div id="latitudeContainer" class="positionDataContainer">
+                            <label for="latitudeInput">Latitude:</label>
+                            <input type="number" class="positionData" id="latitudeInput" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="longitudeContainer" class="positionDataContainer">
+                            <label for="longitudeInput">Longitude:</label>
+                            <input type="number" class="positionData" id="longitudeInput" placeholder="NA" maxlength="8">
+                        </div>
+                        <div id="radiusContainer" class="positionDataContainer">
+                            <label for="radiusInput">Radius:</label>
+                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
+                        </div>
+                    </div>
+                    <div class="hiderContainers" id="hiderContainerPosition">
+                        <button id="hiderPosition" class="collapsed">
+                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+                <div id="pathControl" class="pathControls">
+                    <div class="pathHeader">
+                        <h4>Point selector</h4>
+                    </div>
+                    <div id="pathOptions" class="visible">
+                        <div id="dateContainer" class="pointDataContainer">
+                            <label for="pointDate">Date:</label>
+                            <input type="text" class="pointData" id="pointDate" placeholder="NA">
+                        </div>
+                        <div id="timeContainer" class="pointDataContainer">
+                            <label for="pointTime">Time:</label>
+                            <input type="text" class="pointData" id="pointTime" placeholder="NA">
+                        </div>
+                        <div id="pointControls">
+                            <button id="previousPath" class="pathControlButton">
+                                <img id="previous2" src="media/previous-path.svg" alt="Previous path">
+                            </button>
+
+                            <button id="previousPoint" class="pathControlButton">
+                                <img id="previous" src="media/previous-point.svg" alt="Previous point">
+                            </button>
+
+                            <button id="nextPoint" class="pathControlButton">
+                                <img id="next" src="media/next-point.svg" alt="Next point">
+                            </button>
+
+                            <button id="nextPath" class="pathControlButton">
+                                <img id="next2" src="media/next-path.svg" alt="Next path">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hiderContainers">
+                        <button id="hiderPath" class="collapsed">
+                            <img id="arrowIconPath" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+                <div id="infoBox" class="infoBox">Select area on map</div>
+            </div>
+        </div>
     </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        flatpickr(".flatpickrDateTime", {
+            enableTime: true,
+            dateFormat: "d-m-Y H:i",
+            time_24hr: true,
+            allowInput: false
+        });
+    </script>
+    <script src="scripts/records.js"></script>
 </body>
 </html>

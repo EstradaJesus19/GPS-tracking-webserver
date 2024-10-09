@@ -113,6 +113,47 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+// Time filtering query
+app.get('/api/filterData', (req, res) => {
+    const { startTime, endTime } = req.query; 
+    const tableName = process.env.db_table;
+
+    db.query(
+        `SELECT latitude, longitude, date, time FROM ?? WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?`,
+        [tableName, startTime, endTime],
+        (err, results) => {
+            if (err) {
+                console.error('Error fetching filtered data:', err);
+                res.status(500).json({ error: 'Error fetching filtered data' });
+            } else {
+                res.json(results);
+            }
+        }
+    );
+});
+
+// Position filtering query
+app.get('/api/filterDataByPosition', (req, res) => {
+    const { startTime, endTime, latitude, longitude, radius } = req.query;
+
+    const query = `
+       SELECT latitude, longitude, date, time 
+        FROM ?? 
+        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
+        AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
+    `;
+
+    const tableName = process.env.db_table;
+    db.query(query, [tableName, startTime, endTime, longitude, latitude, radius], (err, results) => {
+        if (err) {
+            console.error('Error fetching data by position:', err);
+            res.status(500).json({ error: 'Error fetching data by position' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
