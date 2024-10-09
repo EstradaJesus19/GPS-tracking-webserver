@@ -167,15 +167,20 @@ main {
 }
 
 #pathButtons {
-    max-height: 200px;
-    width: 125px;
-    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    max-width: 180px;
+    gap: 5px;
+    width: 100%; 
+    overflow-x: auto; 
+    white-space: nowrap; 
     position: relative;
-    justify-content: center;
+    justify-content: start;
+    max-height: none; 
 }
 
 #pathButtons::-webkit-scrollbar {
-    width: 8px;
+    height: 8px; 
 }
 
 #pathButtons::-webkit-scrollbar-thumb {
@@ -186,6 +191,7 @@ main {
 #pathButtons::-webkit-scrollbar-track {
     background-color: #ffffff;
 }
+
 
 .buttonContainer{
     background-color: #ffffff;
