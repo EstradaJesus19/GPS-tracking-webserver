@@ -381,7 +381,6 @@ export function clearMarkers() {
 export function clearCircles() {
     if (circle) {
         circle.setMap(null);
-        circle = null;
     }
 }
 
