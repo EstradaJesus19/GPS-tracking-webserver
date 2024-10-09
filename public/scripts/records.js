@@ -693,7 +693,7 @@ function selectPath(index, paths) {
     currentPointIndex = 0;
 
     updateDateTime(paths);
-    updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex])
+    updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex])
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
