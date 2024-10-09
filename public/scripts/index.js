@@ -40,46 +40,7 @@ function loadLastLocation() {
 getServerOwner();
 getApiKey();
 
-// Init map
-function initMap() {
-    // Build initial map
-    map = new google.maps.Map(mapElement, {
-        center: { lat: 10.98, lng: -74.81 },
-        zoom: 13,
-        fullscreenControl: false,
-        streetViewControl: false,
-        mapTypeControl: false
-    });
 
-    // Build polyline
-    polyline = new google.maps.Polyline({
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-    });
-    polyline.setMap(map);
-
-    // Update street view data
-    panorama = new google.maps.StreetViewPanorama(mapElement, {
-        position: { lat: 10.98, lng: -74.81 },
-        pov: { heading: 165, pitch: 0 },
-        zoom: 1,
-        visible: false,
-        fullscreenControl: false
-    });
-
-    map.setStreetView(panorama);
-
-    streetViewButton.addEventListener('click', toggleStreetView);
-
-    loadLastLocation();
-
-    // Enable street view button
-    streetViewButton.style.display = 'block';
-    streetViewButton.disabled = false;
-
-    setInterval(fetchLatestData, 100);
-}
 
 window.initMap = initMap;
 
