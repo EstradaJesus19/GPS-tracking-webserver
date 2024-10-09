@@ -619,6 +619,8 @@ function createPathSelector(paths) {
     }
     pathSelectorContainer.style.display = 'block'; 
     pathControl.style.display = 'block'; 
+    document.getElementById('pointDate').disabled = true;
+    document.getElementById('pointTime').disabled = true;
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
