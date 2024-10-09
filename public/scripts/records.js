@@ -370,7 +370,7 @@ export function clearMap() {
 }
 
 // Clear markers
-function clearMarkers() {
+export function clearMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
     });
@@ -378,7 +378,7 @@ function clearMarkers() {
 }
 
 // Clear circles
-function clearCircles() {
+export function clearCircles() {
     if (circle) {
         circle.setMap(null);
         circle = null;
@@ -386,7 +386,7 @@ function clearCircles() {
 }
 
 // Clear polylines
-function clearPolylines() {
+export function clearPolylines() {
     polylines.forEach(polyline => {
          polyline.setMap(null);
     });
