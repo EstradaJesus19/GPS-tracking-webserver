@@ -22,6 +22,9 @@ let isPlaying = false;
 let playIntervalId = null;
 let currentVelocity = 200; 
 
+mapElement = document.getElementById('map');
+
+
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
     .then(response => response.json())
@@ -33,7 +36,7 @@ fetch('/api/getOwner')
 // Load Google Maps API
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&loading=async&libraries=maps,marker&v=beta`;
     script.async = true;
     document.head.appendChild(script);
 }
@@ -50,7 +53,7 @@ fetch('/api/getApiKey')
 
 // Init map
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(mapElement, {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
         fullscreenControl: false,
