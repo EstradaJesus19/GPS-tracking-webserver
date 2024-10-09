@@ -759,6 +759,8 @@ function updateDateTime(paths) {
     
     document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
+
+    updateButtonStates();
 }
 
 // document.getElementById('previousPath').addEventListener('click', () => {
