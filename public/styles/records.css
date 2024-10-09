@@ -15,7 +15,7 @@ header {
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-    width: 97.5%;
+    width: 98.5%;
     box-sizing: border-box;
     padding: 0px;
     border-radius: 20px;
@@ -64,8 +64,8 @@ main {
 
 .contentCard {
     position: absolute;
-    height: calc(103vh - 103px);
-    width: 97%;
+    height: calc(100vh - 80px);
+    width: 98%;
     left: 50%;
     transform: translateX(-50%);
     box-sizing: border-box;
@@ -112,6 +112,14 @@ main {
     text-align: center;
 }
 
+.timeInputs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
 #timeFilterBtn{
     font-size: 1.05em;
     padding: 8px 16px;
@@ -120,7 +128,7 @@ main {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 8px;
+    margin-top: 10px;
 }
 
 #timeFilterBtn:hover {
@@ -403,6 +411,14 @@ border-radius: 50%;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
+    }
+
+    .contentCard {
+        height: 120vh;
+    }
+
+    body{
+        overflow-y: scroll;
     }
 }
 

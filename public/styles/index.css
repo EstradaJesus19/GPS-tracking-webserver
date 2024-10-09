@@ -14,7 +14,7 @@ header {
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
-    width: 97.5%;
+    width: 98.5%;
     box-sizing: border-box;
     padding: 0px;
     border-radius: 20px;
@@ -63,8 +63,8 @@ main {
 
 .content-wrapper {
     position: absolute;
-    height: calc(103vh - 103px);
-    width: 97%;
+    height: calc(100vh - 80px);
+    width: 98%;
     left: 50%;
     transform: translateX(-50%);
     box-sizing: border-box;

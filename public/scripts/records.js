@@ -849,11 +849,9 @@ function updateMarkerPosition(latLng) {
 
 document.getElementById('playPoint').addEventListener('click', () => {
     if (!isPlaying) {
-        // Cambiar el ícono a pausa
         document.getElementById('play').src = 'media/pause.svg';
         isPlaying = true;
 
-        // Iniciar el intervalo para mover los puntos automáticamente
         playIntervalId = setInterval(() => {
             if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
                 currentPointIndex++;
@@ -861,17 +859,16 @@ document.getElementById('playPoint').addEventListener('click', () => {
                 updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {
-                // Pausar si se llega al último punto
                 clearInterval(playIntervalId);
                 isPlaying = false;
-                document.getElementById('play').src = 'media/play.svg';  // Cambiar de nuevo a play
+                document.getElementById('play').src = 'media/play.svg';
             }
         }, currentVelocity);
     } else {
         // Pausar la reproducción
         clearInterval(playIntervalId);
         isPlaying = false;
-        document.getElementById('play').src = 'media/play.svg';  // Cambiar el ícono a play
+        document.getElementById('play').src = 'media/play.svg';
     }
 });
 
@@ -879,16 +876,13 @@ document.getElementById('velocityPoint').addEventListener('click', () => {
     const velocityDisplay = document.getElementById('velocity');
 
     if (currentVelocity === 200) {
-        // Cambiar a velocidad x2 (100ms)
         currentVelocity = 100;
         velocityDisplay.textContent = 'x2';
     } else {
-        // Cambiar a velocidad x1 (200ms)
         currentVelocity = 200;
         velocityDisplay.textContent = 'x1';
     }
 
-    // Si está reproduciendo, actualizamos el intervalo con la nueva velocidad
     if (isPlaying) {
         clearInterval(playIntervalId);
         playIntervalId = setInterval(() => {
@@ -898,10 +892,9 @@ document.getElementById('velocityPoint').addEventListener('click', () => {
                 updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {
-                // Pausar si se llega al último punto
                 clearInterval(playIntervalId);
                 isPlaying = false;
-                document.getElementById('play').src = 'media/play.svg';  // Cambiar de nuevo a play
+                document.getElementById('play').src = 'media/play.svg';
             }
         }, currentVelocity);
     }
