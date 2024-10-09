@@ -1,10 +1,11 @@
-import { map, positionFiltering, circle } from './init.js';
+import { map, positionFilteringAction, circle } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { selectPath, createPathSelector, clearMap, clearCircles, clearPolylines, clearMarkers } from '../records.js';
 
 // Define variables
 export let positionOptionsVisible = null;
 export let usedPaths = [];
+let positionFilteringAction = false;
 let selectedPosition = null;
 let radius = null;
 
@@ -24,8 +25,8 @@ export function positionFiltering(){
         latitudeInput.disabled = true;
         longitudeInput.disabled = true;
 
-        if (positionFiltering) {
-            positionFiltering = !positionFiltering;
+        if (positionFilteringAction) {
+            positionFilteringAction = !positionFilteringAction;
             positionOptions.classList.remove("visible");
             
             hiderContainerPosition.classList.remove("visible");
@@ -41,7 +42,7 @@ export function positionFiltering(){
             
         } else {
             positionOptions.classList.add("visible");
-            positionFiltering = !positionFiltering;
+            positionFilteringAction = !positionFilteringAction;
             positionOptionsVisible = true;
 
             hiderContainerPosition.classList.add("visible");
