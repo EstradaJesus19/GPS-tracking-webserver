@@ -42,12 +42,12 @@ positionFiltering();
 
 hiderPosition.addEventListener("click", function() {
     if (positionOptionsVisible) {
-        togglePositionOptionsVisible;
+        togglePositionOptionsVisible();
         positionOptions.classList.remove("visible");
         hiderPosition.classList.remove("collapsed");
         
     } else {
-        togglePositionOptionsVisible;
+        togglePositionOptionsVisible();
         positionOptions.classList.add("visible");
         hiderPosition.classList.add("collapsed");
     }
