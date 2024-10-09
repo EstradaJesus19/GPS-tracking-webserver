@@ -2,8 +2,8 @@ import { clearMap } from '../records.js';
 import { map, markers, polylines } from './init.js';
 
 // Define variables
-let startTime = null;
-let endTime = null;
+export let startTime = null;
+export let endTime = null;
 let paths = [];
 
 
