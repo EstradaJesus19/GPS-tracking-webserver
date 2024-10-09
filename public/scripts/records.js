@@ -35,6 +35,18 @@ const longitudeInput = document.getElementById('longitudeInput');
 const toggleSwitch = document.getElementById('toggleSwitch');
 const positionOptions = document.getElementById('positionOptions');
 const hiderPosition = document.getElementById('hiderPosition');
+const hiderContainerPosition = document.getElementById('hiderContainerPosition');
+const infoBox = document.getElementById('infoBox');
+const hiderPath = document.getElementById('hiderPath');
+const pathOptions = document.getElementById('pathOptions');
+const pointDate = document.getElementById('pointDate');
+const pointTime = document.getElementById('pointTime');
+const previousPoint = document.getElementById('previousPoint');
+const nextPoint = document.getElementById('nextPoint');
+const playPoint = document.getElementById('playPoint');
+const velocityPoint = document.getElementById('velocityPoint')
+const velocityDisplay = document.getElementById('velocity');
+const playOption = document.getElementById('play');
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -540,9 +552,9 @@ toggleSwitch.addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptions.classList.remove("visible");
         
-        document.getElementById('hiderContainerPosition').classList.remove("visible");
+        hiderContainerPosition.classList.remove("visible");
         setTimeout(function() {
-            document.getElementById('hiderContainerPosition').style.display = 'none';
+            hiderContainerPosition.style.display = 'none';
             hiderPosition.classList.add("collapsed");
         }, 200);
 
@@ -556,15 +568,14 @@ toggleSwitch.addEventListener("click", function() {
         positionFiltering = !positionFiltering;
         positionOptionsVisible = true;
 
-        document.getElementById('hiderContainerPosition').classList.add("visible");
+        hiderContainerPosition.classList.add("visible");
         setTimeout(function() {
-            document.getElementById('hiderContainerPosition').style.display = 'block';
+            hiderContainerPosition.style.display = 'block';
         }, 200);
         
         
         enableMapClick();
 
-        var infoBox = document.getElementById("infoBox");
         infoBox.style.display = "block";
         infoBox.style.opacity = 1;
 
@@ -591,20 +602,19 @@ hiderPosition.addEventListener("click", function() {
     }
 });
 
-document.getElementById("hiderPath").addEventListener("click", function() {
-    var pathOptions = document.getElementById("pathOptions");
-    document.getElementById('pointDate').disabled = true;
-    document.getElementById('pointTime').disabled = true;
+hiderPath.addEventListener("click", function() {
+    pointDate.disabled = true;
+    pointTime.disabled = true;
 
     if (pathOptionsVisible) {
         pathOptionsVisible = !pathOptionsVisible;
         pathOptions.classList.remove("visible");
-        document.getElementById('hiderPath').classList.remove("collapsed");
+        hiderPath.classList.remove("collapsed");
         
     } else {
         pathOptionsVisible = !pathOptionsVisible;
         pathOptions.classList.add("visible");
-        document.getElementById('hiderPath').classList.add("collapsed");
+        hiderPath.classList.add("collapsed");
     }
 });
 
@@ -617,8 +627,8 @@ function createPathSelector(paths) {
         return;
     }
     pathSelectorContainer.style.display = 'block'; 
-    document.getElementById('pointDate').disabled = true;
-    document.getElementById('pointTime').disabled = true;
+    pointDate.disabled = true;
+    pointTime.disabled = true;
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
@@ -757,8 +767,8 @@ function formatDateAndTimeControl(date) {
 function updateDateTime(paths) {
     const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
     
-    document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
-    document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
+    pointDate.value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
+    pointTime.value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 
     updateButtonStates(paths);
 }
@@ -777,27 +787,27 @@ function stopHolding() {
 
 function updateButtonStates(paths) {
     if (currentPointIndex === 0) {
-        document.getElementById('previousPoint').disabled = true;
-        document.getElementById('previousPoint').style.cursor = 'not-allowed';
-        document.getElementById('previousPoint').style.opacity = 0.5;
+        previousPoint.disabled = true;
+        previousPoint.style.cursor = 'not-allowed';
+        previousPoint.style.opacity = 0.5;
     } else {
-        document.getElementById('previousPoint').disabled = false;
-        document.getElementById('previousPoint').style.cursor = 'pointer';
-        document.getElementById('previousPoint').style.opacity = 1;
+        previousPoint.disabled = false;
+        previousPoint.style.cursor = 'pointer';
+        previousPoint.style.opacity = 1;
     }
 
     if (currentPointIndex === paths[currentPathIndex].path.length - 1) {
-        document.getElementById('nextPoint').disabled = true;
-        document.getElementById('nextPoint').style.cursor = 'not-allowed';
-        document.getElementById('nextPoint').style.opacity = 0.5;
+        nextPoint.disabled = true;
+        nextPoint.style.cursor = 'not-allowed';
+        nextPoint.style.opacity = 0.5;
     } else {
-        document.getElementById('nextPoint').disabled = false;
-        document.getElementById('nextPoint').style.cursor = 'pointer';
-        document.getElementById('nextPoint').style.opacity = 1;
+        nextPoint.disabled = false;
+        nextPoint.style.cursor = 'pointer';
+        nextPoint.style.opacity = 1;
     }
 }
 
-document.getElementById('previousPoint').addEventListener('mousedown', () => {
+previousPoint.addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex > 0) {
             currentPointIndex--;
@@ -808,10 +818,10 @@ document.getElementById('previousPoint').addEventListener('mousedown', () => {
     });
 });
 
-document.getElementById('previousPoint').addEventListener('mouseup', stopHolding);
-document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding);
+previousPoint.addEventListener('mouseup', stopHolding);
+previousPoint.addEventListener('mouseleave', stopHolding);
 
-document.getElementById('nextPoint').addEventListener('mousedown', () => {
+nextPoint.addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
             currentPointIndex++;
@@ -822,8 +832,8 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
     });
 });
 
-document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
-document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
+nextPoint.addEventListener('mouseup', stopHolding);
+nextPoint.addEventListener('mouseleave', stopHolding);
 
 function updateMarkerPosition(latLng) {
     const icon = {
@@ -844,9 +854,9 @@ function updateMarkerPosition(latLng) {
     }
 }
 
-document.getElementById('playPoint').addEventListener('click', () => {
+playPoint.addEventListener('click', () => {
     if (!isPlaying) {
-        document.getElementById('play').src = 'media/pause.svg';
+        playOption.src = 'media/pause.svg';
         isPlaying = true;
 
         playIntervalId = setInterval(() => {
@@ -858,20 +868,18 @@ document.getElementById('playPoint').addEventListener('click', () => {
             } else {
                 clearInterval(playIntervalId);
                 isPlaying = false;
-                document.getElementById('play').src = 'media/play.svg';
+                playOption.src = 'media/play.svg';
             }
         }, currentVelocity);
     } else {
         // Pausar la reproducción
         clearInterval(playIntervalId);
         isPlaying = false;
-        document.getElementById('play').src = 'media/play.svg';
+        playOption.src = 'media/play.svg';
     }
 });
 
-document.getElementById('velocityPoint').addEventListener('click', () => {
-    const velocityDisplay = document.getElementById('velocity');
-
+velocityPoint.addEventListener('click', () => {
     if (currentVelocity === 200) {
         currentVelocity = 100;
         velocityDisplay.textContent = 'x2';
@@ -891,7 +899,7 @@ document.getElementById('velocityPoint').addEventListener('click', () => {
             } else {
                 clearInterval(playIntervalId);
                 isPlaying = false;
-                document.getElementById('play').src = 'media/play.svg';
+                playOption.src = 'media/play.svg';
             }
         }, currentVelocity);
     }
