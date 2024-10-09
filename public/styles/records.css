@@ -504,13 +504,13 @@ border-radius: 50%;
 }
 
 #hiderPath img {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
     scale: 1.5;
     transition: transform 0.3s ease;
 }
 
 #hiderPath.collapsed img {
-    transform: rotate(-90deg);
+    transform: rotate(90deg);
 } 
 
 /* Flatpickr styles */
