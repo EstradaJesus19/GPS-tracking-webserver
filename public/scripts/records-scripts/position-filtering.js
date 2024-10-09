@@ -130,17 +130,6 @@ function handleMapClick(event) {
 
 // Draw circle on map
 function drawCircle(position, radius, isEditable) {
-
-    document.addEventListener('mouseup', function() {
-        isMouseDown = false;
-        console.log("Mouse button is released inside the element");
-    });
-
-    document.addEventListener('mousedown', function() {
-        isMouseDown = true;
-        console.log("Mouse button is released inside the element");
-    });
-
     circle = new google.maps.Circle({
         center: position,
         radius: radius,
@@ -167,6 +156,16 @@ function drawCircle(position, radius, isEditable) {
             filterByPosition(radius, selectedPosition, startTime, endTime);
             latitudeInput.value = selectedPosition.lat().toFixed(4);
             longitudeInput.value = selectedPosition.lng().toFixed(4);
+        });
+
+        document.addEventListener('mouseup', function() {
+            isMouseDown = false;
+            console.log("Mouse button is released inside the element");
+        });
+    
+        document.addEventListener('mousedown', function() {
+            isMouseDown = true;
+            console.log("Mouse button is released inside the element");
         });
 
         google.maps.event.addListener(circle, 'center_changed', function () {
