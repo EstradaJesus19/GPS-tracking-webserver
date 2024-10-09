@@ -3,7 +3,6 @@ export let map;
 export let polyline;
 export let polylines = [];
 export let markers = [];
-export let circle = null;
 export let positionOptionsVisible = true;
 
 const mapElement = document.getElementById('map');
