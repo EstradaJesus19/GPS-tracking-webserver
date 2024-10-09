@@ -761,19 +761,19 @@ function updateDateTime(paths) {
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 }
 
-document.getElementById('previousPath').addEventListener('click', () => {
-    if (currentPathIndex > 0) {
-        currentPathIndex--;
-        selectPath(currentPathIndex, usedPaths);
-    }
-});
+// document.getElementById('previousPath').addEventListener('click', () => {
+//     if (currentPathIndex > 0) {
+//         currentPathIndex--;
+//         selectPath(currentPathIndex, usedPaths);
+//     }
+// });
 
-document.getElementById('nextPath').addEventListener('click', () => {
-    if (currentPathIndex < usedPaths.length - 1) {
-        currentPathIndex++;
-        selectPath(currentPathIndex, usedPaths);
-    }
-});
+// document.getElementById('nextPath').addEventListener('click', () => {
+//     if (currentPathIndex < usedPaths.length - 1) {
+//         currentPathIndex++;
+//         selectPath(currentPathIndex, usedPaths);
+//     }
+// });
 
 let intervalId = null;
 
