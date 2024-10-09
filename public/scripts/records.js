@@ -179,7 +179,7 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
     endTime = convertToDatabaseFormat(endInput.value);
 
     // Request time filtered data to server
-    fetch(`/api/filterDataByTime?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
+    fetch(`/api/filterData?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
         .then(response => response.json())
         .then(data => {
             
