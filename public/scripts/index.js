@@ -98,6 +98,8 @@ function initMap() {
     setInterval(fetchLatestData, 100);
 }
 
+window.initMap = initMap;
+
 // Fetch latest data from database
 function fetchLatestData() {
     fetch('/api/getAllData')
