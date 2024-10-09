@@ -651,7 +651,7 @@ function createPathSelector(paths) {
         const startTimeFormatted = formatDateAndTime(startDate);
         const endTimeFormatted = formatDateAndTime(endDate);
 
-        button.setAttribute('data-tippy-content', `Path ${index + 1}: ${startTimeFormatted} to ${endTimeFormatted}`);
+        button.setAttribute('data-tippy-content', `${startTimeFormatted} to ${endTimeFormatted}`);
 
         buttonContainer.appendChild(button);
         pathButtonsContainer.appendChild(buttonContainer);
@@ -745,8 +745,8 @@ function selectPath(index, paths) {
 }
 
 function formatDateAndTimeControl(date) {
-    const day = date.getDate().toString().padStart(2, '0'); 
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Suma 1 porque los meses comienzan desde 0
     const year = date.getFullYear();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -755,10 +755,10 @@ function formatDateAndTimeControl(date) {
 }
 
 function updateDateTime(paths) {
-    const metadata = formatDateAndTimeControl(paths[currentPathIndex].metadata[currentPointIndex]);
+    const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
 
-    document.getElementById('pointDate').value = `${metadata.day}-${metadata.month}-${metadata.year}`;
-    document.getElementById('pointTime').value = `${metadata.hours}:${metadata.minutes}`;
+    document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
+    document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}`;
 }
 
 // Funciones para los botones
