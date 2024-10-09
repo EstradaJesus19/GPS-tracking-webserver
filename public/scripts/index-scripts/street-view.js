@@ -1,3 +1,5 @@
+import { panorama } from './init.js';
+
 // Define variables 
 let isStreetViewActive = false;
 
