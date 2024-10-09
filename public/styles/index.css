@@ -34,10 +34,10 @@ nav {
     align-items: center;
 }
 
-nav ul {
-    display: flex;
+nav ul {    
     margin: 0;
     padding: 8px 16px;
+    display: flex;
     border-radius: 5px;
     list-style: none;
     background-color: #530aa8;
@@ -67,6 +67,8 @@ main {
     width: 98%;
     left: 50%;
     transform: translateX(-50%);
+    padding: 10px;
+    margin: auto;
     box-sizing: border-box;
     z-index: 2;
     display: flex;
@@ -74,8 +76,6 @@ main {
     justify-content: flex-start;
     align-items: center;
     border-radius: 20px;
-    padding: 10px;
-    margin: auto;
     background-color: #f0f0f0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
