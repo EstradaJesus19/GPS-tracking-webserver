@@ -754,7 +754,7 @@ function formatDateAndTimeControl(date) {
     return { day, month, year, hours, minutes, seconds };
 }
 
-function updateDateTime() {
+function updateDateTime(paths) {
     const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
     
     console.log(`${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`);
