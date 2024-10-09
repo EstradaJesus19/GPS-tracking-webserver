@@ -1,3 +1,4 @@
+// Define variables
 const startInput = document.getElementById('startDateTime');
 const endInput = document.getElementById('endDateTime');
 

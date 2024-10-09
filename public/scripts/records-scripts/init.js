@@ -1,5 +1,8 @@
+// Define variables
 export let map; 
 export let polyline;
+export let polylines = [];
+export let markers = [];
 
 const mapElement = document.getElementById('map');
 
