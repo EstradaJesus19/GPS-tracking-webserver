@@ -614,7 +614,7 @@ function delay(ms) {
 }
 
 // Clear map
-function clearMap() {
+export function clearMap() {
     clearCircles();
     clearMarkers();
     clearPolylines();
