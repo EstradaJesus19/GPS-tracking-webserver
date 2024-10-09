@@ -17,6 +17,9 @@ let positionOptionsVisible = true;
 let pathOptionsVisible = true;
 let currentPathIndex = 0;
 let currentPointIndex = 0;
+let isPlaying = false;  
+let playIntervalId = null;
+let currentVelocity = 200; 
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -763,20 +766,6 @@ function updateDateTime(paths) {
     updateButtonStates(paths);
 }
 
-// document.getElementById('previousPath').addEventListener('click', () => {
-//     if (currentPathIndex > 0) {
-//         currentPathIndex--;
-//         selectPath(currentPathIndex, usedPaths);
-//     }
-// });
-
-// document.getElementById('nextPath').addEventListener('click', () => {
-//     if (currentPathIndex < usedPaths.length - 1) {
-//         currentPathIndex++;
-//         selectPath(currentPathIndex, usedPaths);
-//     }
-// });
-
 let intervalId = null;
 
 function startHolding(action) {
@@ -825,7 +814,6 @@ document.getElementById('previousPoint').addEventListener('mousedown', () => {
 document.getElementById('previousPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding);
 
-// Botón de nextPoint
 document.getElementById('nextPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
@@ -839,8 +827,6 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
 
 document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
-
-
 
 function updateMarkerPosition(latLng) {
     const icon = {
@@ -860,6 +846,67 @@ function updateMarkerPosition(latLng) {
         }));
     }
 }
+
+document.getElementById('playPoint').addEventListener('click', () => {
+    if (!isPlaying) {
+        // Cambiar el ícono a pausa
+        document.getElementById('play').src = 'media/pause.svg';
+        isPlaying = true;
+
+        // Iniciar el intervalo para mover los puntos automáticamente
+        playIntervalId = setInterval(() => {
+            if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
+                currentPointIndex++;
+                updateDateTime(usedPaths);
+                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+                updateButtonStates(usedPaths);
+            } else {
+                // Pausar si se llega al último punto
+                clearInterval(playIntervalId);
+                isPlaying = false;
+                document.getElementById('play').src = 'media/play.svg';  // Cambiar de nuevo a play
+            }
+        }, currentVelocity);
+    } else {
+        // Pausar la reproducción
+        clearInterval(playIntervalId);
+        isPlaying = false;
+        document.getElementById('play').src = 'media/play.svg';  // Cambiar el ícono a play
+    }
+});
+
+document.getElementById('velocityPoint').addEventListener('click', () => {
+    const velocityDisplay = document.getElementById('velocity');
+
+    if (currentVelocity === 200) {
+        // Cambiar a velocidad x2 (100ms)
+        currentVelocity = 100;
+        velocityDisplay.textContent = 'x2';
+    } else {
+        // Cambiar a velocidad x1 (200ms)
+        currentVelocity = 200;
+        velocityDisplay.textContent = 'x1';
+    }
+
+    // Si está reproduciendo, actualizamos el intervalo con la nueva velocidad
+    if (isPlaying) {
+        clearInterval(playIntervalId);
+        playIntervalId = setInterval(() => {
+            if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
+                currentPointIndex++;
+                updateDateTime(usedPaths);
+                updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+                updateButtonStates(usedPaths);
+            } else {
+                // Pausar si se llega al último punto
+                clearInterval(playIntervalId);
+                isPlaying = false;
+                document.getElementById('play').src = 'media/play.svg';  // Cambiar de nuevo a play
+            }
+        }, currentVelocity);
+    }
+});
+
 
 // Delays
 function delay(ms) {
