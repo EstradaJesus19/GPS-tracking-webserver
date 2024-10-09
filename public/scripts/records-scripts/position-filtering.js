@@ -160,12 +160,10 @@ function drawCircle(position, radius, isEditable) {
 
         document.addEventListener('mouseup', function() {
             isMouseDown = false;
-            console.log("Mouse button is released inside the element");
         });
     
         document.addEventListener('mousedown', function() {
             isMouseDown = true;
-            console.log("Mouse button is released inside the element");
         });
 
         google.maps.event.addListener(circle, 'center_changed', function () {
