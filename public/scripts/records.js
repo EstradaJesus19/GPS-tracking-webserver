@@ -834,7 +834,7 @@ document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
 
 // Llamar a updateButtonStates al cargar el primer punto
-updateButtonStates();
+// updateButtonStates();
 
 
 function updateMarkerPosition(latLng) {
