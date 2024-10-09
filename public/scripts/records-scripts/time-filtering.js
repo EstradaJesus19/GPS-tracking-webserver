@@ -1,4 +1,4 @@
-import { clearMap } from '../records.js';
+import { clearMap } from './clear-options.js';
 import { map, markers, polylines } from './init.js';
 
 // Define variables
