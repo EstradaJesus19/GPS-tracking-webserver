@@ -283,6 +283,10 @@ function updateMarkerPosition(latLng) {
 
 playPoint.addEventListener('click', () => {
     if (!isPlaying) {
+        if (currentPointIndex === usedPaths[currentPathIndex].path.length - 1) {
+            currentPointIndex = 0;
+        }
+
         playOption.src = 'media/pause.svg';
         isPlaying = true;
 
@@ -299,7 +303,6 @@ playPoint.addEventListener('click', () => {
             }
         }, currentVelocity);
     } else {
-        // Pausar la reproducción
         clearInterval(playIntervalId);
         isPlaying = false;
         playOption.src = 'media/play.svg';
