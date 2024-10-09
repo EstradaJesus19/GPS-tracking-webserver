@@ -625,7 +625,7 @@ function clearMarkers() {
     markers.forEach(marker => {
         marker.setMap(null);
     });
-    markers = [];
+    markers.length = 0;
 }
 
 // Clear circles
