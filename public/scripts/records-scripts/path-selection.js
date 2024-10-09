@@ -1,8 +1,18 @@
 import { map, markers, polylines } from "./init.js";
 import { clearPolylines, clearMarkers } from './clear-options.js';
+import { updateDateTime, updateMarkerPosition } from '../records.js';
 
 // Define variables
+export let currentPathIndex = 0;
+export let currentPointIndex = 0;
 let pathOptionsVisible = true;
+
+const pathSelectorContainer = document.getElementById('pathSelector');
+const pathButtonsContainer = document.getElementById('pathButtons');
+const hiderPath = document.getElementById('hiderPath');
+const pathOptions = document.getElementById('pathOptions');
+const pointDate = document.getElementById('pointDate');
+const pointTime = document.getElementById('pointTime');
 
 hiderPath.addEventListener("click", function() {
     pointDate.disabled = true;

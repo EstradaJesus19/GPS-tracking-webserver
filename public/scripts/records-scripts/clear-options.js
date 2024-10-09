@@ -1,5 +1,5 @@
-import { markers, polylines } from "./records-scripts/init.js";
-import { circle } from "./records-scripts/position-filtering.js";
+import { markers, polylines } from ".init.js";
+import { circle } from "./position-filtering.js";
 
 
 // Clear map

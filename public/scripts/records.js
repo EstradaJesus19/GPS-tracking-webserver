@@ -2,18 +2,13 @@ import { getApiOwner, getApiKey, map, markers, polylines } from "./records-scrip
 import { linkCalendars } from "./records-scripts/calendars.js";
 import { timeFiltering } from "./records-scripts/time-filtering.js";
 import { positionFiltering, usedPaths } from "./records-scripts/position-filtering.js";
+import { currentPathIndex, currentPointIndex } from "./records-scripts/position-filtering.js";
 
 // Define variables
-let currentPathIndex = 0;
-let currentPointIndex = 0;
 let isPlaying = false;  
 let playIntervalId = null;
 let currentVelocity = 200; 
 
-const pathSelectorContainer = document.getElementById('pathSelector');
-const pathButtonsContainer = document.getElementById('pathButtons');
-const hiderPath = document.getElementById('hiderPath');
-const pathOptions = document.getElementById('pathOptions');
 const pointDate = document.getElementById('pointDate');
 const pointTime = document.getElementById('pointTime');
 const previousPoint = document.getElementById('previousPoint');
