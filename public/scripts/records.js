@@ -184,7 +184,6 @@ document.getElementById('timeFilterBtn').addEventListener('click', function (e) 
             // Process data and update map
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
-                let paths = [];
                 let currentPath = [];
                 let previousTime = null;
                 let lastPoint = null;
@@ -437,7 +436,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
         .then(data => {
             if (data.length > 0) {
                 const bounds = new google.maps.LatLngBounds();
-                let paths = []; 
                 let currentPath = []; 
                 let currentMetadata = [];
                 let previousTime = null; 
