@@ -1,4 +1,4 @@
-import { getApiOwner, getApiKey, map, polyline } from "./records-scripts/init.js";
+import { getApiOwner, getApiKey, map } from "./records-scripts/init.js";
 
 // Define variables
 
