@@ -125,9 +125,6 @@ export function selectPath(index, paths) {
     currentPathIndex = index;
     currentPointIndex = 0;
 
-    console.log(typeof currentPathIndex);
-    console.log(typeof currentPointIndex);
-
     updateDateTime(paths);
 
     const polyline = new google.maps.Polyline({
@@ -275,6 +272,8 @@ function updateMarkerPosition(latLng) {
     if (markers.length > 2) {
         markers[markers.length - 1].setPosition(latLng); 
     } else {
+        console.log(typeof currentPathIndex);
+        console.log(typeof currentPointIndex);
         markers.push(new google.maps.Marker({
             position: latLng,
             map: map,
