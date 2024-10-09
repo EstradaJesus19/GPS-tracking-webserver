@@ -1,4 +1,4 @@
-import {getServerOwner} from './index-scripts/init.js'
+import {getServerOwner} from './index-scripts/init.js';
 
 // Define variables 
 let map;
