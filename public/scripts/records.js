@@ -792,8 +792,11 @@ document.getElementById('previousPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex > 0) {
             currentPointIndex--;
+            document.getElementById('nextPoint').disabled = 'false';
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        } else if (currentPointIndex == 0) {
+            document.getElementById('previousPoint').disabled = 'true';
         }
     });
 });
@@ -805,8 +808,11 @@ document.getElementById('nextPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
             currentPointIndex++;
+            document.getElementById('nextPoint').disabled = 'false';
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        } else if (currentPointIndex == 0) {
+            document.getElementById('nextPoint').disabled = 'true';
         }
     });
 });
