@@ -74,7 +74,7 @@ function updateMarkerAndInfo(lat, lng, data) {
         anchor: new google.maps.Point(20, 35)
     };
 
-    marker = new google.maps.Marker({
+    marker = new google.maps.marker.AdvancedMarkerElement({
         position,
         map,
         title: `Lat: ${lat}, Lng: ${lng}`,
