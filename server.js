@@ -1,4 +1,3 @@
-// Define constansts and call libraries
 const dgram = require('dgram');
 const express = require('express');
 const http = require('http');
@@ -14,7 +13,6 @@ const udpPort = 60001;
 
 require('dotenv').config();
 
-// Define data structure
 let data = {
     latitude: 'N/A',
     longitude: 'N/A',
@@ -22,7 +20,6 @@ let data = {
     time: 'N/A'
 };
 
-// Connect to MySQL database
 const db = mysql.createConnection({
     host: process.env.db_host,
     user: process.env.db_user,
@@ -38,7 +35,6 @@ db.connect((err) => {
     console.log('Connected to MySQL');
 });
 
-// Define WebSocket server
 const credentials = {
     key: fs.readFileSync( process.env.https_key ),
     cert: fs.readFileSync( process.env.https_cert )
@@ -55,7 +51,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-// Create UDP server and sniffer
 const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
@@ -73,7 +68,6 @@ udpServer.on('message', (msg) => {
 
         const tableName = process.env.db_table; 
 
-        // Insert received data into database
         db.query(`INSERT INTO ?? (latitude, longitude, date, time) VALUES (?, ?, ?, ?)`, 
             [tableName, data.latitude, data.longitude, data.date, data.time], 
             (err) => {
@@ -85,7 +79,6 @@ udpServer.on('message', (msg) => {
             }
         );
 
-        // Send data through web socket
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(data));
@@ -96,23 +89,18 @@ udpServer.on('message', (msg) => {
     }
 });
 
-// Close UDP server
 udpServer.bind(udpPort);
 
-// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Get and send API key
 app.get('/api/getApiKey', (req, res) => {
     res.json({ apiKey: process.env.api_key });
 });
 
-// Get and send server owner
 app.get('/api/getOwner', (req, res) => {
     res.json({ owner: process.env.server_owner });
 });
 
-// Get all data from database
 app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
     db.query('SELECT latitude, longitude, date, time FROM ??', [tableName], (err, results) => {
@@ -126,17 +114,13 @@ app.get('/api/getAllData', (req, res) => {
 });
 
 // Time filtering query
-app.get('/api/filterDataByTime', (req, res) => {
+app.get('/api/filterData', (req, res) => {
     const { startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
 
-    const query = `
-        SELECT latitude, longitude, date, time FROM ??
-        FROM ?? 
-        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?
-    `;
-
-    db.query(query, [tableName, startTime, endTime],
+    db.query(
+        `SELECT latitude, longitude, date, time FROM ?? WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?`,
+        [tableName, startTime, endTime],
         (err, results) => {
             if (err) {
                 console.error('Error fetching filtered data:', err);
@@ -151,15 +135,15 @@ app.get('/api/filterDataByTime', (req, res) => {
 // Position filtering query
 app.get('/api/filterDataByPosition', (req, res) => {
     const { startTime, endTime, latitude, longitude, radius } = req.query;
-    const tableName = process.env.db_table;
 
     const query = `
-        SELECT latitude, longitude, date, time 
+       SELECT latitude, longitude, date, time 
         FROM ?? 
         WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
     `;
 
+    const tableName = process.env.db_table;
     db.query(query, [tableName, startTime, endTime, longitude, latitude, radius], (err, results) => {
         if (err) {
             console.error('Error fetching data by position:', err);
@@ -170,8 +154,6 @@ app.get('/api/filterDataByPosition', (req, res) => {
     });
 });
 
-
-// Enable HTTP and HTTPS servers
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
