@@ -136,6 +136,11 @@ function drawCircle(position, radius, isEditable) {
         console.log("Mouse button is released inside the element");
     });
 
+    document.addEventListener('mousedown', function() {
+        isMouseDown = false;
+        console.log("Mouse button is released inside the element");
+    });
+
     circle = new google.maps.Circle({
         center: position,
         radius: radius,
