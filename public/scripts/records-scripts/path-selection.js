@@ -125,6 +125,9 @@ export function selectPath(index, paths) {
     currentPathIndex = index;
     currentPointIndex = 0;
 
+    console.log(typeof currentPathIndex);
+    console.log(typeof currentPointIndex);
+
     updateDateTime(paths);
 
     const polyline = new google.maps.Polyline({
