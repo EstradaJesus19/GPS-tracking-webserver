@@ -667,7 +667,8 @@ function createPathSelector(paths) {
         hideOnClick: true, 
         trigger: 'mouseenter focus', 
         interactive: true, 
-        appendTo: document.body 
+        appendTo: document.body,
+        maxWidth: '150px'
     });
 }
 
