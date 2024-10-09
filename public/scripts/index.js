@@ -1,11 +1,19 @@
 // Define variables 
 let map;
-let marker;
-let polyline;
+let panorama;
 let path = [];
 let oldPath = [];
-let panorama;
+let polyline;
+let marker;
 let isStreetViewActive = false;
+
+// Rename document objects
+const mapElement = document.getElementById('map');
+const streetViewButton = document.getElementById('streetViewButton');
+const latitudeText = document.getElementById('latitude');
+const longitudeText = document.getElementById('longitude');
+const dateText = document.getElementById('date');
+const timeText = document.getElementById('time');
 
 // Load last location in database
 function loadLastLocation() {
@@ -56,7 +64,7 @@ fetch('/api/getApiKey')
 // Init map
 function initMap() {
     // Build initial map
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(mapElement, {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
         fullscreenControl: false,
@@ -73,7 +81,7 @@ function initMap() {
     polyline.setMap(map);
 
     // Update street view data
-    panorama = new google.maps.StreetViewPanorama(document.getElementById('map'), {
+    panorama = new google.maps.StreetViewPanorama(mapElement, {
         position: { lat: 10.98, lng: -74.81 },
         pov: { heading: 165, pitch: 0 },
         zoom: 1,
@@ -83,13 +91,13 @@ function initMap() {
 
     map.setStreetView(panorama);
 
-    document.getElementById('streetViewButton').addEventListener('click', toggleStreetView);
+    streetViewButton.addEventListener('click', toggleStreetView);
 
     loadLastLocation();
 
     // Enable street view button
-    document.getElementById('streetViewButton').style.display = 'block';
-    document.getElementById('streetViewButton').disabled = false;
+    streetViewButton.style.display = 'block';
+    streetViewButton.disabled = false;
 
     setInterval(fetchLatestData, 100);
 }
@@ -152,21 +160,20 @@ function updateMarkerAndInfo(lat, lng, data) {
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
 
-    document.getElementById('latitude').textContent = data.latitude;
-    document.getElementById('longitude').textContent = data.longitude;
-    document.getElementById('date').textContent = formattedDate;
-    document.getElementById('time').textContent = data.time;
+    latitudeText.textContent = data.latitude;
+    longitudeText.textContent = data.longitude;
+    dateText.textContent = formattedDate;
+    timeText.textContent = data.time;
 }
 
 // Toggle street view/map view
 function toggleStreetView() {
-    const toggleButton = document.getElementById('streetViewButton');
     isStreetViewActive = !isStreetViewActive;
     panorama.setVisible(isStreetViewActive);
     if (!isStreetViewActive) {
         map.setCenter(marker.getPosition());
-        toggleButton.innerText = 'Street View';
+        streetViewButton.innerText = 'Street View';
     } else{
-        toggleButton.innerText = 'Map View';
+        streetViewButton.innerText = 'Map View';
     }
 }

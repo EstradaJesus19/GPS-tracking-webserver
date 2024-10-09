@@ -1,3 +1,4 @@
+// Define variables
 let map; 
 let polyline;
 let polylines = [];
