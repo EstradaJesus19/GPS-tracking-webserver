@@ -764,8 +764,6 @@ function updateDateTime(paths) {
 }
 
 document.getElementById('previousPath').addEventListener('click', () => {
-    console.log(usedPaths);
-    console.log(usedPaths.length);
     if (currentPathIndex > 0) {
         currentPathIndex--;
         console.log(currentPathIndex);
@@ -774,8 +772,6 @@ document.getElementById('previousPath').addEventListener('click', () => {
 });
 
 document.getElementById('nextPath').addEventListener('click', () => {
-    console.log(usedPaths);
-    console.log(usedPaths.length);
     if (currentPathIndex < usedPaths.length - 1) {
         currentPathIndex++;
         console.log(currentPathIndex);
@@ -801,19 +797,19 @@ document.getElementById('nextPoint').addEventListener('click', () => {
 
 function updateMarkerPosition(latLng) {
     if (markers.length > 2) {
-        markers[1].setPosition(latLng); // Usa el marcador de final para el punto actual
+        markers[1].setPosition(latLng); 
     } else {
+
+        const icon = {
+            url: 'media/favicon.svg',
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(20, 35)
+        };
+
         markers.push(new google.maps.Marker({
             position: latLng,
             map: map,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 5,
-                fillColor: "#C3AAff",
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: "#6309CE"
-            },
+            icon: icon,
             title: `Point ${currentPointIndex + 1} of Path ${currentPathIndex + 1}`
         }));
     }
