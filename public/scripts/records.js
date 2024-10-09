@@ -1,8 +1,7 @@
-import { getApiOwner } from "./records-scripts/init.js";
+import { getApiOwner, getApiKey, map, polyline } from "./records-scripts/init.js";
 
 // Define variables
-let map; 
-let polyline;
+
 let polylines = [];
 let path = [];
 let paths = [];
@@ -51,58 +50,7 @@ const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
 
 getApiOwner();
-
-// Load Google Maps API
-function loadGoogleMapsApi(apiKey) {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&loading=async&libraries=maps,marker&v=beta`;
-    script.async = true;
-    document.head.appendChild(script);
-}
-
-// Get APIKEY and load map API
-fetch('/api/getApiKey')
-    .then(response => response.json())
-    .then(data => {
-        loadGoogleMapsApi(data.apiKey);
-    })
-    .catch(error => {
-        console.error('Error getting API Key:', error);
-    });
-
-// Init map
-function initMap() {
-    map = new google.maps.Map(mapElement, {
-        center: { lat: 10.98, lng: -74.81 },
-        zoom: 13,
-        fullscreenControl: false,
-        streetViewControl: false,
-        mapTypeControl: false
-    });
-
-    // Define polyline features
-    polyline = new google.maps.Polyline({
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-        icons: [{
-            icon: {
-                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                scale: 3,
-                strokeColor: '#6309CE',
-                strokeWeight: 2,
-                fillColor: '#6309CE',
-                fillOpacity: 1.0,
-            },
-            offset: '100%',
-            repeat: '100px'
-        }]
-    });
-
-    polyline.setMap(map);
-}
-
-window.initMap = initMap;
+getApiKey();
 
 //Filtering by time
 // Link calendars and dates
