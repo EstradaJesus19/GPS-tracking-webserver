@@ -1,3 +1,5 @@
+import {getServerOwner} from './index-scripts/init.js'
+
 // Define variables 
 let map;
 let panorama;
@@ -35,13 +37,7 @@ function loadLastLocation() {
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Get server owner and print it in the web page tittle
-fetch('/api/getOwner')
-    .then(response => response.json())
-    .then(data => {
-        document.title = `Real time - ${data.owner}`;
-    })
-    .catch(error => console.error('Error fetching owner:', error));
+getServerOwner();
 
 // Load Google Maps API    
 function loadGoogleMapsApi(apiKey) {
