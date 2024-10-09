@@ -610,7 +610,6 @@ document.getElementById("hiderPath").addEventListener("click", function() {
 function createPathSelector(paths) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const pathButtonsContainer = document.getElementById('pathButtons');
-    const pathControl = document.getElementById('pathControl');
     pathButtonsContainer.innerHTML = ''; 
 
     if (paths.length === 0) {
@@ -618,7 +617,6 @@ function createPathSelector(paths) {
         return;
     }
     pathSelectorContainer.style.display = 'block'; 
-    pathControl.style.display = 'block'; 
     document.getElementById('pointDate').disabled = true;
     document.getElementById('pointTime').disabled = true;
 
