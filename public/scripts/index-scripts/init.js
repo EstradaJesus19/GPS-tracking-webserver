@@ -1,3 +1,23 @@
+import { fetchLatestData } from './fetch-data';
+import { toggleStreetView } from './street-view';
+
+// Define variables 
+export let map;
+export let panorama;
+export let path = [];
+export let oldPath = [];
+export let polyline;
+export let marker;
+export let isStreetViewActive = false;
+
+// Rename document objects
+export const mapElement = document.getElementById('map');
+export const streetViewButton = document.getElementById('streetViewButton');
+export const latitudeText = document.getElementById('latitude');
+export const longitudeText = document.getElementById('longitude');
+export const dateText = document.getElementById('date');
+export const timeText = document.getElementById('time');
+
 // Get server owner and print it in the web page tittle
 export function getServerOwner(){
     fetch('/api/getOwner')
@@ -9,7 +29,7 @@ export function getServerOwner(){
 }
 
 // Load Google Maps API    
-export function loadGoogleMapsApi(apiKey) {
+function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&libraries=maps,marker&v=beta`;
     script.async = true;
@@ -68,3 +88,5 @@ export function initMap() {
 
     setInterval(fetchLatestData, 100);
 }
+
+window.initMap = initMap;
