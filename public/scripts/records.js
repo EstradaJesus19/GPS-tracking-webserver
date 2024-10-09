@@ -689,7 +689,6 @@ function selectPath(index, paths) {
     currentPointIndex = 0;
 
     updateDateTime(paths);
-    updateButtonStates();
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
@@ -843,7 +842,7 @@ document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
 
 // Llamar a updateButtonStates al cargar el primer punto
-// 
+// updateButtonStates();
 
 
 function updateMarkerPosition(latLng) {
