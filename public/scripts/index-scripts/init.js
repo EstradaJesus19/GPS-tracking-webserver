@@ -2,21 +2,13 @@ import { fetchLatestData, loadLastLocation } from './fetch-data.js';
 import { toggleStreetView } from './street-view.js';
 
 // Define variables 
-export let map;
-export let panorama;
-export let path = [];
-export let oldPath = [];
-export let polyline;
-export let marker;
-export let isStreetViewActive = false;
+let map;
+let panorama;
+let polyline;
 
 // Rename document objects
-export const mapElement = document.getElementById('map');
-export const streetViewButton = document.getElementById('streetViewButton');
-export const latitudeText = document.getElementById('latitude');
-export const longitudeText = document.getElementById('longitude');
-export const dateText = document.getElementById('date');
-export const timeText = document.getElementById('time');
+const mapElement = document.getElementById('map');
+const streetViewButton = document.getElementById('streetViewButton');
 
 // Get server owner and print it in the web page tittle
 export function getServerOwner(){
@@ -49,7 +41,7 @@ export function getApiKey() {
 }
 
 // Init map
-export function initMap() {
+function initMap() {
     // Build initial map
     map = new google.maps.Map(mapElement, {
         center: { lat: 10.98, lng: -74.81 },

@@ -1,3 +1,13 @@
+// Define variables 
+let path = [];
+let oldPath = [];
+let marker;
+
+const latitudeText = document.getElementById('latitude');
+const longitudeText = document.getElementById('longitude');
+const dateText = document.getElementById('date');
+const timeText = document.getElementById('time');
+
 // Load last location in database
 export function loadLastLocation() {
     fetch('/api/getAllData')

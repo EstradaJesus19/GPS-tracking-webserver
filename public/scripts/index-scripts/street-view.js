@@ -1,3 +1,8 @@
+// Define variables 
+let isStreetViewActive = false;
+
+const streetViewButton = document.getElementById('streetViewButton');
+
 // Toggle street view/map view
 export function toggleStreetView() {
     isStreetViewActive = !isStreetViewActive;
