@@ -26,7 +26,12 @@ const mapElement = document.getElementById('map');
 const startInput = document.getElementById('startDateTime');
 const endInput = document.getElementById('endDateTime');
 const timeFilterBtn = document.getElementById('timeFilterBtn');
-
+const pathSelectorContainer = document.getElementById('pathSelector');
+const positionControl = document.getElementById('positionControl');
+const pathButtonsContainer = document.getElementById('pathButtons');
+const radiusInput = document.getElementById('radiusInput');
+const latitudeInput = document.getElementById('latitudeInput');
+const longitudeInput = document.getElementById('longitudeInput');
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -148,8 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Filter by time
 timeFilterBtn.addEventListener('click', function (e) {
-    const pathSelectorContainer = document.getElementById('pathSelector');
-    const positionControl = document.getElementById('positionControl');
 
     e.preventDefault();
 
@@ -344,9 +347,6 @@ function disableMapClick() {
 
 // Manage clicking on map
 function handleMapClick(event) {
-    radiusInput = document.getElementById('radiusInput');
-    latitudeInput = document.getElementById('latitudeInput');
-    longitudeInput = document.getElementById('longitudeInput');
     radius = parseFloat(radiusInput.value);
     selectedPosition = event.latLng;
     latitudeInput.value = selectedPosition.lat().toFixed(4);
@@ -357,7 +357,7 @@ function handleMapClick(event) {
 }
 
 // Link radius input with map circle
-document.getElementById('radiusInput').addEventListener('keydown', function (event) {
+radiusInput.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         if (circle) {
             if (radiusInput.value <=500){
@@ -370,7 +370,7 @@ document.getElementById('radiusInput').addEventListener('keydown', function (eve
     }
 });
 
-document.getElementById('radiusInput').addEventListener('change', function () {
+radiusInput.addEventListener('change', function () {
     if (circle) {
         radius = parseFloat(radiusInput.value);
         circle.setRadius(radius);
@@ -379,9 +379,6 @@ document.getElementById('radiusInput').addEventListener('change', function () {
 
 // Draw circle on map
 function drawCircle(position, radius, isEditable) {
-    radiusInput = document.getElementById('radiusInput');
-    latitudeInput = document.getElementById('latitudeInput');
-    longitudeInput = document.getElementById('longitudeInput');
 
     circle = new google.maps.Circle({
         center: position,
@@ -534,8 +531,8 @@ function convertToDatabaseFormat(dateTimeStr) {
 
 document.getElementById("toggleSwitch").addEventListener("click", function() {
     var positionOptions = document.getElementById("positionOptions");
-    document.getElementById('latitudeInput').disabled = true;
-    document.getElementById('longitudeInput').disabled = true;
+    latitudeInput.disabled = true;
+    longitudeInput.disabled = true;
 
     if (positionFiltering) {
         positionFiltering = !positionFiltering;
@@ -613,8 +610,6 @@ document.getElementById("hiderPath").addEventListener("click", function() {
 
 // Create path selector
 function createPathSelector(paths) {
-    const pathSelectorContainer = document.getElementById('pathSelector');
-    const pathButtonsContainer = document.getElementById('pathButtons');
     pathButtonsContainer.innerHTML = ''; 
 
     if (paths.length === 0) {
