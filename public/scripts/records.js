@@ -1,4 +1,4 @@
-import { getApiOwner, getApiKey, map, markers, polylines, positionOptionsVisible, togglePositionOptionsVisible } from "./records-scripts/init.js";
+import { getApiOwner, getApiKey, map, markers, polylines } from "./records-scripts/init.js";
 import { linkCalendars } from "./records-scripts/calendars.js";
 import { timeFiltering } from "./records-scripts/time-filtering.js";
 import { positionFiltering, usedPaths, circle } from "./records-scripts/position-filtering.js";
@@ -39,19 +39,6 @@ timeFiltering();
 
 // Filter by position
 positionFiltering();
-
-hiderPosition.addEventListener("click", function() {
-    if (positionOptionsVisible) {
-        togglePositionOptionsVisible();
-        positionOptions.classList.remove("visible");
-        hiderPosition.classList.remove("collapsed");
-        
-    } else {
-        togglePositionOptionsVisible();
-        positionOptions.classList.add("visible");
-        hiderPosition.classList.add("collapsed");
-    }
-});
 
 hiderPath.addEventListener("click", function() {
     pointDate.disabled = true;

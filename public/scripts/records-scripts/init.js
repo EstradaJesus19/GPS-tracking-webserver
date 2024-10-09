@@ -3,7 +3,6 @@ export let map;
 export let polyline;
 export let polylines = [];
 export let markers = [];
-export let positionOptionsVisible = true;
 
 const mapElement = document.getElementById('map');
 
@@ -70,15 +69,3 @@ function initMap() {
 }
 
 window.initMap = initMap;
-
-export function togglePositionOptionsVisible() {
-    positionOptionsVisible = !positionOptionsVisible;
-}
-
-export function setPositionOptionsVisible() {
-    positionOptionsVisible = true;
-}
-
-export function clearPositionOptionsVisible() {
-    positionOptionsVisible = false;
-}

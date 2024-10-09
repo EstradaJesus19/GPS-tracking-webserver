@@ -1,10 +1,11 @@
-import { map, setPositionOptionsVisible } from './init.js';
+import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { selectPath, createPathSelector, clearMap, clearCircles, clearPolylines, clearMarkers } from '../records.js';
 
 // Define variables
 export let usedPaths = [];
 export let circle = null;
+let positionOptionsVisible = true;
 let positionFilteringAction = false;
 let selectedPosition = null;
 let radius = null;
@@ -43,7 +44,7 @@ export function positionFiltering(){
         } else {
             positionOptions.classList.add("visible");
             positionFilteringAction = !positionFilteringAction;
-            setPositionOptionsVisible();
+            positionOptionsVisible = true;
 
             hiderContainerPosition.classList.add("visible");
             setTimeout(function() {
@@ -84,6 +85,19 @@ export function positionFiltering(){
                 circle.setRadius(radius);
             }
             
+        }
+    });
+
+    hiderPosition.addEventListener("click", function() {
+        if (positionOptionsVisible) {
+            togglePositionOptionsVisible();
+            positionOptions.classList.remove("visible");
+            hiderPosition.classList.remove("collapsed");
+            
+        } else {
+            togglePositionOptionsVisible();
+            positionOptions.classList.add("visible");
+            hiderPosition.classList.add("collapsed");
         }
     });
 }
