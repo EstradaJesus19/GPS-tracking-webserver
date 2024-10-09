@@ -178,7 +178,7 @@ main {
 
 #pathButtons {
     max-height: none; 
-    max-width: 206.8px;
+    max-width: 205px;
     width: 100%; 
     gap: 5px;
     display: flex;
