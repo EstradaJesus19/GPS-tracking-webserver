@@ -757,7 +757,6 @@ function formatDateAndTimeControl(date) {
 function updateDateTime(paths) {
     const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
     
-    console.log(`${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`);
     document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
     document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 }
@@ -765,6 +764,7 @@ function updateDateTime(paths) {
 document.getElementById('previousPath').addEventListener('click', () => {
     if (currentPathIndex > 0) {
         currentPathIndex--;
+        console.log(currentPathIndex);
         selectPath(currentPathIndex, paths);
     }
 });
@@ -772,6 +772,7 @@ document.getElementById('previousPath').addEventListener('click', () => {
 document.getElementById('nextPath').addEventListener('click', () => {
     if (currentPathIndex < paths.length - 1) {
         currentPathIndex++;
+        console.log(currentPathIndex);
         selectPath(currentPathIndex, paths);
     }
 });
@@ -811,7 +812,6 @@ function updateMarkerPosition(latLng) {
         }));
     }
 }
-
 
 // Delays
 function delay(ms) {
