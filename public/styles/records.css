@@ -175,7 +175,7 @@ main {
     overflow-x: auto; 
     white-space: nowrap; 
     position: relative;
-    justify-content: center;
+    justify-content: start;
     max-height: none; 
 }
 
