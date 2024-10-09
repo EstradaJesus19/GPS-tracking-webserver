@@ -193,3 +193,10 @@ export function timeFiltering(){
             });
     });
 }
+
+// Convert date and time into database format
+function convertToDatabaseFormat(dateTimeStr) {
+    const [day, month, yearTime] = dateTimeStr.split('-');
+    const [year, time] = yearTime.split(' ');
+    return `${year}-${month}-${day} ${time}`;
+}
