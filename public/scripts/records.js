@@ -751,7 +751,7 @@ function formatDateAndTimeControl(date) {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
 
-    return { day, month, year, hours, minutes };
+    return { day, month, year, hours, minutes, seconds };
 }
 
 function updateDateTime() {
@@ -759,7 +759,7 @@ function updateDateTime() {
     
     console.log(`${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`);
     document.getElementById('pointDate').value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
-    document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}`;
+    document.getElementById('pointTime').value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 }
 
 document.getElementById('previousPath').addEventListener('click', () => {
@@ -791,14 +791,6 @@ document.getElementById('nextPoint').addEventListener('click', () => {
         updateMarkerPosition(paths[currentPathIndex].path[currentPointIndex]);
     }
 });
-
-function updateDateTime(paths) {
-    const pointMetadata = paths[currentPathIndex].metadata[currentPointIndex]; 
-    const [date, time] = pointMetadata.split('T');
-    
-    document.getElementById('pointDate').value = date;
-    document.getElementById('pointTime').value = time;
-}
 
 function updateMarkerPosition(latLng) {
     if (markers.length > 2) {
