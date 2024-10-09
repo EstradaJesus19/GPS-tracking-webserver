@@ -70,7 +70,7 @@ hiderPath.addEventListener("click", function() {
 });
 
 // Create path selector
-function createPathSelector(paths) {
+export function createPathSelector(paths) {
     pathButtonsContainer.innerHTML = ''; 
 
     if (paths.length === 0) {
@@ -141,7 +141,7 @@ function SelectButtonOrNo(index) {
 }
 
 // Select path
-function selectPath(index, paths) {
+export function selectPath(index, paths) {
     SelectButtonOrNo(index); 
     clearPolylines();
     clearMarkers(); 
