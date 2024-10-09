@@ -434,10 +434,6 @@ border-radius: 50%;
     justify-content: space-around;
     margin: -5px;
 }
-
-.pathHeader h4 {
-    line-height: 0%;
-}
   
 #pathOptions {
     max-height: 0px;
