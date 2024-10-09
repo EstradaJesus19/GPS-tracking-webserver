@@ -32,6 +32,9 @@ const pathButtonsContainer = document.getElementById('pathButtons');
 const radiusInput = document.getElementById('radiusInput');
 const latitudeInput = document.getElementById('latitudeInput');
 const longitudeInput = document.getElementById('longitudeInput');
+const toggleSwitch = document.getElementById('toggleSwitch');
+const positionOptions = document.getElementById('positionOptions');
+const hiderPosition = document.getElementById('hiderPosition');
 
 // Get server owner and print it in the web page tittle
 fetch('/api/getOwner')
@@ -529,8 +532,7 @@ function convertToDatabaseFormat(dateTimeStr) {
     return `${year}-${month}-${day} ${time}`;
 }
 
-document.getElementById("toggleSwitch").addEventListener("click", function() {
-    var positionOptions = document.getElementById("positionOptions");
+toggleSwitch.addEventListener("click", function() {
     latitudeInput.disabled = true;
     longitudeInput.disabled = true;
 
@@ -541,7 +543,7 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         document.getElementById('hiderContainerPosition').classList.remove("visible");
         setTimeout(function() {
             document.getElementById('hiderContainerPosition').style.display = 'none';
-            document.getElementById('hiderPosition').classList.add("collapsed");
+            hiderPosition.classList.add("collapsed");
         }, 200);
 
         disableMapClick();
@@ -576,18 +578,16 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
     }
 });
 
-document.getElementById("hiderPosition").addEventListener("click", function() {
-    var positionOptions = document.getElementById("positionOptions");
-
+hiderPosition.addEventListener("click", function() {
     if (positionOptionsVisible) {
         positionOptionsVisible = !positionOptionsVisible;
         positionOptions.classList.remove("visible");
-        document.getElementById('hiderPosition').classList.remove("collapsed");
+        hiderPosition.classList.remove("collapsed");
         
     } else {
         positionOptionsVisible = !positionOptionsVisible;
         positionOptions.classList.add("visible");
-        document.getElementById('hiderPosition').classList.add("collapsed");
+        hiderPosition.classList.add("collapsed");
     }
 });
 
