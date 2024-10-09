@@ -743,14 +743,25 @@ function selectPath(index, paths) {
     }));
 }
 
+function formatTimeTo24Hours(time) {
+    const formattedHours = time.getHours().toString().padStart(2, '0');  
+    const formattedMinutes = time.getMinutes().toString().padStart(2, '0'); 
+    return `${formattedHours}:${formattedMinutes}`;
+}
+
+function formatDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth(); 
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
 
 // Actualiza la fecha y hora en el HTML según el punto actual
 function updateDateTime(paths) {
-    console.log(paths[currentPathIndex].metadata[currentPointIndex]);
     const metadata = paths[currentPathIndex].metadata[currentPointIndex];
     
-    document.getElementById('pointDate').value = metadata.date;
-    document.getElementById('pointTime').value = metadata.time;
+    document.getElementById('pointDate').value = formatDate(metadata.date);
+    document.getElementById('pointTime').value = formatTimeTo24Hours(metadata.time);
 }
 
 // Funciones para los botones
