@@ -689,7 +689,6 @@ function selectPath(index, paths) {
     currentPointIndex = 0;
 
     updateDateTime(paths);
-    document.getElementById('previousPoint').disabled = 'true';
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
@@ -780,7 +779,6 @@ let intervalId = null;
 
 function startHolding(action) {
     action();
-
     intervalId = setInterval(action, 500);
 }
 
@@ -789,45 +787,55 @@ function stopHolding() {
     intervalId = null;
 }
 
+function updateButtonStates() {
+    // Deshabilitar el botón de previousPoint si estás en el primer punto
+    if (currentPointIndex === 0) {
+        document.getElementById('previousPoint').disabled = true;
+    } else {
+        document.getElementById('previousPoint').disabled = false;
+    }
+
+    // Deshabilitar el botón de nextPoint si estás en el último punto
+    if (currentPointIndex === usedPaths[currentPathIndex].path.length - 1) {
+        document.getElementById('nextPoint').disabled = true;
+    } else {
+        document.getElementById('nextPoint').disabled = false;
+    }
+}
+
+// Botón de previousPoint
 document.getElementById('previousPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex > 0) {
             currentPointIndex--;
-
-            if (currentPointIndex == 0) {
-                document.getElementById('previousPoint').disabled = 'true';
-            } else{
-                document.getElementById('previousPoint').disabled = 'false';
-            }
-
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-        } 
+            updateButtonStates(); // Actualiza el estado de los botones
+        }
     });
 });
 
 document.getElementById('previousPoint').addEventListener('mouseup', stopHolding);
-document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding); 
+document.getElementById('previousPoint').addEventListener('mouseleave', stopHolding);
 
+// Botón de nextPoint
 document.getElementById('nextPoint').addEventListener('mousedown', () => {
     startHolding(() => {
         if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
             currentPointIndex++;
-
-            if (currentPointIndex == 0) {
-                document.getElementById('nextPoint').disabled = 'true';
-            } else{
-                document.getElementById('nextPoint').disabled = 'false';
-            }
-
             updateDateTime(usedPaths);
             updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-        } 
+            updateButtonStates(); // Actualiza el estado de los botones
+        }
     });
 });
 
 document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
+
+// Llamar a updateButtonStates al cargar el primer punto
+updateButtonStates();
+
 
 function updateMarkerPosition(latLng) {
     const icon = {
