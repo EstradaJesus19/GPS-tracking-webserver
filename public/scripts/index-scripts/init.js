@@ -4,7 +4,6 @@ import { toggleStreetView } from './street-view.js';
 // Define variables 
 let map;
 let panorama;
-let polyline;
 
 // Rename document objects
 const mapElement = document.getElementById('map');

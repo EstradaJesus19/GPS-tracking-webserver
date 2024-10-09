@@ -1,4 +1,5 @@
 // Define variables 
+let polyline;
 let path = [];
 let oldPath = [];
 let marker;
@@ -91,3 +92,5 @@ function updateMarkerAndInfo(lat, lng, data) {
     dateText.textContent = formattedDate;
     timeText.textContent = data.time;
 }
+
+window.polyline = polyline;
