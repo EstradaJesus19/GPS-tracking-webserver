@@ -22,7 +22,10 @@ let isPlaying = false;
 let playIntervalId = null;
 let currentVelocity = 200; 
 
-mapElement = document.getElementById('map');
+const mapElement = document.getElementById('map');
+const startInput = document.getElementById('startDateTime');
+const endInput = document.getElementById('endDateTime');
+const timeFilterBtn = document.getElementById('timeFilterBtn');
 
 
 // Get server owner and print it in the web page tittle
@@ -86,9 +89,6 @@ function initMap() {
 //Filtering by time
 // Link calendars and dates
 document.addEventListener('DOMContentLoaded', function () {
-    const startInput = document.getElementById('startDateTime');
-    const endInput = document.getElementById('endDateTime');
-
     function getMaxDate() {
         return new Date();
     }
@@ -147,11 +147,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Filter by time
-document.getElementById('timeFilterBtn').addEventListener('click', function (e) {
+timeFilterBtn.addEventListener('click', function (e) {
     const pathSelectorContainer = document.getElementById('pathSelector');
     const positionControl = document.getElementById('positionControl');
-    const startInput = document.getElementById('startDateTime');
-    const endInput = document.getElementById('endDateTime');
 
     e.preventDefault();
 
@@ -552,7 +550,7 @@ document.getElementById("toggleSwitch").addEventListener("click", function() {
         disableMapClick();
         clearMap();
 
-        document.getElementById('timeFilterBtn').click();
+        timeFilterBtn.click();
         
     } else {
         positionOptions.classList.add("visible");
