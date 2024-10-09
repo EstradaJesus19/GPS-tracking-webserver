@@ -272,13 +272,11 @@ function updateMarkerPosition(latLng) {
     if (markers.length > 2) {
         markers[markers.length - 1].setPosition(latLng); 
     } else {
-        console.log(typeof currentPathIndex);
-        console.log(typeof currentPointIndex);
         markers.push(new google.maps.Marker({
             position: latLng,
             map: map,
             icon: icon,
-            title: `Point ${currentPointIndex + 1} of Path ${currentPathIndex + 1}`
+            title: `Path ${currentPathIndex + 1}`
         }));
     }
 }
