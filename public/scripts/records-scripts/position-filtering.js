@@ -5,6 +5,7 @@ import { selectPath, createPathSelector, clearMap, clearCircles, clearPolylines,
 // Define variables
 export let positionOptionsVisible = null;
 export let usedPaths = [];
+export let circle = null;
 let positionFilteringAction = false;
 let selectedPosition = null;
 let radius = null;
