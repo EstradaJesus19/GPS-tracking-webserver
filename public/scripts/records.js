@@ -689,6 +689,7 @@ function selectPath(index, paths) {
     currentPointIndex = 0;
 
     updateDateTime(paths);
+    updateButtonStates();
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
@@ -791,15 +792,23 @@ function updateButtonStates() {
     // Deshabilitar el botón de previousPoint si estás en el primer punto
     if (currentPointIndex === 0) {
         document.getElementById('previousPoint').disabled = true;
+        document.getElementById('previousPoint').style.cursor = 'not-allowed';
+        document.getElementById('previousPoint').style.opacity = 0.5;
     } else {
         document.getElementById('previousPoint').disabled = false;
+        document.getElementById('previousPoint').style.cursor = 'default';
+        document.getElementById('previousPoint').style.opacity = 1;
     }
 
     // Deshabilitar el botón de nextPoint si estás en el último punto
     if (currentPointIndex === usedPaths[currentPathIndex].path.length - 1) {
         document.getElementById('nextPoint').disabled = true;
+        document.getElementById('nextPoint').style.cursor = 'not-allowed';
+        document.getElementById('nextPoint').style.opacity = 0.5;
     } else {
         document.getElementById('nextPoint').disabled = false;
+        document.getElementById('nextPoint').style.cursor = 'default';
+        document.getElementById('nextPoint').style.opacity = 1;
     }
 }
 
@@ -834,7 +843,7 @@ document.getElementById('nextPoint').addEventListener('mouseup', stopHolding);
 document.getElementById('nextPoint').addEventListener('mouseleave', stopHolding);
 
 // Llamar a updateButtonStates al cargar el primer punto
-// updateButtonStates();
+// 
 
 
 function updateMarkerPosition(latLng) {
