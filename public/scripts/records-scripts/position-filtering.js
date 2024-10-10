@@ -41,7 +41,6 @@ export function positionFiltering(){
             clearMap();
 
             timeFilterBtn.click();
-            
         } else {
             positionOptions.classList.add("visible");
             positionFilteringAction = !positionFilteringAction;
