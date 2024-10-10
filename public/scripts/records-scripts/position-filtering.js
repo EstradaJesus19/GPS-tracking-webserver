@@ -144,7 +144,7 @@ function drawCircle(position, radius, isEditable) {
         draggable: isEditable,
     });
 
-    if (isEditable) {
+    if (window.innerWidth >= 720) {
         google.maps.event.addListener(circle, 'radius_changed', function () {
             radius = Math.round(circle.getRadius());
             filterByPosition(radius, selectedPosition, startTime, endTime);
@@ -173,6 +173,19 @@ function drawCircle(position, radius, isEditable) {
                 latitudeInput.value = selectedPosition.lat().toFixed(4);
                 longitudeInput.value = selectedPosition.lng().toFixed(4);
             }
+        });
+    } else{
+        google.maps.event.addListener(circle, 'radius_changed', function () {
+            radius = Math.round(circle.getRadius());
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            radiusInput.value = radius;
+        });
+
+        google.maps.event.addListener(circle, 'mouseup', function () {
+            selectedPosition = circle.getCenter();
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            latitudeInput.value = selectedPosition.lat().toFixed(4);
+            longitudeInput.value = selectedPosition.lng().toFixed(4);
         });
     }
 }
