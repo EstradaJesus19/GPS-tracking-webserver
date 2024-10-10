@@ -152,3 +152,14 @@ main {
     right: 10px;
     top: 9px;
 }
+
+/*Media querys*/
+@media (max-width: 720px) {
+    .contentCard {
+        height: 120vh;
+    }
+
+    body{
+        overflow-y: scroll;
+    }
+}
