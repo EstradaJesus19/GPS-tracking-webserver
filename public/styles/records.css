@@ -153,7 +153,7 @@ main {
 /* Path selector */
 .pathSelectors {
     position: absolute;
-    bottom: 40px;
+    bottom: 10px;
     left: 10px;
     display: none;
     justify-content: center;
