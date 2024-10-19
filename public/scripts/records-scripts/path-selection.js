@@ -275,10 +275,12 @@ nextPoint.addEventListener('mouseup', stopHolding);
 nextPoint.addEventListener('mouseleave', stopHolding);
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-        previousAction();
-    } else if (event.key === 'ArrowRight') {
-        nextAction();
+    if (pathSelectorContainer.style.display == 'block') {
+        if (event.key === 'ArrowLeft') {
+            previousAction();
+        } else if (event.key === 'ArrowRight') {
+            nextAction();
+        }
     }
 });
 
@@ -301,7 +303,11 @@ function updateMarkerPosition(latLng) {
     }
 }
 
-playPoint.addEventListener('click', togglePlayPause);
+playPoint.addEventListener('click', () => {
+    if (pathSelectorContainer.style.display == 'block') {
+        togglePlayPause();
+    }
+});
 
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
