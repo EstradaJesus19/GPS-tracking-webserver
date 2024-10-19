@@ -234,33 +234,45 @@ function updateButtonStates(paths) {
     }
 }
 
+function previousAction() {
+    if (currentPointIndex > 0) {
+        currentPointIndex--;
+        updateDateTime(usedPaths);
+        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        updateButtonStates(usedPaths); 
+    }
+}
+
+function nextAction() {
+    if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
+        currentPointIndex++;
+        updateDateTime(usedPaths);
+        updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
+        updateButtonStates(usedPaths); 
+    }
+}
+
 previousPoint.addEventListener('mousedown', () => {
-    startHolding(() => {
-        if (currentPointIndex > 0) {
-            currentPointIndex--;
-            updateDateTime(usedPaths);
-            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-            updateButtonStates(usedPaths); 
-        }
-    });
+    startHolding(previousAction);
 });
 
 previousPoint.addEventListener('mouseup', stopHolding);
 previousPoint.addEventListener('mouseleave', stopHolding);
 
 nextPoint.addEventListener('mousedown', () => {
-    startHolding(() => {
-        if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
-            currentPointIndex++;
-            updateDateTime(usedPaths);
-            updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
-            updateButtonStates(usedPaths); 
-        }
-    });
+    startHolding(nextAction);
 });
 
 nextPoint.addEventListener('mouseup', stopHolding);
 nextPoint.addEventListener('mouseleave', stopHolding);
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+        previousAction();
+    } else if (event.key === 'ArrowRight') {
+        nextAction();
+    }
+});
 
 function updateMarkerPosition(latLng) {
     const icon = {
