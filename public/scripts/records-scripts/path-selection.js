@@ -23,12 +23,12 @@ const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
 
-export function showPathContainer() {
+function showPathContainer() {
     pathOptions.classList.add("visible");
     hiderPath.classList.add("collapsed");
 }
 
-export function hidePathContainer() {
+function hidePathContainer() {
     pathOptions.classList.remove("visible");
     hiderPath.classList.remove("collapsed");
 }
@@ -47,6 +47,11 @@ export function pathContainerHider() {
             showPathContainer();
         }
     });
+}
+
+export function hidePathSelector(){
+    pathSelectorContainer.style.display = 'block'; 
+    path.length = 0;
 }
 
 // Create path selector
