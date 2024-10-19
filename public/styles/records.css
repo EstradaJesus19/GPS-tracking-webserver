@@ -305,6 +305,10 @@ main {
     transition: box-shadow 0.3s ease;
 }
 
+.fixedData {
+    margin-left: 5px; 
+}
+
 #pointControls{
     display: flex;
     flex-direction: row;

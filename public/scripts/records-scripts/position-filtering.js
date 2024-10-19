@@ -24,9 +24,6 @@ const hiderContainerPosition = document.getElementById('hiderContainerPosition')
 
 export function positionFiltering(){
     toggleSwitch.addEventListener("click", function() {
-        latitudeInput.disabled = true;
-        longitudeInput.disabled = true;
-
         if (positionFilteringAction) {
             positionFilteringAction = !positionFilteringAction;
             positionOptions.classList.remove("visible");
@@ -120,8 +117,8 @@ function disableMapClick() {
 function handleMapClick(event) {
     radius = parseFloat(radiusInput.value);
     selectedPosition = event.latLng;
-    latitudeInput.value = selectedPosition.lat().toFixed(4);
-    longitudeInput.value = selectedPosition.lng().toFixed(4);
+    latitudeInput.textContent = selectedPosition.lat().toFixed(4);
+    longitudeInput.textContent = selectedPosition.lng().toFixed(4);
     clearCircles();
     drawCircle(selectedPosition, radius, true);
     filterByPosition(radius, selectedPosition, startTime, endTime);
@@ -153,8 +150,8 @@ function drawCircle(position, radius, isEditable) {
         google.maps.event.addListener(circle, 'mouseup', function () {
             selectedPosition = circle.getCenter();
             filterByPosition(radius, selectedPosition, startTime, endTime);
-            latitudeInput.value = selectedPosition.lat().toFixed(4);
-            longitudeInput.value = selectedPosition.lng().toFixed(4);
+            latitudeInput.textContent = selectedPosition.lat().toFixed(4);
+            longitudeInput.textContent = selectedPosition.lng().toFixed(4);
         });
 
         document.addEventListener('mouseup', function() {
@@ -169,8 +166,8 @@ function drawCircle(position, radius, isEditable) {
             if  (!isMouseDown){
                 selectedPosition = circle.getCenter();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
-                latitudeInput.value = selectedPosition.lat().toFixed(4);
-                longitudeInput.value = selectedPosition.lng().toFixed(4);
+                latitudeInput.textContent = selectedPosition.lat().toFixed(4);
+                longitudeInput.textContent = selectedPosition.lng().toFixed(4);
             }
         });
     } else{
@@ -183,8 +180,8 @@ function drawCircle(position, radius, isEditable) {
         google.maps.event.addListener(circle, 'mouseup', function () {
             selectedPosition = circle.getCenter();
             filterByPosition(radius, selectedPosition, startTime, endTime);
-            latitudeInput.value = selectedPosition.lat().toFixed(4);
-            longitudeInput.value = selectedPosition.lng().toFixed(4);
+            latitudeInput.textContent = selectedPosition.lat().toFixed(4);
+            longitudeInput.textContent = selectedPosition.lng().toFixed(4);
         });
     }
 }
