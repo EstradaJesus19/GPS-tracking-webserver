@@ -35,9 +35,6 @@ function hidePathContainer() {
 
 export function pathContainerHider() {
     hiderPath.addEventListener("click", function() {
-        pointDate.disabled = true;
-        pointTime.disabled = true;
-
         if (pathOptionsVisible) {
             pathOptionsVisible = !pathOptionsVisible;
             hidePathContainer();
@@ -58,8 +55,6 @@ export function createPathSelector(paths) {
         return;
     }
     pathSelectorContainer.style.display = 'block'; 
-    pointDate.disabled = true;
-    pointTime.disabled = true;
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
@@ -202,8 +197,8 @@ function formatDateAndTimeControl(date) {
 function updateDateTime(paths) {
     const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
     
-    pointDate.value = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
-    pointTime.value = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
+    pointDate.textContent  = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
+    pointTime.textContent  = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
 
     updateButtonStates(paths);
 }
