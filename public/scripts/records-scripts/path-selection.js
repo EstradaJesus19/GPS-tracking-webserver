@@ -303,17 +303,16 @@ function updateMarkerPosition(latLng) {
     }
 }
 
-playPoint.addEventListener('click', () => {
-    if (pathSelectorContainer.style.display == 'block') {
-        togglePlayPause();
-    }
-});
+playPoint.addEventListener('click', togglePlayPause);
 
 document.addEventListener('keydown', (event) => {
-    if (event.code === 'Space') {
-        event.preventDefault();  // Evita que la página se desplace al presionar espacio
-        togglePlayPause();
+    if (pathSelectorContainer.style.display == 'block') {
+        if (event.code === 'Space') {
+            event.preventDefault(); 
+            togglePlayPause();
+        }
     }
+    
 });
 
 function togglePlayPause() {
