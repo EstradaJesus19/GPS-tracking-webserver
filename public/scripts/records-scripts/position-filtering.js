@@ -280,6 +280,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                         icon: 'swal2-icon-info-custom'
                     }
                 });
+
+                pathContaierHider();
             }
         })
         .catch(error => {
