@@ -1,7 +1,7 @@
 import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { clearMap, clearCircles, clearPolylines, clearMarkers } from './clear-options.js';
-import { selectPath, createPathSelector, pathContainerHider, hidePathSelector } from './path-selection.js';
+import { selectPath, createPathSelector, pathContainerHider } from './path-selection.js';
 
 // Define variables
 export let usedPaths = [];
