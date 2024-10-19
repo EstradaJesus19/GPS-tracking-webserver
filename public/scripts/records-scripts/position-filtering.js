@@ -1,7 +1,7 @@
 import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { clearMap, clearCircles, clearPolylines, clearMarkers } from './clear-options.js';
-import { selectPath, createPathSelector, pathContaierHider } from './path-selection.js';
+import { selectPath, createPathSelector, pathContainerHider, hidePathContainer } from './path-selection.js';
 
 // Define variables
 export let usedPaths = [];
@@ -101,7 +101,7 @@ export function positionFiltering(){
         }
     });
 
-    pathContaierHider();
+    pathContainerHider();
 }
 
 // Enable map click
@@ -267,7 +267,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
             } else {
                 clearPolylines();
                 clearMarkers();
-                pathContaierHider();
+                hidePathContainer();
 
                 // Print warning that no data was found
                 Swal.fire({

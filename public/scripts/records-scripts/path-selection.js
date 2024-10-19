@@ -23,20 +23,28 @@ const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
 
-export function pathContaierHider() {
+export function showPathContainer() {
+    pathOptions.classList.add("visible");
+    hiderPath.classList.add("collapsed");
+}
+
+export function hidePathContainer() {
+    pathOptions.classList.remove("visible");
+    hiderPath.classList.remove("collapsed");
+}
+
+export function pathContainerHider() {
     hiderPath.addEventListener("click", function() {
         pointDate.disabled = true;
         pointTime.disabled = true;
 
         if (pathOptionsVisible) {
             pathOptionsVisible = !pathOptionsVisible;
-            pathOptions.classList.remove("visible");
-            hiderPath.classList.remove("collapsed");
+            hidePathContainer();
             
         } else {
             pathOptionsVisible = !pathOptionsVisible;
-            pathOptions.classList.add("visible");
-            hiderPath.classList.add("collapsed");
+            showPathContainer();
         }
     });
 }
