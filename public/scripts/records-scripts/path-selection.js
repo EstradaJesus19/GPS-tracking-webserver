@@ -49,6 +49,10 @@ export function pathContainerHider() {
     });
 }
 
+export function hidePathSelector(){
+    pathSelectorContainer.style.display = 'none'; 
+}
+
 // Create path selector
 export function createPathSelector(paths) {
     pathButtonsContainer.innerHTML = ''; 
