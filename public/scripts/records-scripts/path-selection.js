@@ -49,11 +49,6 @@ export function pathContainerHider() {
     });
 }
 
-export function hidePathSelector(){
-    pathSelectorContainer.style.display = 'block'; 
-    usedPaths.length = 0;
-}
-
 // Create path selector
 export function createPathSelector(paths) {
     pathButtonsContainer.innerHTML = ''; 

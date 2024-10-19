@@ -267,7 +267,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
             } else {
                 clearPolylines();
                 clearMarkers();
-                hidePathSelector();
+                createPathSelector(paths);
 
                 // Print warning that no data was found
                 Swal.fire({
