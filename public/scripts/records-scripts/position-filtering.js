@@ -56,7 +56,7 @@ export function positionFiltering(){
 
             setTimeout(function() {
                 infoBox.style.opacity = 0;
-            }, 1000);
+            }, 2000);
 
             setTimeout(function() {
                 infoBox.style.display = "none"; 
