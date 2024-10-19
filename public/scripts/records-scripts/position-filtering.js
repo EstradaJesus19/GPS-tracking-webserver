@@ -60,7 +60,7 @@ export function positionFiltering(){
 
             setTimeout(function() {
                 infoBox.style.display = "none"; 
-            }, 2000); 
+            }, 3000); 
         }
     });
 
