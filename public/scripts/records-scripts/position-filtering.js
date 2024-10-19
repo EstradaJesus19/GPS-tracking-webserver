@@ -267,6 +267,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
             } else {
                 clearPolylines();
                 clearMarkers();
+                pathContaierHider();
 
                 // Print warning that no data was found
                 Swal.fire({
@@ -280,8 +281,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                         icon: 'swal2-icon-info-custom'
                     }
                 });
-
-                pathContaierHider();
             }
         })
         .catch(error => {
