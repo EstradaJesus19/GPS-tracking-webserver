@@ -293,7 +293,16 @@ function updateMarkerPosition(latLng) {
     }
 }
 
-playPoint.addEventListener('click', () => {
+playPoint.addEventListener('click', togglePlayPause);
+
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+        event.preventDefault();  // Evita que la página se desplace al presionar espacio
+        togglePlayPause();
+    }
+});
+
+function togglePlayPause() {
     if (!isPlaying) {
         if (currentPointIndex === usedPaths[currentPathIndex].path.length - 1) {
             currentPointIndex = 0;
@@ -319,7 +328,7 @@ playPoint.addEventListener('click', () => {
         isPlaying = false;
         playOption.src = 'media/play.svg';
     }
-});
+}
 
 velocityPoint.addEventListener('click', () => {
     if (currentVelocity === 200) {
