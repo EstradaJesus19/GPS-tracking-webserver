@@ -51,7 +51,7 @@ export function pathContainerHider() {
 
 export function hidePathSelector(){
     pathSelectorContainer.style.display = 'block'; 
-    path.length = 0;
+    usedPaths.length = 0;
 }
 
 // Create path selector
