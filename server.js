@@ -63,7 +63,6 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    console.log(message);
     const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), RPM: ([^,]+), Fuel: ([^,]+)/;
     const match = message.match(regex);
 
@@ -75,16 +74,14 @@ udpServer.on('message', (msg) => {
             time: match[4] || 'N/A',
             vel: match[5] || '0',
             rpm: match[6] || '0',
-            fuel: match[7] || '0',
+            fuel: match[7] || '0'
         };
-
-        console.log(data);
 
         const tableName = process.env.db_table; 
 
         // Insert received data into database
         db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-            [tableName, data.latitude, data.longitude, data.date, data.time, data.vel, data.fuel], 
+            [tableName, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
             (err) => {
                 if (err) {
                     console.error('Error inserting into database:', err);
