@@ -1,4 +1,5 @@
 import { map, polyline, panorama } from './init.js';
+import { updateFuelGauge, updateSpeedGauge } from './car-variables.js';
 
 // Define variables 
 let path = [];

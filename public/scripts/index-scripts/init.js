@@ -1,5 +1,4 @@
 import { fetchLatestData, loadLastLocation } from './fetch-data.js';
-import { updateFuelGauge, updateSpeedGauge } from './car-variables.js';
 import { toggleStreetView } from './street-view.js';
 
 // Define variables 
