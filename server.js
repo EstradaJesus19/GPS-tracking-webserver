@@ -74,7 +74,7 @@ udpServer.on('message', (msg) => {
             time: match[4] || 'N/A',
             vel: match[5] || '0',
             rpm: match[6] || '0',
-            fuel: match[7] || '0'
+            fuel: match[7] || '0',
         };
 
         const tableName = process.env.db_table; 
