@@ -17,9 +17,10 @@ export function updateSpeedGauge() {
 }
 
 export function updateFuelGauge(value) {
+    const newValue = parseInt(value, 10);
     fuelContainer.style.background = `linear-gradient(
         to top,
-        #530aa8 ${value}%,
+        #530aa8 ${newValue}%,
         #dfdfdf 0%
     )`;
 }
