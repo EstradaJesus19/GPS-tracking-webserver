@@ -1,4 +1,5 @@
 import { fetchLatestData, loadLastLocation } from './fetch-data.js';
+import { updateFuelGauge, updateSpeedGauge } from './car-variables.js';
 import { toggleStreetView } from './street-view.js';
 
 // Define variables 
@@ -80,6 +81,14 @@ function initMap() {
     streetViewButton.disabled = false;
 
     setInterval(fetchLatestData, 100);
+
+    setInterval(() => {
+        const newSpeed = Math.floor(Math.random() * 181);
+        const newFuel = Math.floor(Math.random() * 101);
+        speedValueElement.textContent = newSpeed;
+        updateFuelGauge(newFuel);
+        updateSpeedGauge();
+    }, 2000);
 }
 
 export function mainProcess(){

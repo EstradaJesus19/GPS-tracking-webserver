@@ -30,6 +30,28 @@
             <div class="mapContainer">
                 <div id="map"></div>
                 <button id="streetViewButton" class="mapButton">Street View</button>
+                <div id="carVariables" class="carVariablesContainer">
+                    <div class="gaugeContainer">
+                        <div class="gaugeLine line1"></div>
+                        <div class="gaugeLine line2"></div>
+                        <div class="gaugeLine line3"></div>
+                        <div class="gaugeLine line4"></div>
+                        <div class="gauge"></div>
+                        <div class="gaugeValue">
+                            <span class="speedValue" id="speedValue">0</span>
+                            <span class="speedUnit">km/h</span>
+                        </div>
+                    </div>
+                    <div class="fuelGauge">
+                        <div class="fuelIndicators">
+                            <div class="fuelLevelText top">F</div>
+                            <div class="fuelIcon">
+                                <img src="media/fuel.svg" alt="Fuel icon">
+                            </div>
+                            <div class="fuelLevelText bottom">E</div>
+                        </div>
+                        <div class="fuelContainer" id="fuelContainer"></div>
+                    </div>
             </div>
         </div>
     </main>
