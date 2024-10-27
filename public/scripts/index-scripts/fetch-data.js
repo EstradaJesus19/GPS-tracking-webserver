@@ -58,7 +58,7 @@ export function fetchLatestData() {
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                     speedValueElement.textContent = latestData.vel;
                     updateSpeedGauge(); 
-                    updateFuelGauge(data.fuel);
+                    updateFuelGauge(latestData.fuel);
                 }
             }
         })
