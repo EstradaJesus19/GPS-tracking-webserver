@@ -26,6 +26,9 @@ export function loadLastLocation() {
                 oldPath.push(initialPosition);
                 polyline.setPath(path);
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                updateSpeedGauge(latestData.vel); 
+                updateFuelGauge(latestData.fuel);
+                updateRPMGauge(latestData.rpm)
             }
         })
         .catch(error => console.error('Error fetching data:', error));
