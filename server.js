@@ -21,6 +21,7 @@ let data = {
     date: 'N/A',
     time: 'N/A',
     vel: '0',
+    rpm: '0',
     fuel: '0'
 };
 
@@ -62,7 +63,7 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), Fuel: ([^,]+)/;
+    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), RPM: ([^,]+), Fuel: ([^,]+)/;
     const match = message.match(regex);
 
     if (match) {
@@ -72,13 +73,14 @@ udpServer.on('message', (msg) => {
             date: match[3] || 'N/A',
             time: match[4] || 'N/A',
             vel: match[5] || '0',
-            fuel: match[6] || '0',
+            rpm: match[6] || '0',
+            fuel: match[7] || '0'
         };
 
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, fuel) VALUES (?, ?, ?, ?, ?, ?)`, 
+        db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?. ?)`, 
             [tableName, data.latitude, data.longitude, data.date, data.time, data.vel, data.fuel], 
             (err) => {
                 if (err) {
@@ -119,7 +121,7 @@ app.get('/api/getOwner', (req, res) => {
 // Get all data from database
 app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
-    db.query('SELECT latitude, longitude, date, time, vel, fuel FROM ??', [tableName], (err, results) => {
+    db.query('SELECT latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });

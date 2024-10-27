@@ -1,5 +1,5 @@
 import { map, polyline, panorama } from './init.js';
-import { updateFuelGauge, updateSpeedGauge } from './car-variables.js';
+import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
 
 // Define variables 
 let path = [];
@@ -10,7 +10,6 @@ const latitudeText = document.getElementById('latitude');
 const longitudeText = document.getElementById('longitude');
 const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
-const speedValueElement = document.getElementById("speedValue");
 
 // Load last location in database
 export function loadLastLocation() {
@@ -56,9 +55,9 @@ export function fetchLatestData() {
                     polyline.setPath(path);
 
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                    speedValueElement.textContent = latestData.vel;
-                    updateSpeedGauge(); 
+                    updateSpeedGauge(latestData.vel); 
                     updateFuelGauge(latestData.fuel);
+                    updateRPMGauge(latestData.rpm)
                 }
             }
         })

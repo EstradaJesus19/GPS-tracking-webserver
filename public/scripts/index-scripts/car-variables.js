@@ -1,8 +1,10 @@
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
+const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
 
-export function updateSpeedGauge() {
+export function updateSpeedGauge(value) {
+    speedValueElement.textContent = value;
     const speed = parseInt(speedValueElement.textContent, 10);
     const limitedSpeed = Math.min(Math.max(speed, 0), 180);
     const angle = (limitedSpeed / 180) * 180;
@@ -23,4 +25,8 @@ export function updateFuelGauge(value) {
         #530aa8 ${newValue}%,
         #dfdfdf 0%
     )`;
+}
+
+export function updateRPMGauge(value) {
+    rpmValueElement.textContent = value;
 }

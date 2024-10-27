@@ -211,11 +211,14 @@ main {
 .line3 {transform: rotate(18deg);}
 .line4 {transform: rotate(54deg);}
 
-.gaugeValue {
+.gaugeVelocity {
     position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
     top: 60%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -70%);
     text-align: center;
     color: #530aa8;
 }
@@ -227,6 +230,31 @@ main {
 }
 
 .speedUnit {
+    display: block;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.gaugeRPM {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 2px;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, 40%);
+    text-align: center;
+    color: #530aa8;
+}
+
+.rpmValue {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.rpmUnit {
     display: block;
     font-size: 15px;
     font-style: italic;
