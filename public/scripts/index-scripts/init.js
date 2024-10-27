@@ -52,6 +52,7 @@ function initMap() {
         mapTypeControl: false,
         scaleControl: false,
         rotateControl: false,
+        disableDefaultUI: true
     });
 
     // Build polyline
