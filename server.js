@@ -63,6 +63,7 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
+    console.log(message);
     const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), RPM: ([^,]+), Fuel: ([^,]+)/;
     const match = message.match(regex);
 
@@ -76,6 +77,8 @@ udpServer.on('message', (msg) => {
             rpm: match[6] || '0',
             fuel: match[7] || '0',
         };
+
+        console.log(data);
 
         const tableName = process.env.db_table; 
 
