@@ -43,7 +43,11 @@ function initMap() {
         zoom: 13,
         fullscreenControl: false,
         streetViewControl: false,
-        mapTypeControl: false
+        zoomControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        rotateControl: false,
+        disableDefaultUI: true
     });
 
     // Define polyline features
