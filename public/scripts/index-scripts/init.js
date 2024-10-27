@@ -10,7 +10,6 @@ export let polyline;
 // Rename document objects
 const mapElement = document.getElementById('map');
 const streetViewButton = document.getElementById('streetViewButton');
-const speedValueElement = document.getElementById("speedValue");
 
 // Get server owner and print it in the web page tittle
 export function getServerOwner(){
@@ -82,14 +81,6 @@ function initMap() {
     streetViewButton.disabled = false;
 
     setInterval(fetchLatestData, 100);
-
-    setInterval(() => {
-        const newSpeed = Math.floor(Math.random() * 181);
-        const newFuel = Math.floor(Math.random() * 101);
-        speedValueElement.textContent = newSpeed;
-        updateFuelGauge(newFuel);
-        updateSpeedGauge();
-    }, 2000);
 }
 
 export function mainProcess(){
