@@ -80,7 +80,7 @@ udpServer.on('message', (msg) => {
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?. ?)`, 
+        db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
             [tableName, data.latitude, data.longitude, data.date, data.time, data.vel, data.fuel], 
             (err) => {
                 if (err) {
