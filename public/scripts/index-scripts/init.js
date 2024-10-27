@@ -10,6 +10,7 @@ export let polyline;
 // Rename document objects
 const mapElement = document.getElementById('map');
 const streetViewButton = document.getElementById('streetViewButton');
+const speedValueElement = document.getElementById("speedValue");
 
 // Get server owner and print it in the web page tittle
 export function getServerOwner(){
