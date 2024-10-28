@@ -2,7 +2,7 @@ import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { clearMap, clearCircles, clearPolylines, clearMarkers } from './clear-options.js';
 import { selectPath, createPathSelector, pathContainerHider } from './path-selection.js';
-// import { carVariablesHider } from './car-variables.js';
+import { carVariablesHider } from './car-variables.js';
 
 // Define variables
 export let usedPaths = [];
