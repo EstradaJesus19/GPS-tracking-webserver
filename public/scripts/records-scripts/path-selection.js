@@ -38,7 +38,6 @@ export function pathContainerHider() {
         if (pathOptionsVisible) {
             pathOptionsVisible = !pathOptionsVisible;
             hidePathContainer();
-            
         } else {
             pathOptionsVisible = !pathOptionsVisible;
             showPathContainer();
