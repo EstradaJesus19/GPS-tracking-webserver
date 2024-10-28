@@ -1,5 +1,6 @@
 import { clearMap } from './clear-options.js';
 import { map, markers, polylines } from './init.js';
+import { disableCarVariables } from './car-variables.js';
 
 // Define variables
 export let startTime = null;
@@ -36,6 +37,8 @@ export function timeFiltering(){
 
         clearMap();
         paths = [];
+        disableCarVariables();
+
 
         pathSelectorContainer.style.display = 'none';
         positionControl.style.display = 'block';
