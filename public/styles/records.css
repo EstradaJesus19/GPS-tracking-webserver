@@ -155,6 +155,7 @@ main {
     position: absolute;
     bottom: 10px;
     left: 10px;
+    width: 200px;
     display: none;
     justify-content: center;
     text-align: center;
