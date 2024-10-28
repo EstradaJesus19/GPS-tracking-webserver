@@ -1,4 +1,4 @@
-let carVariablesVisible = false;
+let carVariablesVisible = true;
 
 const carVariables = document.getElementById('carVariables');
 const speedValueElement = document.getElementById("speedValue");
