@@ -159,7 +159,7 @@ app.get('/api/filterDataByPosition', (req, res) => {
     const tableName = process.env.db_table;
 
     const query = `
-        SELECT latitude, longitude, date, time 
+        SELECT latitude, longitude, date, time, vel, rpm, fuel 
         FROM ?? 
         WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;

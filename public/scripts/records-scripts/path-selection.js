@@ -1,7 +1,7 @@
 import { map, markers, polylines } from "./init.js";
 import { clearPolylines, clearMarkers } from './clear-options.js';
 import { usedPaths } from "./position-filtering.js";
-import { enableCarVariables, disableCarVariables } from './car-variables.js';
+import { enableCarVariables, disableCarVariables, updateFuelGauge, updateRPMGauge, updateSpeedGauge } from './car-variables.js';
 
 // Define variables
 let currentPathIndex = 0;
@@ -131,7 +131,7 @@ export function selectPath(index, paths) {
     currentPathIndex = index;
     currentPointIndex = 0;
 
-    updateDateTime(paths);
+    updatePointData(paths);
 
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
@@ -197,12 +197,19 @@ function formatDateAndTimeControl(date) {
     return { day, month, year, hours, minutes, seconds };
 }
 
-function updateDateTime(paths) {
-    const formattedDateTime  = formatDateAndTimeControl(new Date(paths[currentPathIndex].metadata[currentPointIndex]));
+function updatePointData(paths) {
+    const metadata = paths[currentPathIndex].metadata[currentPointIndex];
+    const [dateTime, vel, rpm, fuel] = metadata.split('|');
     
-    pointDate.textContent  = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
-    pointTime.textContent  = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
-
+    const formattedDateTime = formatDateAndTimeControl(new Date(dateTime));
+    
+    pointDate.textContent = `${formattedDateTime.day}-${formattedDateTime.month}-${formattedDateTime.year}`;
+    pointTime.textContent = `${formattedDateTime.hours}:${formattedDateTime.minutes}:${formattedDateTime.seconds}`;
+    
+    updateSpeedGauge(vel);
+    updateRPMGauge(rpm);
+    updateFuelGauge(fuel);
+    
     updateButtonStates(paths);
 }
 
@@ -243,7 +250,7 @@ function updateButtonStates(paths) {
 function previousAction() {
     if (currentPointIndex > 0) {
         currentPointIndex--;
-        updateDateTime(usedPaths);
+        updatePointData(usedPaths);
         updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
         updateButtonStates(usedPaths); 
     }
@@ -252,7 +259,7 @@ function previousAction() {
 function nextAction() {
     if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
         currentPointIndex++;
-        updateDateTime(usedPaths);
+        updatePointData(usedPaths);
         updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
         updateButtonStates(usedPaths); 
     }
@@ -325,7 +332,7 @@ function togglePlayPause() {
         playIntervalId = setInterval(() => {
             if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
                 currentPointIndex++;
-                updateDateTime(usedPaths);
+                updatePointData(usedPaths);
                 updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {
@@ -355,7 +362,7 @@ velocityPoint.addEventListener('click', () => {
         playIntervalId = setInterval(() => {
             if (currentPointIndex < usedPaths[currentPathIndex].path.length - 1) {
                 currentPointIndex++;
-                updateDateTime(usedPaths);
+                updatePointData(usedPaths);
                 updateMarkerPosition(usedPaths[currentPathIndex].path[currentPointIndex]);
                 updateButtonStates(usedPaths);
             } else {

@@ -250,7 +250,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                     }
                     endTimePath = currentTime; 
                     currentPath.push(latLng); 
-                    currentMetadata.push(`${point.date.split('T')[0]}T${point.time}`); 
+                    currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}`);
                     bounds.extend(latLng); 
                     previousTime = currentTime; 
                 });
