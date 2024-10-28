@@ -1,6 +1,7 @@
 import { map, markers, polylines } from "./init.js";
 import { clearPolylines, clearMarkers } from './clear-options.js';
 import { usedPaths } from "./position-filtering.js";
+import { enableCarVariables, disableCarVariables } from './car-variables.js';
 
 // Define variables
 let currentPathIndex = 0;
@@ -51,9 +52,12 @@ export function createPathSelector(paths) {
 
     if (paths.length === 0) {
         pathSelectorContainer.style.display = 'none';
+        disableCarVariables();
         return;
     }
+
     pathSelectorContainer.style.display = 'block'; 
+    enableCarVariables();
 
     paths.forEach((pathInfo, index) => {
         const buttonContainer = document.createElement('div');
