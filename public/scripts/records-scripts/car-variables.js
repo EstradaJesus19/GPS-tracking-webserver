@@ -34,3 +34,12 @@ export function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
 }
 
+export function carVariablesHider() {
+    if (carVariablesVisible) {
+        carVariablesVisible = !carVariablesVisible;
+        carVariables.style.display = 'none';
+    } else {
+        carVariablesVisible = !carVariablesVisible;
+        carVariables.style.display = 'flex';
+    }
+}
