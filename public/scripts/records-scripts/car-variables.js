@@ -37,9 +37,9 @@ export function updateRPMGauge(value) {
 export function carVariablesHider() {
     if (carVariablesVisible) {
         carVariablesVisible = !carVariablesVisible;
-        carVariables.style.display = 'flex';
+        carVariables.style.display = 'none';
     } else {
         carVariablesVisible = !carVariablesVisible;
-        carVariables.style.display = 'none';
+        carVariables.style.display = 'flex';
     }
 }
