@@ -100,7 +100,7 @@ export function positionFiltering(){
     });
 
     pathContainerHider();
-    carVariablesHider();
+    // carVariablesHider();
 }
 
 // Enable map click
