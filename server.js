@@ -19,7 +19,10 @@ let data = {
     latitude: 'N/A',
     longitude: 'N/A',
     date: 'N/A',
-    time: 'N/A'
+    time: 'N/A',
+    vel: '0',
+    rpm: '0',
+    fuel: '0'
 };
 
 // Connect to MySQL database
@@ -60,7 +63,7 @@ const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+)/;
+    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), RPM: ([^,]+), Fuel: ([^,]+)/;
     const match = message.match(regex);
 
     if (match) {
@@ -68,14 +71,17 @@ udpServer.on('message', (msg) => {
             latitude: match[1] || 'N/A',
             longitude: match[2] || 'N/A',
             date: match[3] || 'N/A',
-            time: match[4] || 'N/A'
+            time: match[4] || 'N/A',
+            vel: match[5] || '0',
+            rpm: match[6] || '0',
+            fuel: match[7] || '0'
         };
 
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        db.query(`INSERT INTO ?? (latitude, longitude, date, time) VALUES (?, ?, ?, ?)`, 
-            [tableName, data.latitude, data.longitude, data.date, data.time], 
+        db.query(`INSERT INTO ?? (latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+            [tableName, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
             (err) => {
                 if (err) {
                     console.error('Error inserting into database:', err);
@@ -115,7 +121,7 @@ app.get('/api/getOwner', (req, res) => {
 // Get all data from database
 app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
-    db.query('SELECT latitude, longitude, date, time FROM ??', [tableName], (err, results) => {
+    db.query('SELECT latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
@@ -153,7 +159,7 @@ app.get('/api/filterDataByPosition', (req, res) => {
     const tableName = process.env.db_table;
 
     const query = `
-        SELECT latitude, longitude, date, time 
+        SELECT latitude, longitude, date, time, vel, rpm, fuel 
         FROM ?? 
         WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;

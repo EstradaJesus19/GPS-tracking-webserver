@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,14 +22,14 @@
         <div class="contentCard">
             <div class="filterContainer">
                 <form id="timeFilterForm">
-                    <h2>Records filtering</h2>
+                    <h2>Filter historical data</h2>
                     <div class="timeInputs">
                         <div id="startTimeInput">
-                            <label for="startDateTime">Start time:</label>
+                            <label for="startDateTime">From:</label>
                             <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
                         </div>
                         <div id="endtTimeInput">
-                            <label for="endDateTime">End time:</label>
+                            <label for="endDateTime">To:</label>
                             <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
                         </div>
                         <div id="filterButtonContainer">
@@ -53,11 +53,11 @@
                         </div>
                         <div id="dateContainer" class="pointDataContainer">
                             <label for="pointDate">Date:</label>
-                            <input type="text" class="pointData" id="pointDate" placeholder="NA">
+                            <span class="fixedData" id="pointDate">NA</span>
                         </div>
                         <div id="timeContainer" class="pointDataContainer">
                             <label for="pointTime">Time:</label>
-                            <input type="text" class="pointData" id="pointTime" placeholder="NA">
+                            <span class="fixedData" id="pointTime">NA</span>
                         </div>
                         <div id="pointControls">
                             <button id="previousPoint" class="pathControlButton">
@@ -88,11 +88,11 @@
                     <div id="positionOptions">
                         <div id="latitudeContainer" class="positionDataContainer">
                             <label for="latitudeInput">Latitude:</label>
-                            <input type="number" class="positionData" id="latitudeInput" placeholder="NA" maxlength="8">
+                            <span class="fixedData" id="latitudeInput">NA</span>
                         </div>
                         <div id="longitudeContainer" class="positionDataContainer">
                             <label for="longitudeInput">Longitude:</label>
-                            <input type="number" class="positionData" id="longitudeInput" placeholder="NA" maxlength="8">
+                            <span class="fixedData" id="longitudeInput">NA</span>
                         </div>
                         <div id="radiusContainer" class="positionDataContainer">
                             <label for="radiusInput">Radius:</label>
@@ -106,6 +106,33 @@
                     </div>
                 </div>
                 <div id="infoBox" class="infoBox">Select area on map</div>
+                <div id="carVariables" class="carVariablesContainer">
+                    <div class="gaugeContainer">
+                        <div class="gaugeLine line1"></div>
+                        <div class="gaugeLine line2"></div>
+                        <div class="gaugeLine line3"></div>
+                        <div class="gaugeLine line4"></div>
+                        <div class="gauge"></div>
+                        <div class="gaugeVelocity">
+                            <span class="speedValue" id="speedValue">0</span>
+                            <span class="speedUnit">km/h</span>
+                        </div>
+                        <div class="gaugeRPM">
+                            <span class="rpmValue" id="rpmValue">0</span>
+                            <span class="rpmUnit">rpm</span>
+                        </div>
+                    </div>
+                    <div class="fuelGauge">
+                        <div class="fuelIndicators">
+                            <div class="fuelLevelText top">F</div>
+                            <div class="fuelIcon">
+                                <img src="media/fuel.svg" alt="Fuel icon">
+                            </div>
+                            <div class="fuelLevelText bottom">E</div>
+                        </div>
+                        <div class="fuelContainer" id="fuelContainer"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -122,6 +149,6 @@
             allowInput: false
         });
     </script>
-    <script src="scripts/records.js"></script>
+    <script src="scripts/records.js" type="module"></script>
 </body>
 </html>

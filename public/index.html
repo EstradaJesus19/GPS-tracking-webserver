@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
         <a href="index.html"><img src="media/TrackIt.svg" alt="TrackIt_logo" id="logo"></a>
         <nav>
             <ul id="menu">
-                <li><a href="records.html" class="main">Records</a></li>
+                <li><a href="records.html" class="main">Historical data</a></li>
             </ul>
         </nav>
     </header>
@@ -30,9 +30,36 @@
             <div class="mapContainer">
                 <div id="map"></div>
                 <button id="streetViewButton" class="mapButton">Street View</button>
+                <div id="carVariables" class="carVariablesContainer">
+                    <div class="gaugeContainer">
+                        <div class="gaugeLine line1"></div>
+                        <div class="gaugeLine line2"></div>
+                        <div class="gaugeLine line3"></div>
+                        <div class="gaugeLine line4"></div>
+                        <div class="gauge"></div>
+                        <div class="gaugeVelocity">
+                            <span class="speedValue" id="speedValue">0</span>
+                            <span class="speedUnit">km/h</span>
+                        </div>
+                        <div class="gaugeRPM">
+                            <span class="rpmValue" id="rpmValue">0</span>
+                            <span class="rpmUnit">rpm</span>
+                        </div>
+                    </div>
+                    <div class="fuelGauge">
+                        <div class="fuelIndicators">
+                            <div class="fuelLevelText top">F</div>
+                            <div class="fuelIcon">
+                                <img src="media/fuel.svg" alt="Fuel icon">
+                            </div>
+                            <div class="fuelLevelText bottom">E</div>
+                        </div>
+                        <div class="fuelContainer" id="fuelContainer"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-    <script src="scripts/index.js"></script>
+    <script src="scripts/index.js" type="module"></script>
 </body>
 </html>

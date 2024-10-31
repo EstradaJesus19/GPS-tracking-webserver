@@ -153,8 +153,9 @@ main {
 /* Path selector */
 .pathSelectors {
     position: absolute;
-    bottom: 40px;
+    bottom: 10px;
     left: 10px;
+    width: 200px;
     display: none;
     justify-content: center;
     text-align: center;
@@ -303,6 +304,10 @@ main {
     font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     outline: none;
     transition: box-shadow 0.3s ease;
+}
+
+.fixedData {
+    margin-left: 2px; 
 }
 
 #pointControls{
@@ -508,13 +513,171 @@ input:checked + .slider:before {
     top: 10px;
     left: 50%;
     transform: translate(-50%);
-    display: none; 
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #dddddd;
+    padding: 5px;
     border-radius: 5px;
+    display: none; 
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #530aa8;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     opacity: 1; 
     transition: opacity 1s ease-out; 
+}
+
+/* Car variables */
+.carVariablesContainer {
+    display: none;
+    flex-direction: row;
+    gap: 20px;
+    position: absolute;
+    z-index: 3;
+    bottom: 20px;
+    right: 10px;
+    width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.gaugeContainer {
+    background: conic-gradient(
+        from -90deg at bottom,
+        #530aa8 0deg,
+        #530aa8 0deg,
+        #dfdfdf 0deg,
+        #dfdfdf 180deg
+    );
+    position: relative;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: flex-end; 
+    justify-content: center;
+    border-radius: 100px 100px 0 0;
+    box-sizing: border-box;
+}
+
+.gauge {
+    background-color: #ffffff;
+    width: 180px;
+    height: 90px;
+    border-radius: 90px 90px 0 0; 
+}
+
+.gaugeLine {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 5px;
+    height: 105px;
+    background-color: #ffffff;
+    transform-origin: bottom center; 
+}
+
+.line1 {transform: rotate(-54deg);}
+.line2 {transform: rotate(-18deg);}
+.line3 {transform: rotate(18deg);}
+.line4 {transform: rotate(54deg);}
+
+.gaugeVelocity {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    text-align: center;
+    color: #530aa8;
+}
+
+.speedValue {
+    font-size: 40px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.speedUnit {
+    display: block;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.gaugeRPM {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 2px;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, 40%);
+    text-align: center;
+    color: #530aa8;
+}
+
+.rpmValue {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.rpmUnit {
+    display: block;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.fuelGauge {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.fuelIndicators {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    height: 100px; 
+}
+
+.fuelLevelText {
+    font-size: 14px;
+    font-weight: bold;
+    color: #530aa8;
+}
+
+.fuelLevelText.top {
+    align-self: center;
+}
+
+.fuelLevelText.bottom {
+    align-self: center; 
+}
+
+.fuelIcon {
+    align-self: center; 
+}
+
+.fuelIcon img {
+    width: 20px;
+    height: 20px;
+}
+
+.fuelContainer {
+    width: 50px;
+    height: 100px;
+    background: linear-gradient(to top, #530aa8 0%, #dfdfdf 0%);
+    clip-path: path("M 0,0 L 38,0 A 10,10 90 0 1 46,12 L 30,90 A 10,10 90 0 1 20,100 L 0,100");
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
 }
 
 /* Flatpickr styles */
