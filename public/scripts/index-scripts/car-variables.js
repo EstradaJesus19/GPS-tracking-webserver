@@ -9,6 +9,7 @@ const nextVehicleIcon = document.getElementById("nextVehicleIcon");
 export function initVehicleDataContainer() {
     vehicleName.textContent = 'Vehicle 1';
     previousVehicleIcon.style.disabled = true;
+    previousVehicleIcon.style.opacity = 0.25;
 }
 
 export function updateSpeedGauge(value) {
