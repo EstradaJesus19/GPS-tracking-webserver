@@ -129,6 +129,7 @@ main {
     opacity: 0;
     overflow: hidden;
     position: relative;
+    margin-top: 3px;
     border-radius: 10px;
     background-color: #ffffff;
     width: 125px;
@@ -325,7 +326,7 @@ main {
 
 #previousVehicleIcon {
     transform: rotate(180deg);
-    opacity: 0.25;
+    opacity: 1;
 }
 
 #nextVehicleIcon {

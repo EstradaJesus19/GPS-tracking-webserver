@@ -2,6 +2,14 @@ const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
 const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
+const vehicleName = document.getElementById("vehicleName");
+const previousVehicleIcon = document.getElementById("previousVehicleIcon");
+const nextVehicleIcon = document.getElementById("nextVehicleIcon");
+
+export function initVehicleDataContainer() {
+    vehicleName.textContent = 'Vehicle 1';
+    previousVehicleIcon.style.disabled = true;
+}
 
 export function updateSpeedGauge(value) {
     speedValueElement.textContent = value;
