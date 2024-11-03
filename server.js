@@ -69,7 +69,7 @@ udpServer.on('message', (msg) => {
 
     if (match) {
         data = {
-            id_autoslatitude: match[1] || ' ',
+            id_autos: match[1] || ' ',
             latitude: match[2] || 'N/A',
             longitude: match[3] || 'N/A',
             date: match[4] || 'N/A',
@@ -82,7 +82,7 @@ udpServer.on('message', (msg) => {
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        if (process.env.user == 'Orlando Arroyo'){
+        if (process.env.db_user == 'Orlando Arroyo'){
             db.query(`INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
                 [tableName, data.id_autos, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
                 (err) => {
@@ -94,6 +94,7 @@ udpServer.on('message', (msg) => {
                 }
             );
         }
+
         // Send data through web socket
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
