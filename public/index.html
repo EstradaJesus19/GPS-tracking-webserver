@@ -18,18 +18,56 @@
     </header>
     <main>
         <div class="contentCard">
+            <div class="vehicleSelector">
+                <button class="vehicleDropdown">
+                    Select vehicles
+                    <img src="media/arrow-right.svg" class="dropdownIcon">
+                </button>
+                <div class="dropdownContent">
+                    <label><input type="checkbox" checked> Vehicle 1</label>
+                    <label><input type="checkbox" checked> Vehicle 2</label>
+                </div>
+            </div>
             <div class="locationInfo">
                 <h1>Real time location</h1>
-                <div class="locationData">
+                <!-- <div class="locationData">
                     <p>Latitude: <span id="latitude">N/A</span></p>
                     <p>Longitude: <span id="longitude">N/A</span></p>
                     <p>Date: <span id="date">N/A</span></p>
                     <p>Time: <span id="time">N/A</span></p>
-                </div>
+                </div> -->
             </div>
             <div class="mapContainer">
                 <div id="map"></div>
                 <button id="streetViewButton" class="mapButton">Street View</button>
+                <div id="positionControl" class="positionControls">
+                    <div class="positionHeader">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4>Position filtering</h4>
+                    </div>
+                    <div id="positionOptions">
+                        <div id="latitudeContainer" class="positionDataContainer">
+                            <label for="latitudeInput">Latitude:</label>
+                            <span class="fixedData" id="latitudeInput">NA</span>
+                        </div>
+                        <div id="longitudeContainer" class="positionDataContainer">
+                            <label for="longitudeInput">Longitude:</label>
+                            <span class="fixedData" id="longitudeInput">NA</span>
+                        </div>
+                        <div id="radiusContainer" class="positionDataContainer">
+                            <label for="radiusInput">Radius:</label>
+                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
+                        </div>
+                    </div>
+                    <div class="hiderContainers" id="hiderContainerPosition">
+                        <button id="hiderPosition" class="collapsed">
+                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
                 <div id="carVariables" class="carVariablesContainer">
                     <div class="gaugeContainer">
                         <div class="gaugeLine line1"></div>

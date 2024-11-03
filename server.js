@@ -94,10 +94,7 @@ udpServer.on('message', (msg) => {
                     }
                 }
             );
-        } else {
-            console.log('Insertion skipped: server_owner does not match "Orlando Arroyo".');
         }
-
 
         // Send data through web socket
         wss.clients.forEach((client) => {
