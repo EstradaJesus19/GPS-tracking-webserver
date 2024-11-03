@@ -42,11 +42,7 @@
                 <button id="streetViewButton" class="mapButton">Street View</button>
                 <div id="positionControl" class="positionControls">
                     <div class="positionHeader">
-                        <label class="switch">
-                            <input type="checkbox" id="toggleSwitch">
-                            <span class="slider round"></span>
-                        </label>
-                        <h4>Position filtering</h4>
+                        <h4>Position data</h4>
                     </div>
                     <div id="positionOptions">
                         <div id="latitudeContainer" class="positionDataContainer">
@@ -57,12 +53,16 @@
                             <label for="longitudeInput">Longitude:</label>
                             <span class="fixedData" id="longitudeInput">NA</span>
                         </div>
-                        <div id="radiusContainer" class="positionDataContainer">
-                            <label for="radiusInput">Radius:</label>
-                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
+                        <div id="dateContainer" class="positionDataContainer">
+                            <label for="dateInput">Date:</label>
+                            <span class="fixedData" id="dateInput">NA</span>
+                        </div>
+                        <div id="timeContainer" class="positionDataContainer">
+                            <label for="timeInput">Time:</label>
+                            <span class="fixedData" id="timeInput">NA</span>
                         </div>
                     </div>
-                    <div class="hiderContainers" id="hiderContainerPosition">
+                    <div class="hiderContainers" id="hiderContainerPosition visible">
                         <button id="hiderPosition" class="collapsed">
                             <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
                         </button>

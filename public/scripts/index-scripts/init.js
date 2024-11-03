@@ -83,7 +83,7 @@ function initMap() {
     streetViewButton.style.display = 'block';
     streetViewButton.disabled = false;
 
-    setInterval(fetchLatestData, 100);
+    setInterval(fetchLatestData, 50);
 }
 
 export function mainProcess(){
