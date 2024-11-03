@@ -82,8 +82,9 @@ udpServer.on('message', (msg) => {
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        if (process.env.db_user == 'Orlando Arroyo'){
-            db.query(`INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+        if (process.env.db_user === 'Orlando Arroyo') {
+            db.query(
+                `INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
                 [tableName, data.id_autos, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
                 (err) => {
                     if (err) {
@@ -93,7 +94,10 @@ udpServer.on('message', (msg) => {
                     }
                 }
             );
+        } else {
+            console.log('Insertion skipped: db_user does not match "Orlando Arroyo".');
         }
+
 
         // Send data through web socket
         wss.clients.forEach((client) => {
