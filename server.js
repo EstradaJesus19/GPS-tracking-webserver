@@ -82,7 +82,7 @@ udpServer.on('message', (msg) => {
         const tableName = process.env.db_table; 
 
         // Insert received data into database
-        if (process.env.db_user === 'Orlando Arroyo') {
+        if (process.env.server_owner === 'Orlando Arroyo') {
             db.query(
                 `INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
                 [tableName, data.id_autos, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
@@ -95,7 +95,7 @@ udpServer.on('message', (msg) => {
                 }
             );
         } else {
-            console.log('Insertion skipped: db_user does not match "Orlando Arroyo".');
+            console.log('Insertion skipped: server_owner does not match "Orlando Arroyo".');
         }
 
 
