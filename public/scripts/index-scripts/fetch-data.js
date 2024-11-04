@@ -35,7 +35,7 @@ export function loadLastLocation(vehicleId) {
 
                 updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
                 updateGauges(latestData);
-                updateVehicleData(latestData); // Nueva llamada
+                updateVehicleData(latestData); 
             }
         })
         .catch(error => console.error('Error fetching data:', error));
@@ -61,7 +61,7 @@ export function fetchLatestData(vehicleId) {
                     updatePolyline(vehicleId);
                     updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
                     updateGauges(latestData);
-                    updateVehicleData(latestData); // Nueva llamada
+                    updateVehicleData(latestData); 
                 }
             }
         })

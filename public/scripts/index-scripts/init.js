@@ -1,4 +1,5 @@
 import { fetchLatestData, loadLastLocation, vehiclePaths } from './fetch-data.js';
+import { manageCarDataVisibility } from './car-variables.js';
 
 export let map;
 
@@ -71,6 +72,7 @@ vehicle2Checkbox.addEventListener('change', (event) => {
 export function mainProcess() {
     getServerOwner();
     getApiKey();
+    manageCarDataVisibility();
 }
 
 window.initMap = initMap;
