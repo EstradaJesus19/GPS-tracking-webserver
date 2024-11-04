@@ -12,7 +12,7 @@ const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
 
 // Load last location in database
-export function loadDataForVehicle(vehicleId) {
+export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
