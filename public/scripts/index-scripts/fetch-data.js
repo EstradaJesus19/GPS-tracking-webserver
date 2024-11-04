@@ -12,8 +12,8 @@ const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
 
 // Load last location in database
-export function loadLastLocation() {
-    fetch('/api/getAllData')
+export function loadDataForVehicle(vehicleId) {
+    fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
@@ -28,36 +28,21 @@ export function loadLastLocation() {
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 updateSpeedGauge(latestData.vel); 
                 updateFuelGauge(latestData.fuel);
-                updateRPMGauge(latestData.rpm)
+                updateRPMGauge(latestData.rpm);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Fetch latest data from database
-function getSelectedVehicles() {
-    const vehicle1Selected = document.getElementById('vehicle1Checkbox').checked;
-    const vehicle2Selected = document.getElementById('vehicle2Checkbox').checked;
-    const vehicleIds = [];
-
-    if (vehicle1Selected) vehicleIds.push(1); // assuming vehicle 1 has ID 1
-    if (vehicle2Selected) vehicleIds.push(2); // assuming vehicle 2 has ID 2
-
-    return vehicleIds;
-}
-
-// Fetch latest data based on selected vehicles
-export function fetchLatestData() {
-    const selectedVehicles = getSelectedVehicles();
-    const queryString = selectedVehicles.map(id => `vehicle_id=${id}`).join('&');
-
-    fetch(`/api/getAllData?${queryString}`)
+// Fetch latest data for specific vehicle ID
+export function fetchLatestData(vehicleId) {
+    fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
                 const latestData = data[data.length - 1];
-
                 const lastPosition = path.length > 0 ? path[path.length - 1] : null;
+                
                 if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
                     if (oldPath.length > 0) {
                         oldPath = [];
@@ -71,7 +56,6 @@ export function fetchLatestData() {
 
                     path.push(position);
                     polyline.setPath(path);
-
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                     updateSpeedGauge(latestData.vel); 
                     updateFuelGauge(latestData.fuel);
@@ -81,6 +65,7 @@ export function fetchLatestData() {
         })
         .catch(error => console.error('Error fetching latest data:', error));
 }
+
 
 // Update marker and info window
 function updateMarkerAndInfo(lat, lng, data) {

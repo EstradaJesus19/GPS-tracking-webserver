@@ -78,13 +78,13 @@ function initMap() {
 
     streetViewButton.addEventListener('click', toggleStreetView);
 
-    loadLastLocation();
+    loadLastLocation(1);
 
     // Enable street view button
     streetViewButton.style.display = 'block';
     streetViewButton.disabled = false;
 
-    setInterval(fetchLatestData, 100);
+    setInterval(fetchLatestData(1), 100);
 }
 
 export function mainProcess(){
