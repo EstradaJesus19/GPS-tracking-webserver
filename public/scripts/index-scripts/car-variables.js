@@ -56,6 +56,7 @@ function updateVehicleSelection() {
         updateVehicleDisplay();
     } else {
         showDefaultValues();
+        currentVehicleId = 0;
     }
     updateNavigationButtons();
 }
