@@ -69,7 +69,7 @@ function updateVehicleSelection() {
     
     if (totalVehicles > 0) {
         currentVehicleId = selectedVehicles[0];
-        updateVehicleDisplay();
+        loadLastLocation(currentVehicleId);
     } else {
         showDefaultValues();
         currentVehicleId = 0;
