@@ -55,6 +55,15 @@ function initMap() {
         disableDefaultUI: true
     });
 
+    // Build polyline
+    polyline = new google.maps.Polyline({
+        strokeColor: '#6309CE',
+        strokeOpacity: 1.0,
+        strokeWeight: 5,
+    });
+
+    polyline.setMap(map);
+
     // Update street view data
     panorama = new google.maps.StreetViewPanorama(mapElement, {
         position: { lat: 10.98, lng: -74.81 },
