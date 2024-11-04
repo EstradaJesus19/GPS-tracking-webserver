@@ -126,9 +126,17 @@ app.get('/api/getOwner', (req, res) => {
 // Get all data from database
 app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
-    
+    const vehicleIds = req.query.vehicle_id ? req.query.vehicle_id.split(',').map(Number) : [];
 
-    db.query('SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
+    let query = 'SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ??';
+    const queryParams = [tableName];
+
+    if (vehicleIds.length > 0) {
+        query += ' WHERE vehicle_id IN (?)';
+        queryParams.push(vehicleIds);
+    }
+
+    db.query(query, queryParams, (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });

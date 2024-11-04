@@ -35,8 +35,23 @@ export function loadLastLocation() {
 }
 
 // Fetch latest data from database
+function getSelectedVehicles() {
+    const vehicle1Selected = document.getElementById('vehicle1Checkbox').checked;
+    const vehicle2Selected = document.getElementById('vehicle2Checkbox').checked;
+    const vehicleIds = [];
+
+    if (vehicle1Selected) vehicleIds.push(1); // assuming vehicle 1 has ID 1
+    if (vehicle2Selected) vehicleIds.push(2); // assuming vehicle 2 has ID 2
+
+    return vehicleIds;
+}
+
+// Fetch latest data based on selected vehicles
 export function fetchLatestData() {
-    fetch('/api/getAllData')
+    const selectedVehicles = getSelectedVehicles();
+    const queryString = selectedVehicles.map(id => `vehicle_id=${id}`).join('&');
+
+    fetch(`/api/getAllData?${queryString}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
@@ -60,7 +75,7 @@ export function fetchLatestData() {
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                     updateSpeedGauge(latestData.vel); 
                     updateFuelGauge(latestData.fuel);
-                    updateRPMGauge(latestData.rpm)
+                    updateRPMGauge(latestData.rpm);
                 }
             }
         })
