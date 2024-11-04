@@ -22,8 +22,9 @@ export function loadLastLocation(vehicleId) {
                     lng: parseFloat(latestData.longitude)
                 };
 
+                // Asegurarse de que vehiclePaths[vehicleId] esté inicializado
                 if (!vehiclePaths[vehicleId]) {
-                    vehiclePaths[vehicleId] = { path: [], polyline: null };
+                    vehiclePaths[vehicleId] = { path: [], polyline: null, marker: null };
                 }
 
                 vehiclePaths[vehicleId].path.push(initialPosition);
@@ -88,6 +89,11 @@ function updatePolyline(vehicleId) {
 // Actualiza el marcador y la información de la ventana de información
 function updateMarkerAndInfo(lat, lng, data) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+    // Asegurarse de que vehiclePaths[data.vehicleId] esté inicializado
+    if (!vehiclePaths[data.vehicleId]) {
+        vehiclePaths[data.vehicleId] = { path: [], polyline: null, marker: null };
+    }
 
     if (vehiclePaths[data.vehicleId].marker) {
         vehiclePaths[data.vehicleId].marker.setMap(null);
