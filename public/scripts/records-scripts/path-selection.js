@@ -309,8 +309,9 @@ document.addEventListener('keydown', (event) => {
 });
 
 function updateMarkerPosition(latLng) {
+    const selectedVehicle = vehiclePathSelector.value;
     const icon = {
-        url: urls[vehicleId],
+        url: urls[selectedVehicle],
         scaledSize: new google.maps.Size(40, 40),
         anchor: new google.maps.Point(20, 35)
     };
