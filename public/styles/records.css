@@ -297,21 +297,6 @@ main {
     font-size: 16px;
 }
 
-#vehiclePathSelector {
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    font-size: 1em;
-    height: 25px;
-}
-
-#vehiclePathSelector:hover,
-#vehiclePathSelector:focus {
-    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
-    border-color: #530aa8;
-}
-
 #pathButtons {
     max-height: none; 
     max-width: 205px;
@@ -609,6 +594,21 @@ input:checked + .slider:before {
     outline: none;
     transition: box-shadow 0.3s ease;
     color: #505050;
+}
+
+#vehiclePathSelector {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-size: 1em;
+    height: 35px;
+}
+
+#vehiclePathSelector:hover,
+#vehiclePathSelector:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
 }
 
 #hiderContainerPosition {
