@@ -1,6 +1,6 @@
 import { fetchLatestData, loadLastLocation } from './fetch-data.js';
 import { toggleStreetView } from './street-view.js';
-import { initVehicleDataContainer } from './car-variables.js';
+// import { initVehicleDataContainer } from './car-variables.js';
 
 // Define variables 
 export let map;
