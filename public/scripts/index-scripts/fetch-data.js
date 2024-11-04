@@ -45,6 +45,8 @@ export function loadLastLocation(vehicleId) {
                 if (vehicleId === currentVehicleId) {
                     updateVehicleData(latestData);
                 }
+
+                adjustMapView();
             }
         })
         .catch(error => console.error('Error fetching data:', error));
@@ -74,6 +76,8 @@ export function fetchLatestData(vehicleId) {
                     if (vehicleId === currentVehicleId) {
                         updateVehicleData(latestData);
                     }
+
+                    adjustMapView();
                 }
             }
         })
@@ -108,5 +112,23 @@ function updateMarkerAndInfo(vehicleId, lat, lng, data) {
             title: `Lat: ${lat}, Lng: ${lng}`,
             icon: icon
         });
+    }
+}
+
+function adjustMapView() {
+    const selectedVehicles = Object.keys(vehiclePaths)
+        .filter(id => vehiclePaths[id].marker && vehiclePaths[id].marker.getMap());
+
+    if (selectedVehicles.length === 1) {
+        const vehicleId = selectedVehicles[0];
+        const position = vehiclePaths[vehicleId].marker.getPosition();
+        map.setCenter(position);
+    } else if (selectedVehicles.length > 1) {
+        const bounds = new google.maps.LatLngBounds();
+        selectedVehicles.forEach(vehicleId => {
+            const position = vehiclePaths[vehicleId].marker.getPosition();
+            bounds.extend(position);
+        });
+        map.fitBounds(bounds);
     }
 }

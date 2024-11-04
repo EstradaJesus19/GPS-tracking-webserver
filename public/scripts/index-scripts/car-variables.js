@@ -1,6 +1,7 @@
 import { vehiclePaths, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
+let carGaugesVisible = true;
 export let currentVehicleId = 1;
 let totalVehicles = 0;
 
@@ -19,6 +20,9 @@ const dateInput = document.getElementById('dateInput');
 const timeInput = document.getElementById('timeInput');
 const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
 const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
+const hiderVariables = document.getElementById('hiderVariables');
+const fuelVelContainer = document.getElementById('fuelVelContainer');
+const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
@@ -31,6 +35,12 @@ export function manageCarDataVisibility() {
         carDataVisible = !carDataVisible;
         positionOptions.classList.toggle("visible", carDataVisible);
         hiderPosition.classList.toggle("collapsed", carDataVisible);
+    });
+
+    hiderVariables.addEventListener("click", function() {
+        carGaugesVisible = !carGaugesVisible;
+        fuelVelContainer.classList.toggle("visible", carGaugesVisible);
+        hiderVariables.classList.toggle("collapsed", carGaugesVisible);
     });
 
     previousVehicleIcon.addEventListener("click", () => {
@@ -84,6 +94,7 @@ function updateButtonsVisibility(icon) {
 
 export function updateVehicleData(data) {
     vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
+    vehicleNameGauges.textContent = `Vehicle ${data.vehicle_id} info`;
     latitudeInput.textContent = data.latitude || 'NA';
     longitudeInput.textContent = data.longitude || 'NA';
     dateInput.textContent = data.date ? new Date(data.date).toISOString().split('T')[0] : 'NA';
