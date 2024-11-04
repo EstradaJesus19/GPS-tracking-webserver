@@ -335,8 +335,15 @@ main {
 }
 
 #positionOptions {
-    max-height: 300px; 
+    display: block;
+    max-height: 0px; 
     overflow: hidden;
+    transition: max-height 0.3s ease-out; 
+}
+
+#positionOptions.visible {
+    max-height: 300px; 
+    transition: max-height 0.3s ease-in; 
 }
 
 .positionDataContainer {
@@ -363,19 +370,6 @@ main {
     outline: none;
     transition: box-shadow 0.3s ease;
     color: #505050;
-}
-
-#hiderContainerPosition {
-    display: none;
-    opacity: 0; 
-    visibility: hidden; 
-    transition: opacity 0.3s ease-out, visibility 0s linear 0.3s; 
-}
-
-#hiderContainerPosition.visible {
-    opacity: 1; 
-    visibility: visible;
-    transition: opacity 0.3s ease-in;
 }
 
 #hiderPosition {

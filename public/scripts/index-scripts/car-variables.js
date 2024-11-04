@@ -1,3 +1,5 @@
+let carDataVisible = true;
+
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
 const rpmValueElement = document.getElementById("rpmValue");
@@ -5,11 +7,26 @@ const fuelContainer = document.getElementById("fuelContainer");
 const vehicleName = document.getElementById("vehicleName");
 const previousVehicleIcon = document.getElementById("previousVehicleIcon");
 const nextVehicleIcon = document.getElementById("nextVehicleIcon");
+const positionOptions = document.getElementById("positionOptions");
+const hiderPosition = document.getElementById("hiderPosition");
 
 export function initVehicleDataContainer() {
     vehicleName.textContent = 'Vehicle 1';
     previousVehicleIcon.style.disabled = true;
     previousVehicleIcon.style.opacity = 0.25;
+}
+
+export function manageCarDataVisibility() {
+    hiderPosition.addEventListener("click", function() {
+        carDataVisible = !carDataVisible;
+        if (carDataVisible) {
+            positionOptions.classList.add("visible");
+            hiderPosition.classList.add("collapsed");
+        } else {
+            positionOptions.classList.remove("visible");
+            hiderPosition.classList.remove("collapsed");
+        }
+    });
 }
 
 export function updateSpeedGauge(value) {
