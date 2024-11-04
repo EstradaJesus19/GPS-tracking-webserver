@@ -5,7 +5,7 @@ export const vehiclePaths = {};
 
 const polylineColors = {
     1: '#6309CE',
-    2: '#c3aaff'
+    2: '#a80aa8'
 };
 
 export function loadLastLocation(vehicleId) {
