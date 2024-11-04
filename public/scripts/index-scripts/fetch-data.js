@@ -95,8 +95,8 @@ function updateMarkerAndInfo(lat, lng, data) {
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
 
-    latitudeText.textContent = data.latitude;
-    longitudeText.textContent = data.longitude;
-    dateText.textContent = formattedDate;
-    timeText.textContent = data.time;
+    // latitudeText.textContent = data.latitude;
+    // longitudeText.textContent = data.longitude;
+    // dateText.textContent = formattedDate;
+    // timeText.textContent = data.time;
 }
