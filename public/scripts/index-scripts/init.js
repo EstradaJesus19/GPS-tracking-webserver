@@ -84,7 +84,8 @@ function initMap() {
     streetViewButton.style.display = 'block';
     streetViewButton.disabled = false;
 
-    setInterval(fetchLatestData(1), 100);
+
+    setInterval(() => {fetchLatestData(1)}, 100);
 }
 
 export function mainProcess(){
