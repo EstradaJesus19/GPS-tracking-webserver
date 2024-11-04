@@ -117,7 +117,7 @@ function updateMarkerAndInfo(vehicleId, lat, lng, data) {
     }
 
     // Centrar el mapa en el nuevo marcador
-    map.setCenter(position);
+    // map.setCenter(position);
 
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
