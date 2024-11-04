@@ -189,7 +189,7 @@ main {
 
 .dropdownContent label:nth-child(2) input[type="checkbox"]:checked {
     background-color: #f0f0f0; /* Color del segundo checkbox */
-    border-color: #c3aaff;
+    border-color: #a80aa8;
 }
 
 .dropdownContent label:nth-child(2) input[type="checkbox"]:checked::before {
@@ -199,7 +199,7 @@ main {
     left: 50%;
     width: 8px;
     height: 8px;
-    background-color: #c3aaff;
+    background-color: #a80aa8;
     border-radius: 2px;
     transform: translate(-50%, -50%);
 }
