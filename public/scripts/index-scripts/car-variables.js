@@ -12,6 +12,14 @@ const hiderPosition = document.getElementById("hiderPosition");
 const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
 const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
+export function initVehicleDataContainer() {
+    vehicleName.textContent = 'Vehicle 1';
+    previousVehicleIcon.style.disabled = true;
+    previousVehicleIcon.style.opacity = 0.25;
+    vehicle1Checkbox.checked = true;
+    vehicle2Checkbox.checked = true;
+}
+
 export function manageCarDataVisibility() {
     hiderPosition.addEventListener("click", function() {
         carDataVisible = !carDataVisible;
