@@ -63,7 +63,17 @@ function updateVehicleSelection() {
 
 function updateNavigationButtons() {
     previousVehicleIcon.disabled = currentVehicleId === 1 || totalVehicles <= 1;
+    updateButtonsVisibility(previousVehicleIcon);
     nextVehicleIcon.disabled = currentVehicleId === totalVehicles || totalVehicles <= 1;
+    updateButtonsVisibility(nextVehicleIcon);
+}
+
+function updateButtonsVisibility(icon) {
+    if (icon.disabled) {
+        icon.style.opacity = 0.25;
+    } else {
+        icon.style.opacity = 1;
+    }
 }
 
 export function updateVehicleData(data) {
