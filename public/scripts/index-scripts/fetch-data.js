@@ -120,13 +120,10 @@ function adjustMapView() {
         .filter(id => vehiclePaths[id].marker && vehiclePaths[id].marker.getMap());
 
     if (selectedVehicles.length === 1) {
-        // Centrar el mapa en el único vehículo seleccionado
         const vehicleId = selectedVehicles[0];
         const position = vehiclePaths[vehicleId].marker.getPosition();
         map.setCenter(position);
-        map.setZoom(15);  // Ajusta el nivel de zoom si es necesario
     } else if (selectedVehicles.length > 1) {
-        // Ajustar el mapa para que ambos vehículos sean visibles
         const bounds = new google.maps.LatLngBounds();
         selectedVehicles.forEach(vehicleId => {
             const position = vehiclePaths[vehicleId].marker.getPosition();
