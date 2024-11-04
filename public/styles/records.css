@@ -643,10 +643,9 @@ input:checked + .slider:before {
     transition: opacity 1s ease-out; 
 }
 
-/* Car variables */
 /* vehicle variables */
 .vehicleVariablesContainer {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 20px;
     position: absolute;

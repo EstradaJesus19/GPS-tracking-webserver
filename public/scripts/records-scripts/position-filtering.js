@@ -2,7 +2,7 @@ import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { clearMap, clearCircles, clearPolylines, clearMarkers } from './clear-options.js';
 import { selectPath, createPathSelector, pathContainerHider } from './path-selection.js';
-import { enableCarVariables, disableCarVariables } from './car-variables.js';
+import { disableCarVariables } from './car-variables.js';
 
 // Define variables
 export let usedPaths = [];
@@ -45,6 +45,7 @@ export function positionFiltering() {
             positionFilteringAction = !positionFilteringAction;
             positionOptions.classList.remove("visible");
             hiderContainerPosition.classList.remove("visible");
+            
             setTimeout(function () {
                 hiderContainerPosition.style.display = 'none';
                 hiderPosition.classList.add("collapsed");
@@ -59,16 +60,20 @@ export function positionFiltering() {
             positionFilteringAction = !positionFilteringAction;
             positionOptionsVisible = true;
             hiderContainerPosition.classList.add("visible");
+
             setTimeout(function () {
                 hiderContainerPosition.style.display = 'block';
             }, 200);
+
             enableMapClick();
 
             infoBox.style.display = "block";
             infoBox.style.opacity = 1;
+
             setTimeout(function () {
                 infoBox.style.opacity = 0;
             }, 2000);
+
             setTimeout(function () {
                 infoBox.style.display = "none";
             }, 3000);
@@ -167,6 +172,19 @@ function drawCircle(position, radius, isEditable) {
                 longitudeInput.textContent = selectedPosition.lng().toFixed(4);
             }
         });
+    } else{
+        google.maps.event.addListener(circle, 'radius_changed', function () {
+            radius = Math.round(circle.getRadius());
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            radiusInput.value = radius;
+        });
+
+        google.maps.event.addListener(circle, 'mouseup', function () {
+            selectedPosition = circle.getCenter();
+            filterByPosition(radius, selectedPosition, startTime, endTime);
+            latitudeInput.textContent = selectedPosition.lat().toFixed(4);
+            longitudeInput.textContent = selectedPosition.lng().toFixed(4);
+        });
     }
 }
 
@@ -194,15 +212,16 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
     };
 
     const selectedVehicles = updateVehicleSelectionForPosition();
-    const bounds = new google.maps.LatLngBounds();
 
     selectedVehicles.forEach(vehicleId => {
         fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
+                    const bounds = new google.maps.LatLngBounds();
                     let paths = [];
                     let currentPath = [];
+                    let currentMetadata = [];
                     let previousTime = null;
                     let startTimePath = null;
                     let endTimePath = null;
@@ -211,6 +230,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         if (point.vehicle_id !== vehicleId) return;
 
                         const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+
                         const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
                         const currentTime = new Date(currentTimeString);
 
@@ -218,40 +238,37 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                             const timeDifference = (currentTime - previousTime) / 1000;
                             if (timeDifference > 60) {
                                 if (currentPath.length > 0) {
-                                    paths.push({ path: currentPath, startTimePath, endTimePath });
+                                    paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                                 }
-                                currentPath = [];
+                                currentPath = []; 
+                                currentMetadata = [];
                             }
                         }
 
                         if (!currentPath.length) startTimePath = currentTime;
+
                         endTimePath = currentTime;
                         currentPath.push(latLng);
+                        currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}|${point.vehicle_id}`);
                         bounds.extend(latLng);
                         previousTime = currentTime;
                     });
 
                     if (currentPath.length > 0) {
-                        paths.push({ path: currentPath, startTimePath, endTimePath });
+                        paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
                     }
 
-                    paths.forEach((vehiclePath, index) => {
-                        const polyline = new google.maps.Polyline({
-                            path: vehiclePath.path,
-                            strokeColor: polylineColors[vehicleId] || '#000000',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 5,
-                        });
+                    // Create windows for path selecting
+                    createPathSelector(paths);
+                    selectPath(0, paths);
+                    usedPaths = paths;
 
-                        polyline.setMap(map);
-                    });
-
-                    map.fitBounds(bounds);
                 } else {
                     usedPaths.length = 0;
                     clearPolylines();
                     clearMarkers();
                     createPathSelector(usedPaths);
+                    
                     Swal.fire({
                         text: `No data found for Vehicle ${vehicleId} in the specified area.`,
                         icon: 'info',
@@ -266,7 +283,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 }
             })
             .catch(error => {
-                console.error('Error fetching filtered data: ', error);
                 clearPolylines();
                 clearMarkers();
                 Swal.fire({
@@ -280,6 +296,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         icon: 'swal2-icon-info-custom'
                     }
                 });
+                console.error('Error fetching filtered data: ', error);
             });
     });
 }
