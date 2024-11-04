@@ -368,7 +368,7 @@ main {
     width: 180px;
     padding: 10px;
     border-radius: 10px;
-    display: none;
+    display: block;
     justify-content: center;
     text-align: center;
     background-color: white;
