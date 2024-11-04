@@ -7,7 +7,6 @@ const polylineColors = {
     1: '#6309CE',
     2: '#c3aaff'
 };
-
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -25,22 +24,16 @@ export function loadLastLocation(vehicleId) {
 
                 vehiclePaths[vehicleId].path.push(initialPosition);
 
-                if (vehicleId === 1) {
-                    polylineColor = '#6309CE';
-                } else if (vehicleId === 2) {
-                    polylineColor = '#c3aaff';
-                }
-
                 if (!vehiclePaths[vehicleId].polyline) {
                     vehiclePaths[vehicleId].polyline = new google.maps.Polyline({
-                        strokeColor: polylineColor,
+                        strokeColor: polylineColors[vehicleId] || '#000000', // Color predeterminado si no está definido
                         strokeOpacity: 1.0,
                         strokeWeight: 5,
                         map: map
                     });
                 }
 
-                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
                 updateGauges(latestData);
                 updateVehicleData(latestData); // Nueva llamada
             }
@@ -66,7 +59,7 @@ export function fetchLatestData(vehicleId) {
 
                     vehiclePaths[vehicleId].path.push(position);
                     updatePolyline(vehicleId);
-                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                    updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
                     updateGauges(latestData);
                     updateVehicleData(latestData); // Nueva llamada
                 }
