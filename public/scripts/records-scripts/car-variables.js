@@ -1,7 +1,7 @@
 
 let carGaugesVisible = true;
 
-const carVariables = document.getElementById('carVariables');
+const vehicleVariables = document.getElementById('vehicleVariables');
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
 const rpmValueElement = document.getElementById("rpmValue");
@@ -43,10 +43,10 @@ export function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
 }
 
-// export function enableCarVariables() {
-//     carVariables.style.display = 'flex';
-// }
+export function enableCarVariables() {
+    vehicleVariables.style.display = 'flex';
+}
 
-// export function disableCarVariables() {
-//     carVariables.style.display = 'none';
-// }
+export function disableCarVariables() {
+    vehicleVariables.style.display = 'none';
+}
