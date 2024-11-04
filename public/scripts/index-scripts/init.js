@@ -47,7 +47,7 @@ function initMap() {
     setInterval(() => {
         fetchLatestData(1);
         fetchLatestData(2);
-    }, 100); 
+    }, 5000); 
 }
 
 function toggleVehicleVisibility(vehicleId, visible) {
