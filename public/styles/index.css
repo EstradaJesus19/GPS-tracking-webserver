@@ -275,7 +275,7 @@ main {
 /*Car data*/
 .positionControls {
     position: absolute;
-    z-index: 3;
+    z-index: 2;
     top: 10px;
     left: 10px;
     width: 180px;
