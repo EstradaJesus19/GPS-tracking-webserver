@@ -72,8 +72,10 @@ vehicle2Checkbox.addEventListener('change', (event) => {
 export function mainProcess() {
     getServerOwner();
     getApiKey();
-    selectVehicles();
-    manageCarDataVisibility();
+    document.addEventListener("DOMContentLoaded", () => {
+        selectVehicles();
+        manageCarDataVisibility(); 
+    });
 }
 
 window.initMap = initMap;

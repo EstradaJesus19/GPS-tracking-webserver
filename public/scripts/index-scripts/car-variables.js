@@ -23,6 +23,7 @@ const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
+    updateVehicleSelection();
 }
 
 export function manageCarDataVisibility() {
