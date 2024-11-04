@@ -1,3 +1,5 @@
+import { vehiclePaths } from './fetch-data.js';
+
 let carDataVisible = true;
 let currentVehicleId = 1; 
 const totalVehicles = 2;
@@ -93,7 +95,6 @@ export function setCurrentVehicleId(vehicleId) {
 }
 
 function updateVehicleDisplay() {
-    // Actualizar los datos del vehículo actualmente seleccionado
     const vehicleData = vehiclePaths[currentVehicleId];
     if (vehicleData) {
         updateVehicleData(vehicleData);
