@@ -1,79 +1,104 @@
-import { map, polyline, panorama } from './init.js';
+import { map, panorama } from './init.js';
 import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
 
 // Define variables 
-let path = [];
-let oldPath = [];
-export let marker;
+let vehiclePaths = {}; // Guardar las polilíneas y la información de cada vehículo
+let vehicleColors = {}; // Colores únicos por cada vehículo
 
 const latitudeText = document.getElementById('latitude');
 const longitudeText = document.getElementById('longitude');
 const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
 
-// Load last location in database
+// Asignar un color único para cada vehículo
+function getColorForVehicle(vehicleId) {
+    if (!vehicleColors[vehicleId]) {
+        const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+        vehicleColors[vehicleId] = colors[Object.keys(vehicleColors).length % colors.length];
+    }
+    return vehicleColors[vehicleId];
+}
+
+// Cargar la última ubicación de todos los vehículos
 export function loadLastLocation() {
     fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
-                const initialPosition = {
-                    lat: parseFloat(latestData.latitude),
-                    lng: parseFloat(latestData.longitude)
+            data.forEach(vehicleData => {
+                const vehicleId = vehicleData.vehicle_id;
+                const color = getColorForVehicle(vehicleId);
+
+                if (!vehiclePaths[vehicleId]) {
+                    vehiclePaths[vehicleId] = {
+                        path: [],
+                        polyline: new google.maps.Polyline({
+                            strokeColor: color,
+                            strokeOpacity: 1.0,
+                            strokeWeight: 3,
+                            map: map
+                        })
+                    };
+                }
+
+                const position = {
+                    lat: parseFloat(vehicleData.latitude),
+                    lng: parseFloat(vehicleData.longitude)
                 };
-                path.push(initialPosition);
-                oldPath.push(initialPosition);
-                polyline.setPath(path);
-                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                updateSpeedGauge(latestData.vel); 
-                updateFuelGauge(latestData.fuel);
-                updateRPMGauge(latestData.rpm)
-            }
+                vehiclePaths[vehicleId].path.push(position);
+                vehiclePaths[vehicleId].polyline.setPath(vehiclePaths[vehicleId].path);
+
+                updateMarkerAndInfo(position.lat, position.lng, vehicleData, color);
+                updateSpeedGauge(vehicleData.vel); 
+                updateFuelGauge(vehicleData.fuel);
+                updateRPMGauge(vehicleData.rpm);
+            });
         })
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Fetch latest data from database
+// Obtener datos actualizados y agregar a cada vehículo su polilínea
 export function fetchLatestData() {
     fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
-            if (data.length > 0) {
-                const latestData = data[data.length - 1];
+            data.forEach(vehicleData => {
+                const vehicleId = vehicleData.vehicle_id;
+                const color = getColorForVehicle(vehicleId);
 
-                const lastPosition = path.length > 0 ? path[path.length - 1] : null;
-                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
-                    if (oldPath.length > 0) {
-                        oldPath = [];
-                        path = [];
-                    }
-
-                    const position = {
-                        lat: parseFloat(latestData.latitude),
-                        lng: parseFloat(latestData.longitude)
+                if (!vehiclePaths[vehicleId]) {
+                    vehiclePaths[vehicleId] = {
+                        path: [],
+                        polyline: new google.maps.Polyline({
+                            strokeColor: color,
+                            strokeOpacity: 1.0,
+                            strokeWeight: 3,
+                            map: map
+                        })
                     };
-
-                    path.push(position);
-                    polyline.setPath(path);
-
-                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                    updateSpeedGauge(latestData.vel); 
-                    updateFuelGauge(latestData.fuel);
-                    updateRPMGauge(latestData.rpm)
                 }
-            }
+
+                const lastPosition = vehiclePaths[vehicleId].path.slice(-1)[0];
+                const newPosition = {
+                    lat: parseFloat(vehicleData.latitude),
+                    lng: parseFloat(vehicleData.longitude)
+                };
+
+                if (!lastPosition || lastPosition.lat !== newPosition.lat || lastPosition.lng !== newPosition.lng) {
+                    vehiclePaths[vehicleId].path.push(newPosition);
+                    vehiclePaths[vehicleId].polyline.setPath(vehiclePaths[vehicleId].path);
+                    updateMarkerAndInfo(newPosition.lat, newPosition.lng, vehicleData, color);
+                    updateSpeedGauge(vehicleData.vel); 
+                    updateFuelGauge(vehicleData.fuel);
+                    updateRPMGauge(vehicleData.rpm);
+                }
+            });
         })
         .catch(error => console.error('Error fetching latest data:', error));
 }
 
-// Update marker and info window
-function updateMarkerAndInfo(lat, lng, data) {
+// Actualizar el marcador y la información
+function updateMarkerAndInfo(lat, lng, data, color) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-    if (marker) {
-        marker.setMap(null);
-    }
 
     const icon = {
         url: 'media/favicon.svg',
@@ -81,7 +106,7 @@ function updateMarkerAndInfo(lat, lng, data) {
         anchor: new google.maps.Point(20, 35)
     };
 
-    marker = new google.maps.Marker({
+    const marker = new google.maps.Marker({
         position,
         map,
         title: `Lat: ${lat}, Lng: ${lng}`,
@@ -89,7 +114,6 @@ function updateMarkerAndInfo(lat, lng, data) {
     });
 
     map.setCenter(position);
-
     panorama.setPosition(position);
 
     const date = new Date(data.date);

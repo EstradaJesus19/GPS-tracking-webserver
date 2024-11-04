@@ -16,7 +16,7 @@ require('dotenv').config();
 
 // Define data structure
 let data = {
-    id_autos: ' ',
+    vehicle_id: ' ',
     latitude: 'N/A',
     longitude: 'N/A',
     date: 'N/A',
@@ -69,7 +69,7 @@ udpServer.on('message', (msg) => {
 
     if (match) {
         data = {
-            id_autos: match[1] || ' ',
+            vehicle_id: match[1] || ' ',
             latitude: match[2] || 'N/A',
             longitude: match[3] || 'N/A',
             date: match[4] || 'N/A',
@@ -84,8 +84,8 @@ udpServer.on('message', (msg) => {
         // Insert received data into database
         if (process.env.server_owner === 'Orlando Arroyo') {
             db.query(
-                `INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [tableName, data.id_autos, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
+                `INSERT INTO ?? (vehicle_id, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [tableName, data.vehicle_id, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
                 (err) => {
                     if (err) {
                         console.error('Error inserting into database:', err);
@@ -128,7 +128,7 @@ app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
     
 
-    db.query('SELECT latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
+    db.query('SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
