@@ -1,5 +1,5 @@
 import { map } from './init.js';
-import { updateGauges, updateVehicleData } from './car-variables.js';
+import { updateVehicleData, currentVehicleId } from './car-variables.js';
 
 export const vehiclePaths = {};
 
@@ -7,6 +7,7 @@ const polylineColors = {
     1: '#6309CE',
     2: '#c3aaff'
 };
+
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -34,7 +35,11 @@ export function loadLastLocation(vehicleId) {
                 }
 
                 updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
-                updateVehicleData(latestData); 
+
+                // Solo actualiza la pantalla si el vehículo corresponde al actual
+                if (vehicleId === currentVehicleId) {
+                    updateVehicleData(latestData);
+                }
             }
         })
         .catch(error => console.error('Error fetching data:', error));
@@ -59,7 +64,11 @@ export function fetchLatestData(vehicleId) {
                     vehiclePaths[vehicleId].path.push(position);
                     updatePolyline(vehicleId);
                     updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
-                    updateVehicleData(latestData); 
+
+                    // Solo actualiza la pantalla si el vehículo corresponde al actual
+                    if (vehicleId === currentVehicleId) {
+                        updateVehicleData(latestData);
+                    }
                 }
             }
         })
