@@ -1,9 +1,8 @@
 import { map } from './init.js';
 import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
 
-const vehiclePaths = {};
+export const vehiclePaths = {};
 
-// Colores para las polilíneas de cada vehículo
 const polylineColors = {
     1: '#6309CE',
     2: '#c3aaff'
@@ -14,7 +13,6 @@ const longitudeText = document.getElementById('longitude');
 const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
 
-// Cargar la última ubicación de un vehículo específico
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -75,30 +73,25 @@ export function fetchLatestData(vehicleId) {
         .catch(error => console.error('Error fetching latest data:', error));
 }
 
-// Actualiza los indicadores de velocidad, combustible y RPM
 function updateGauges(data) {
     updateSpeedGauge(data.vel);
     updateFuelGauge(data.fuel);
     updateRPMGauge(data.rpm);
 }
 
-// Actualiza la polilínea de un vehículo en el mapa
 function updatePolyline(vehicleId) {
     if (vehiclePaths[vehicleId] && vehiclePaths[vehicleId].polyline) {
         vehiclePaths[vehicleId].polyline.setPath(vehiclePaths[vehicleId].path);
     }
 }
 
-// Actualiza el marcador y la información de la ventana de información para un vehículo específico
 function updateMarkerAndInfo(vehicleId, lat, lng, data) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
-    // Asegurarse de que vehiclePaths[vehicleId] esté inicializado
     if (!vehiclePaths[vehicleId]) {
         vehiclePaths[vehicleId] = { path: [], polyline: null, marker: null };
     }
 
-    // Si ya existe un marcador, se actualiza su posición; si no, se crea uno nuevo
     if (vehiclePaths[vehicleId].marker) {
         vehiclePaths[vehicleId].marker.setPosition(position);
     } else {

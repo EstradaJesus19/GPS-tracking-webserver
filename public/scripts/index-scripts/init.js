@@ -1,4 +1,4 @@
-import { fetchLatestData, loadLastLocation } from './fetch-data.js';
+import { fetchLatestData, loadLastLocation, vehiclePaths } from './fetch-data.js';
 
 export let map;
 
