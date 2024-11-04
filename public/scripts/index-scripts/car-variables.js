@@ -18,6 +18,30 @@ const longitudeInput = document.getElementById('longitudeInput');
 const dateInput = document.getElementById('dateInput');
 const timeInput = document.getElementById('timeInput');
 
+function updateNavigationButtons() {
+    previousVehicleIcon.disabled = currentVehicleId === 1;
+    nextVehicleIcon.disabled = currentVehicleId === totalVehicles;
+}
+
+export function updateVehicleData(data) {
+    vehicleName.textContent = `Vehicle ${data.vehicleId}`;
+    latitudeInput.textContent = data.latitude || 'NA';
+    longitudeInput.textContent = data.longitude || 'NA';
+    const date = new Date(data.date);
+    const formattedDate = date.toISOString().split('T')[0];
+    dateInput.textContent = formattedDate || 'NA';
+    timeInput.textContent = data.time || 'NA';
+    updateGauges(data);
+    updateNavigationButtons();
+}
+
+function updateVehicleDisplay() {
+    const vehicleData = vehiclePaths[currentVehicleId];
+    if (vehicleData) {
+        updateVehicleData(vehicleData);
+    }
+}
+
 export function manageCarDataVisibility() {
     hiderPosition.addEventListener("click", function() {
         carDataVisible = !carDataVisible;
@@ -45,7 +69,7 @@ export function manageCarDataVisibility() {
     });
 }
 
-export function updateSpeedGauge(value) {
+function updateSpeedGauge(value) {
     speedValueElement.textContent = value;
     const speed = parseInt(speedValueElement.textContent, 10);
     const limitedSpeed = Math.min(Math.max(speed, 0), 180);
@@ -60,7 +84,7 @@ export function updateSpeedGauge(value) {
     )`;
 }
 
-export function updateFuelGauge(value) {
+function updateFuelGauge(value) {
     const newValue = parseInt(value, 10);
     fuelContainer.style.background = `linear-gradient(
         to top,
@@ -69,34 +93,17 @@ export function updateFuelGauge(value) {
     )`;
 }
 
-export function updateRPMGauge(value) {
+function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
 }
 
-export function updateVehicleData(data) {
-    vehicleName.textContent = `Vehicle ${data.vehicleId}`;
-    latitudeInput.textContent = data.latitude || 'NA';
-    longitudeInput.textContent = data.longitude || 'NA';
-    const date = new Date(data.date);
-    const formattedDate = date.toISOString().split('T')[0];
-    dateInput.textContent = formattedDate || 'NA';
-    timeInput.textContent = data.time || 'NA';
-    updateNavigationButtons();
-}
-
-function updateNavigationButtons() {
-    previousVehicleIcon.disabled = currentVehicleId === 1;
-    nextVehicleIcon.disabled = currentVehicleId === totalVehicles;
+function updateGauges(data) {
+    updateSpeedGauge(data.vel);
+    updateFuelGauge(data.fuel);
+    updateRPMGauge(data.rpm);
 }
 
 export function setCurrentVehicleId(vehicleId) {
     currentVehicleId = vehicleId;
     updateVehicleDisplay();
-}
-
-function updateVehicleDisplay() {
-    const vehicleData = vehiclePaths[currentVehicleId];
-    if (vehicleData) {
-        updateVehicleData(vehicleData);
-    }
 }

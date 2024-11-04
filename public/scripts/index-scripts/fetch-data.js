@@ -1,5 +1,5 @@
 import { map } from './init.js';
-import { updateFuelGauge, updateSpeedGauge, updateRPMGauge, updateVehicleData  } from './car-variables.js';
+import { updateGauges, updateVehicleData } from './car-variables.js';
 
 export const vehiclePaths = {};
 
@@ -26,7 +26,7 @@ export function loadLastLocation(vehicleId) {
 
                 if (!vehiclePaths[vehicleId].polyline) {
                     vehiclePaths[vehicleId].polyline = new google.maps.Polyline({
-                        strokeColor: polylineColors[vehicleId] || '#000000', // Color predeterminado si no está definido
+                        strokeColor: polylineColors[vehicleId] || '#000000', 
                         strokeOpacity: 1.0,
                         strokeWeight: 5,
                         map: map
@@ -34,7 +34,6 @@ export function loadLastLocation(vehicleId) {
                 }
 
                 updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
-                updateGauges(latestData);
                 updateVehicleData(latestData); 
             }
         })
@@ -60,18 +59,11 @@ export function fetchLatestData(vehicleId) {
                     vehiclePaths[vehicleId].path.push(position);
                     updatePolyline(vehicleId);
                     updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
-                    updateGauges(latestData);
                     updateVehicleData(latestData); 
                 }
             }
         })
         .catch(error => console.error('Error fetching latest data:', error));
-}
-
-function updateGauges(data) {
-    updateSpeedGauge(data.vel);
-    updateFuelGauge(data.fuel);
-    updateRPMGauge(data.rpm);
 }
 
 function updatePolyline(vehicleId) {
