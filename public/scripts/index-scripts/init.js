@@ -66,23 +66,23 @@ function initMap() {
     polyline.setMap(map);
 
     // Update street view data
-    panorama = new google.maps.StreetViewPanorama(mapElement, {
-        position: { lat: 10.98, lng: -74.81 },
-        pov: { heading: 165, pitch: 0 },
-        zoom: 1,
-        visible: false,
-        fullscreenControl: false
-    });
+    // panorama = new google.maps.StreetViewPanorama(mapElement, {
+    //     position: { lat: 10.98, lng: -74.81 },
+    //     pov: { heading: 165, pitch: 0 },
+    //     zoom: 1,
+    //     visible: false,
+    //     fullscreenControl: false
+    // });
 
-    map.setStreetView(panorama);
+    // map.setStreetView(panorama);
 
-    streetViewButton.addEventListener('click', toggleStreetView);
+    // streetViewButton.addEventListener('click', toggleStreetView);
 
     loadLastLocation(2);
 
     // Enable street view button
-    streetViewButton.style.display = 'block';
-    streetViewButton.disabled = false;
+    // streetViewButton.style.display = 'block';
+    // streetViewButton.disabled = false;
 
 
     setInterval(() => {fetchLatestData(2)}, 100);
@@ -91,7 +91,6 @@ function initMap() {
 export function mainProcess(){
     getServerOwner();
     getApiKey();
-    initVehicleDataContainer();
 }
 
 window.initMap = initMap;

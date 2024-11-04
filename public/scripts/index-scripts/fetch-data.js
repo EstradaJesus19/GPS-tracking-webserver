@@ -90,7 +90,7 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     map.setCenter(position);
 
-    panorama.setPosition(position);
+    // panorama.setPosition(position);
 
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
