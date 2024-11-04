@@ -1,17 +1,16 @@
-import { map, polyline, panorama } from './init.js';
+import { map } from './init.js';
 import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
 
-// Define variables 
-let path = [];
-let oldPath = [];
-export let marker;
+// Define un objeto para almacenar los paths y polilíneas de cada vehículo
+const vehiclePaths = {};
 
+// Elementos de información en la interfaz
 const latitudeText = document.getElementById('latitude');
 const longitudeText = document.getElementById('longitude');
 const dateText = document.getElementById('date');
 const timeText = document.getElementById('time');
 
-// Load last location in database
+// Cargar la última ubicación en la base de datos para un vehículo específico
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -22,57 +21,76 @@ export function loadLastLocation(vehicleId) {
                     lat: parseFloat(latestData.latitude),
                     lng: parseFloat(latestData.longitude)
                 };
-                path.push(initialPosition);
-                oldPath.push(initialPosition);
-                polyline.setPath(path);
+
+                if (!vehiclePaths[vehicleId]) {
+                    vehiclePaths[vehicleId] = { path: [], polyline: null };
+                }
+
+                vehiclePaths[vehicleId].path.push(initialPosition);
+
+                if (!vehiclePaths[vehicleId].polyline) {
+                    vehiclePaths[vehicleId].polyline = new google.maps.Polyline({
+                        strokeColor: '#6309CE',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        map: map
+                    });
+                }
+
                 updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                updateSpeedGauge(latestData.vel); 
-                updateFuelGauge(latestData.fuel);
-                updateRPMGauge(latestData.rpm);
+                updateGauges(latestData);
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Fetch latest data for specific vehicle ID
+// Fetch de los datos más recientes para un vehículo específico
 export function fetchLatestData(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
                 const latestData = data[data.length - 1];
-                const lastPosition = path.length > 0 ? path[path.length - 1] : null;
-                
-                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
-                    if (oldPath.length > 0) {
-                        oldPath = [];
-                        path = [];
-                    }
+                const lastPosition = vehiclePaths[vehicleId].path.length > 0 
+                    ? vehiclePaths[vehicleId].path[vehiclePaths[vehicleId].path.length - 1] 
+                    : null;
 
+                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
                     const position = {
                         lat: parseFloat(latestData.latitude),
                         lng: parseFloat(latestData.longitude)
                     };
 
-                    path.push(position);
-                    polyline.setPath(path);
+                    vehiclePaths[vehicleId].path.push(position);
+                    updatePolyline(vehicleId);
                     updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
-                    updateSpeedGauge(latestData.vel); 
-                    updateFuelGauge(latestData.fuel);
-                    updateRPMGauge(latestData.rpm);
+                    updateGauges(latestData);
                 }
             }
         })
         .catch(error => console.error('Error fetching latest data:', error));
 }
 
+// Actualiza los indicadores de velocidad, combustible y RPM
+function updateGauges(data) {
+    updateSpeedGauge(data.vel);
+    updateFuelGauge(data.fuel);
+    updateRPMGauge(data.rpm);
+}
 
-// Update marker and info window
+// Actualiza la polilínea de un vehículo en el mapa
+function updatePolyline(vehicleId) {
+    if (vehiclePaths[vehicleId] && vehiclePaths[vehicleId].polyline) {
+        vehiclePaths[vehicleId].polyline.setPath(vehiclePaths[vehicleId].path);
+    }
+}
+
+// Actualiza el marcador y la información de la ventana de información
 function updateMarkerAndInfo(lat, lng, data) {
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
 
-    if (marker) {
-        marker.setMap(null);
+    if (vehiclePaths[data.vehicleId].marker) {
+        vehiclePaths[data.vehicleId].marker.setMap(null);
     }
 
     const icon = {
@@ -81,7 +99,7 @@ function updateMarkerAndInfo(lat, lng, data) {
         anchor: new google.maps.Point(20, 35)
     };
 
-    marker = new google.maps.Marker({
+    vehiclePaths[data.vehicleId].marker = new google.maps.Marker({
         position,
         map,
         title: `Lat: ${lat}, Lng: ${lng}`,
@@ -90,13 +108,11 @@ function updateMarkerAndInfo(lat, lng, data) {
 
     map.setCenter(position);
 
-    // panorama.setPosition(position);
-
     const date = new Date(data.date);
     const formattedDate = date.toISOString().split('T')[0];
 
-    // latitudeText.textContent = data.latitude;
-    // longitudeText.textContent = data.longitude;
-    // dateText.textContent = formattedDate;
-    // timeText.textContent = data.time;
+    latitudeText.textContent = data.latitude;
+    longitudeText.textContent = data.longitude;
+    dateText.textContent = formattedDate;
+    timeText.textContent = data.time;
 }
