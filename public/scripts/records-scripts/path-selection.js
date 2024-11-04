@@ -310,7 +310,7 @@ document.addEventListener('keydown', (event) => {
 
 function updateMarkerPosition(latLng) {
     const icon = {
-        url: 'media/favicon.svg',
+        url: urls[vehicleId],
         scaledSize: new google.maps.Size(40, 40),
         anchor: new google.maps.Point(20, 35)
     };
