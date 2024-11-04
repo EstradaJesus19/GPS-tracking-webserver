@@ -1,4 +1,4 @@
-import { vehiclePaths, loadLastLocation, centerMapOnVehicles } from './fetch-data.js';
+import { vehiclePaths, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
 export let currentVehicleId = 1;
@@ -56,18 +56,16 @@ function updateVehicleSelection() {
     if (vehicle1Checkbox.checked) selectedVehicles.push(1);
     if (vehicle2Checkbox.checked) selectedVehicles.push(2);
     totalVehicles = selectedVehicles.length;
-
+    
     if (totalVehicles > 0) {
         currentVehicleId = selectedVehicles[0];
         updateVehicleDisplay();
-        centerMapOnVehicles(selectedVehicles); // Llama a la función para centrar el mapa
     } else {
         showDefaultValues();
         currentVehicleId = 0;
     }
     updateNavigationButtons();
 }
-
 
 function updateNavigationButtons() {
     previousVehicleIcon.disabled = currentVehicleId === 1 || totalVehicles <= 1;
