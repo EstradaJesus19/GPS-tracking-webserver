@@ -1,48 +1,78 @@
 import { map, polyline, panorama } from './init.js';
 import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
 
-let paths = {};
-let markers = {};
+// Define variables 
+let path = [];
+let oldPath = [];
+export let marker;
 
-const checkboxes = document.querySelectorAll('.dropdownContent input[type="checkbox"]');
+const latitudeText = document.getElementById('latitude');
+const longitudeText = document.getElementById('longitude');
+const dateText = document.getElementById('date');
+const timeText = document.getElementById('time');
 
-function getSelectedVehicleIds() {
-    const selectedIds = [];
-    checkboxes.forEach((checkbox, index) => {
-        if (checkbox.checked) {
-            selectedIds.push(index + 1); // Asume que el ID del vehículo es index + 1 (Vehicle 1 = ID 1)
-        }
-    });
-    return selectedIds;
-}
-
-export function loadLastLocations() {
-    const selectedVehicleIds = getSelectedVehicleIds();
-    fetch(`/api/getDataByVehicleIds`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ vehicleIds: selectedVehicleIds })
-    })
+// Load last location in database
+export function loadLastLocation() {
+    fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
-            data.forEach(vehicleData => {
-                const vehicleId = vehicleData.vehicles_id;
-                if (!paths[vehicleId]) {
-                    paths[vehicleId] = [];
-                }
-                const position = { lat: parseFloat(vehicleData.latitude), lng: parseFloat(vehicleData.longitude) };
-                paths[vehicleId].push(position);
-                updateMarkerAndPolyline(vehicleId, position, vehicleData);
-            });
+            if (data.length > 0) {
+                const latestData = data[data.length - 1];
+                const initialPosition = {
+                    lat: parseFloat(latestData.latitude),
+                    lng: parseFloat(latestData.longitude)
+                };
+                path.push(initialPosition);
+                oldPath.push(initialPosition);
+                polyline.setPath(path);
+                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                updateSpeedGauge(latestData.vel); 
+                updateFuelGauge(latestData.fuel);
+                updateRPMGauge(latestData.rpm)
+            }
         })
         .catch(error => console.error('Error fetching data:', error));
 }
 
-function updateMarkerAndPolyline(vehicleId, position, data) {
-    if (markers[vehicleId]) {
-        markers[vehicleId].setMap(null);
+// Fetch latest data from database
+export function fetchLatestData() {
+    fetch('/api/getAllData')
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const latestData = data[data.length - 1];
+
+                const lastPosition = path.length > 0 ? path[path.length - 1] : null;
+                if (!lastPosition || lastPosition.lat !== parseFloat(latestData.latitude) || lastPosition.lng !== parseFloat(latestData.longitude)) {
+                    if (oldPath.length > 0) {
+                        oldPath = [];
+                        path = [];
+                    }
+
+                    const position = {
+                        lat: parseFloat(latestData.latitude),
+                        lng: parseFloat(latestData.longitude)
+                    };
+
+                    path.push(position);
+                    polyline.setPath(path);
+
+                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
+                    updateSpeedGauge(latestData.vel); 
+                    updateFuelGauge(latestData.fuel);
+                    updateRPMGauge(latestData.rpm)
+                }
+            }
+        })
+        .catch(error => console.error('Error fetching latest data:', error));
+}
+
+// Update marker and info window
+function updateMarkerAndInfo(lat, lng, data) {
+    const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+    if (marker) {
+        marker.setMap(null);
     }
 
     const icon = {
@@ -51,30 +81,22 @@ function updateMarkerAndPolyline(vehicleId, position, data) {
         anchor: new google.maps.Point(20, 35)
     };
 
-    markers[vehicleId] = new google.maps.Marker({
+    marker = new google.maps.Marker({
         position,
         map,
-        title: `Vehicle ID: ${vehicleId}`,
+        title: `Lat: ${lat}, Lng: ${lng}`,
         icon: icon
     });
 
-    if (!polyline[vehicleId]) {
-        polyline[vehicleId] = new google.maps.Polyline({
-            map,
-            path: paths[vehicleId],
-            strokeColor: getColorByVehicleId(vehicleId),
-            strokeOpacity: 1.0,
-            strokeWeight: 2
-        });
-    } else {
-        polyline[vehicleId].setPath(paths[vehicleId]);
-    }
-
     map.setCenter(position);
-}
 
-function getColorByVehicleId(vehicleId) {
-    const colors = ['#6309ce', '#c3aaff', '#ffa500']; // Define más colores según sea necesario
-    return colors[vehicleId % colors.length];
-}
+    panorama.setPosition(position);
 
+    const date = new Date(data.date);
+    const formattedDate = date.toISOString().split('T')[0];
+
+    latitudeText.textContent = data.latitude;
+    longitudeText.textContent = data.longitude;
+    dateText.textContent = formattedDate;
+    timeText.textContent = data.time;
+}
