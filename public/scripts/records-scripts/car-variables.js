@@ -7,6 +7,12 @@ const gaugeContainer = document.querySelector(".gaugeContainer");
 const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
 
+export function selectVehicles() {
+    vehicle1Checkbox.checked = true;
+    vehicle2Checkbox.checked = true;
+    updateVehicleSelection();
+}
+
 export function manageCarDataVisibility() {
     hiderVariables.addEventListener("click", function() {
         carGaugesVisible = !carGaugesVisible;
