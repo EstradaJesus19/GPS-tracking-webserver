@@ -8,6 +8,11 @@ const polylineColors = {
     2: '#a80aa8'
 };
 
+const urls = {
+    1: 'media/marker1.svg',
+    2: 'media/marker2.svg'
+};
+
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -92,7 +97,7 @@ function updateMarkerAndInfo(vehicleId, lat, lng, data) {
         vehiclePaths[vehicleId].marker.setPosition(position);
     } else {
         const icon = {
-            url: 'media/favicon.svg',
+            url: urls[vehicleId],
             scaledSize: new google.maps.Size(40, 40),
             anchor: new google.maps.Point(20, 35)
         };
