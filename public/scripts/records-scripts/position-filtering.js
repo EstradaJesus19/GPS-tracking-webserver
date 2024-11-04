@@ -22,6 +22,8 @@ const positionOptions = document.getElementById('positionOptions');
 const hiderPosition = document.getElementById('hiderPosition');
 const infoBox = document.getElementById('infoBox');
 const hiderContainerPosition = document.getElementById('hiderContainerPosition');
+const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
+const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
 // Colores para las polilíneas de cada vehículo
 const polylineColors = {
@@ -32,8 +34,8 @@ const polylineColors = {
 // Obtener vehículos seleccionados
 function updateVehicleSelectionForPosition() {
     const selectedVehicles = [];
-    if (document.getElementById('vehicle1Checkbox').checked) selectedVehicles.push(1);
-    if (document.getElementById('vehicle2Checkbox').checked) selectedVehicles.push(2);
+    if (vehicle1Checkbox.checked) selectedVehicles.push(1);
+    if (vehicle2Checkbox.checked) selectedVehicles.push(2);
     return selectedVehicles;
 }
 
@@ -246,6 +248,10 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
 
                     map.fitBounds(bounds);
                 } else {
+                    usedPaths.length = 0;
+                    clearPolylines();
+                    clearMarkers();
+                    createPathSelector(usedPaths);
                     Swal.fire({
                         text: `No data found for Vehicle ${vehicleId} in the specified area.`,
                         icon: 'info',
@@ -261,7 +267,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
             })
             .catch(error => {
                 console.error('Error fetching filtered data: ', error);
-                clearMap();
+                clearPolylines();
+                clearMarkers();
                 Swal.fire({
                     text: 'Error fetching filtered data: ' + error,
                     icon: 'error',
