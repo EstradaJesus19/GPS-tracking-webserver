@@ -2,7 +2,7 @@ import { map } from './init.js';
 import { startTime, endTime } from './time-filtering.js';
 import { clearMap, clearCircles, clearPolylines, clearMarkers } from './clear-options.js';
 import { selectPath, createPathSelector, pathContainerHider } from './path-selection.js';
-import { enableCarVariables, disableCarVariables } from './car-variables.js';
+// import { enableCarVariables, disableCarVariables } from './car-variables.js';
 
 // Define variables
 export let usedPaths = [];
@@ -35,7 +35,7 @@ export function positionFiltering(){
                 hiderPosition.classList.add("collapsed");
             }, 200);
 
-            disableCarVariables();
+            // disableCarVariables();
 
             disableMapClick();
             clearMap();

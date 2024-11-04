@@ -43,10 +43,10 @@ export function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
 }
 
-export function enableCarVariables() {
-    carVariables.style.display = 'flex';
-}
+// export function enableCarVariables() {
+//     carVariables.style.display = 'flex';
+// }
 
-export function disableCarVariables() {
-    carVariables.style.display = 'none';
-}
+// export function disableCarVariables() {
+//     carVariables.style.display = 'none';
+// }
