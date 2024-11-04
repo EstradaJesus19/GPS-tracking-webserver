@@ -1,5 +1,4 @@
 import { vehiclePaths, loadLastLocation } from './fetch-data.js';
-import { stopFetchingData, startFetchingData } from './init.js';
 
 let carDataVisible = true;
 export let currentVehicleId = 1;
@@ -18,8 +17,8 @@ const latitudeInput = document.getElementById('latitudeInput');
 const longitudeInput = document.getElementById('longitudeInput');
 const dateInput = document.getElementById('dateInput');
 const timeInput = document.getElementById('timeInput');
-const vehicle1Checkbox = document.getElementById("vehicle1Checkbox");
-const vehicle2Checkbox = document.getElementById("vehicle2Checkbox");
+const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
+const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
@@ -37,14 +36,14 @@ export function manageCarDataVisibility() {
     previousVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId > 1) {
             currentVehicleId--;
-            handleVehicleChange();
+            loadLastLocation(currentVehicleId);
         }
     });
 
     nextVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
-            handleVehicleChange();
+            loadLastLocation(currentVehicleId);
         }
     });
 
@@ -81,12 +80,6 @@ function updateButtonsVisibility(icon) {
     } else {
         icon.style.opacity = 1;
     }
-}
-
-export function handleVehicleChange() {
-    stopFetchingData(); // Pausar el fetch periódico
-    loadLastLocation(currentVehicleId); // Llamar a loadLastLocation para el cambio de vehículo
-    startFetchingData(); // Reactivar el fetch periódico después del cambio
 }
 
 export function updateVehicleData(data) {
