@@ -50,8 +50,13 @@ function initMap() {
 }
 
 function toggleVehicleVisibility(vehicleId, visible) {
-    if (vehiclePaths[vehicleId] && vehiclePaths[vehicleId].polyline) {
-        vehiclePaths[vehicleId].polyline.setMap(visible ? map : null);
+    if (vehiclePaths[vehicleId]) {
+        if (vehiclePaths[vehicleId].polyline) {
+            vehiclePaths[vehicleId].polyline.setMap(visible ? map : null);
+        }
+        if (vehiclePaths[vehicleId].marker) {
+            vehiclePaths[vehicleId].marker.setMap(visible ? map : null);
+        }
     }
 }
 
