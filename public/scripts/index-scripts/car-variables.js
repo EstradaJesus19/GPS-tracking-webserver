@@ -24,7 +24,7 @@ function updateNavigationButtons() {
 }
 
 export function updateVehicleData(data) {
-    vehicleName.textContent = `Vehicle ${data.vehicleId}`;
+    vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
     latitudeInput.textContent = data.latitude || 'NA';
     longitudeInput.textContent = data.longitude || 'NA';
     const date = new Date(data.date);
