@@ -1,8 +1,8 @@
 import { vehiclePaths } from './fetch-data.js';
 
 let carDataVisible = true;
-let currentVehicleId = 1; 
-const totalVehicles = 2;
+let currentVehicleId = 1;
+let totalVehicles = 0;
 
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
@@ -17,41 +17,14 @@ const latitudeInput = document.getElementById('latitudeInput');
 const longitudeInput = document.getElementById('longitudeInput');
 const dateInput = document.getElementById('dateInput');
 const timeInput = document.getElementById('timeInput');
-
-function updateNavigationButtons() {
-    previousVehicleIcon.disabled = currentVehicleId === 1;
-    nextVehicleIcon.disabled = currentVehicleId === totalVehicles;
-}
-
-export function updateVehicleData(data) {
-    vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
-    latitudeInput.textContent = data.latitude || 'NA';
-    longitudeInput.textContent = data.longitude || 'NA';
-    const date = new Date(data.date);
-    const formattedDate = date.toISOString().split('T')[0];
-    dateInput.textContent = formattedDate || 'NA';
-    timeInput.textContent = data.time || 'NA';
-    updateGauges(data);
-    updateNavigationButtons();
-}
-
-function updateVehicleDisplay() {
-    const vehicleData = vehiclePaths[currentVehicleId];
-    if (vehicleData) {
-        updateVehicleData(vehicleData);
-    }
-}
+const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
+const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
 export function manageCarDataVisibility() {
     hiderPosition.addEventListener("click", function() {
         carDataVisible = !carDataVisible;
-        if (carDataVisible) {
-            positionOptions.classList.add("visible");
-            hiderPosition.classList.add("collapsed");
-        } else {
-            positionOptions.classList.remove("visible");
-            hiderPosition.classList.remove("collapsed");
-        }
+        positionOptions.classList.toggle("visible", carDataVisible);
+        hiderPosition.classList.toggle("collapsed", carDataVisible);
     });
 
     previousVehicleIcon.addEventListener("click", () => {
@@ -67,12 +40,60 @@ export function manageCarDataVisibility() {
             updateVehicleDisplay();
         }
     });
+
+    vehicle1Checkbox.addEventListener('change', updateVehicleSelection);
+    vehicle2Checkbox.addEventListener('change', updateVehicleSelection);
+}
+
+function updateVehicleSelection() {
+    const selectedVehicles = [];
+    if (vehicle1Checkbox.checked) selectedVehicles.push(1);
+    if (vehicle2Checkbox.checked) selectedVehicles.push(2);
+    totalVehicles = selectedVehicles.length;
+    
+    if (totalVehicles > 0) {
+        currentVehicleId = selectedVehicles[0];
+        updateVehicleDisplay();
+    } else {
+        showDefaultValues();
+    }
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    previousVehicleIcon.disabled = currentVehicleId === 1 || totalVehicles <= 1;
+    nextVehicleIcon.disabled = currentVehicleId === totalVehicles || totalVehicles <= 1;
+}
+
+export function updateVehicleData(data) {
+    vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
+    latitudeInput.textContent = data.latitude || 'NA';
+    longitudeInput.textContent = data.longitude || 'NA';
+    dateInput.textContent = data.date ? new Date(data.date).toISOString().split('T')[0] : 'NA';
+    timeInput.textContent = data.time || 'NA';
+    updateGauges(data);
+    updateNavigationButtons();
+}
+
+function updateVehicleDisplay() {
+    const vehicleData = vehiclePaths[`vehicle${currentVehicleId}`];
+    if (vehicleData) {
+        updateVehicleData(vehicleData);
+    }
+}
+
+function showDefaultValues() {
+    vehicleName.textContent = 'Vehicle NA';
+    latitudeInput.textContent = 'NA';
+    longitudeInput.textContent = 'NA';
+    dateInput.textContent = 'NA';
+    timeInput.textContent = 'NA';
+    updateGauges({ vel: 0, fuel: 0, rpm: 0 });
 }
 
 function updateSpeedGauge(value) {
     speedValueElement.textContent = value;
-    const speed = parseInt(speedValueElement.textContent, 10);
-    const limitedSpeed = Math.min(Math.max(speed, 0), 180);
+    const limitedSpeed = Math.min(Math.max(parseInt(value, 10), 0), 180);
     const angle = (limitedSpeed / 180) * 180;
 
     gaugeContainer.style.background = `conic-gradient(
@@ -101,9 +122,4 @@ export function updateGauges(data) {
     updateSpeedGauge(data.vel);
     updateFuelGauge(data.fuel);
     updateRPMGauge(data.rpm);
-}
-
-export function setCurrentVehicleId(vehicleId) {
-    currentVehicleId = vehicleId;
-    updateVehicleDisplay();
 }
