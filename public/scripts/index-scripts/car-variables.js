@@ -20,6 +20,11 @@ const timeInput = document.getElementById('timeInput');
 const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
 const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
+export function selectVehicles() {
+    vehicle1Checkbox.checked = true;
+    vehicle2Checkbox.checked = true;
+}
+
 export function manageCarDataVisibility() {
     hiderPosition.addEventListener("click", function() {
         carDataVisible = !carDataVisible;
