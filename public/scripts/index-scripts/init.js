@@ -44,11 +44,15 @@ function initMap() {
     loadLastLocation(1);
     loadLastLocation(2);
 
-    setInterval(() => {
-        fetchLatestData(1);
-        fetchLatestData(2);
-    }, 100); 
+    fetchAllVehicleData();
 }
+
+function fetchAllVehicleData() {
+    Promise.all([fetchLatestData(1), fetchLatestData(2)])
+        .then(() => setTimeout(fetchAllVehicleData, 100))
+        .catch(error => console.error('Error fetching vehicle data:', error));
+}
+
 
 function toggleVehicleVisibility(vehicleId, visible) {
     if (vehiclePaths[vehicleId]) {
