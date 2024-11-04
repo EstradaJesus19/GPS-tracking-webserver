@@ -2,24 +2,39 @@ import { clearMap } from './clear-options.js';
 import { map, markers, polylines } from './init.js';
 import { disableCarVariables } from './car-variables.js';
 
-// Define variables
+// Definir variables
 export let startTime = null;
 export let endTime = null;
-let paths = [];
-
+let paths = {};
 
 const startInput = document.getElementById('startDateTime');
 const endInput = document.getElementById('endDateTime');
 const timeFilterBtn = document.getElementById('timeFilterBtn');
 const pathSelectorContainer = document.getElementById('pathSelector');
 const positionControl = document.getElementById('positionControl');
+const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
+const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
-//Time filtring
-export function timeFiltering(){
+// Colores para las polilíneas de cada vehículo
+const polylineColors = {
+    1: '#6309CE',
+    2: '#a80aa8'
+};
+
+// Actualizar la selección de vehículos
+function updateVehicleSelectionForHistory() {
+    const selectedVehicles = [];
+    if (vehicle1Checkbox.checked) selectedVehicles.push(1);
+    if (vehicle2Checkbox.checked) selectedVehicles.push(2);
+    return selectedVehicles;
+}
+
+// Filtrado temporal de rutas históricas
+export function timeFiltering() {
     timeFilterBtn.addEventListener('click', function (e) {
         e.preventDefault();
 
-        // Message if time frame not selected
+        // Mensaje si no se selecciona el marco temporal
         if (!startInput.value || !endInput.value) {
             Swal.fire({
                 text: 'Please set a time frame',
@@ -36,137 +51,151 @@ export function timeFiltering(){
         }
 
         clearMap();
-        paths = [];
+        paths = {};
         disableCarVariables();
-
 
         pathSelectorContainer.style.display = 'none';
         positionControl.style.display = 'block';
 
-
         startTime = convertToDatabaseFormat(startInput.value);
         endTime = convertToDatabaseFormat(endInput.value);
 
-        // Request time filtered data to server
-        fetch(`/api/filterDataByTime?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
-            .then(response => response.json())
-            .then(data => {
-                
-                // Process data and update map
-                if (data.length > 0) {
-                    const bounds = new google.maps.LatLngBounds();
-                    let currentPath = [];
-                    let previousTime = null;
-                    let lastPoint = null;
-                    let startTimePath = null;
-                    let endTimePath = null;
+        // Obtener vehículos seleccionados
+        const selectedVehicles = updateVehicleSelectionForHistory();
+        const bounds = new google.maps.LatLngBounds();
 
-                    // Separate data in paths
-                    data.forEach(point => {
-                        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+        // Solicitar datos filtrados por vehículo y por tiempo
+        selectedVehicles.forEach(vehicleId => {
+            fetch(`/api/filterDataByTime?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        let currentPath = [];
+                        let previousTime = null;
+                        let lastPoint = null;
+                        let startTimePath = null;
+                        let endTimePath = null;
 
-                        const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
-                        const currentTime = new Date(currentTimeString);
+                        // Separar datos en trayectorias
+                        data.forEach(point => {
+                            const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                            const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
+                            const currentTime = new Date(currentTimeString);
 
-                        // Inicialize comparation variables
-                        let timeDifference = 0;
-                        let distance = 0;
+                            let timeDifference = 0;
+                            let distance = 0;
 
-                        if (previousTime) {
-                            timeDifference = (currentTime - previousTime) / 1000; 
-                        }
-
-                        if (lastPoint) {
-                            distance = google.maps.geometry.spherical.computeDistanceBetween(
-                                new google.maps.LatLng(lastPoint.lat, lastPoint.lng),
-                                new google.maps.LatLng(latLng.lat, latLng.lng)
-                            );
-                        }
-
-                        // Crate new path if time differences > 60 or distance > 1000
-                        if (timeDifference > 60 || distance > 1000) {
-                            if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                            if (previousTime) {
+                                timeDifference = (currentTime - previousTime) / 1000;
                             }
-                            currentPath = [];
-                        }
 
-                        if (!currentPath.length) {
-                            startTimePath = currentTime; 
-                        }
+                            if (lastPoint) {
+                                distance = google.maps.geometry.spherical.computeDistanceBetween(
+                                    new google.maps.LatLng(lastPoint.lat, lastPoint.lng),
+                                    new google.maps.LatLng(latLng.lat, latLng.lng)
+                                );
+                            }
 
-                        endTimePath = currentTime; 
-                        previousTime = currentTime; 
-                        currentPath.push(latLng); 
-                        bounds.extend(latLng); 
-                        lastPoint = latLng;         
-                    });
+                            // Crear nueva trayectoria si la diferencia de tiempo > 60 segundos o la distancia > 1000 metros
+                            if (timeDifference > 60 || distance > 1000) {
+                                if (currentPath.length > 0) {
+                                    if (!paths[vehicleId]) paths[vehicleId] = [];
+                                    paths[vehicleId].push({ path: currentPath, startTimePath, endTimePath });
+                                }
+                                currentPath = [];
+                            }
 
-                    // Add data to paths
-                    if (currentPath.length > 0) {
-                        paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
-                    }
+                            if (!currentPath.length) {
+                                startTimePath = currentTime;
+                            }
 
-                    // Print polylines
-                    paths.forEach((path, index) => {
-                        const polyline = new google.maps.Polyline({
-                            path: paths[index].path,
-                            strokeColor: '#6309CE',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 5,
-                            icons: [{
-                                icon: {
-                                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                                    scale: 3,
-                                    strokeColor: '#6309CE',
-                                    strokeWeight: 2,
-                                    fillColor: '#6309CE',
-                                    fillOpacity: 1.0,
-                                },
-                                offset: '100%',
-                                repeat: '100px'
-                            }]
+                            endTimePath = currentTime;
+                            previousTime = currentTime;
+                            currentPath.push(latLng);
+                            bounds.extend(latLng);
+                            lastPoint = latLng;
                         });
 
-                        polyline.setMap(map);
-                        polylines.push(polyline);
+                        if (currentPath.length > 0) {
+                            if (!paths[vehicleId]) paths[vehicleId] = [];
+                            paths[vehicleId].push({ path: currentPath, startTimePath, endTimePath });
+                        }
 
-                        markers.push(new google.maps.Marker({
-                            position: paths[index].path[0], 
-                            map: map,
-                            icon: {
-                                path: google.maps.SymbolPath.CIRCLE,
-                                scale: 5,
-                                fillColor: "#C3AAff",
-                                fillOpacity: 1,
-                                strokeWeight: 2,
-                                strokeColor: "#6309CE"
-                            },
-                            title: `Start of Path ${index + 1}`
-                        }));
+                        // Dibujar polilíneas
+                        paths[vehicleId].forEach((vehiclePath, index) => {
+                            const polyline = new google.maps.Polyline({
+                                path: vehiclePath.path,
+                                strokeColor: polylineColors[vehicleId] || '#000000',
+                                strokeOpacity: 1.0,
+                                strokeWeight: 5,
+                                icons: [{
+                                    icon: {
+                                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                        scale: 3,
+                                        strokeColor: polylineColors[vehicleId] || '#000000',
+                                        strokeWeight: 2,
+                                        fillColor: polylineColors[vehicleId] || '#000000',
+                                        fillOpacity: 1.0,
+                                    },
+                                    offset: '100%',
+                                    repeat: '100px'
+                                }]
+                            });
 
-                        markers.push(new google.maps.Marker({
-                            position: paths[index].path[path.length - 1], 
-                            map: map,
-                            icon: {
-                                path: google.maps.SymbolPath.CIRCLE,
-                                scale: 5,
-                                fillColor: "#C3AAff",
-                                fillOpacity: 1,
-                                strokeWeight: 2,
-                                strokeColor: "#6309CE"
-                            },
-                            title: `End of Path ${index + 1}`
-                        }));
-                    });
+                            polyline.setMap(map);
+                            polylines.push(polyline);
 
-                    map.fitBounds(bounds);
+                            markers.push(new google.maps.Marker({
+                                position: vehiclePath.path[0],
+                                map: map,
+                                icon: {
+                                    path: google.maps.SymbolPath.CIRCLE,
+                                    scale: 5,
+                                    fillColor: "#C3AAff",
+                                    fillOpacity: 1,
+                                    strokeWeight: 2,
+                                    strokeColor: polylineColors[vehicleId] || '#000000'
+                                },
+                                title: `Start of Path ${index + 1} for Vehicle ${vehicleId}`
+                            }));
 
-                } else {
-                    // Print warning if no data was found
+                            markers.push(new google.maps.Marker({
+                                position: vehiclePath.path[vehiclePath.path.length - 1],
+                                map: map,
+                                icon: {
+                                    path: google.maps.SymbolPath.CIRCLE,
+                                    scale: 5,
+                                    fillColor: "#C3AAff",
+                                    fillOpacity: 1,
+                                    strokeWeight: 2,
+                                    strokeColor: polylineColors[vehicleId] || '#000000'
+                                },
+                                title: `End of Path ${index + 1} for Vehicle ${vehicleId}`
+                            }));
+                        });
+
+                        map.fitBounds(bounds);
+                    } else {
+                        // Advertencia si no se encuentran datos
+                        Swal.fire({
+                            text: `No data found for Vehicle ${vehicleId} in the specified time frame.`,
+                            icon: 'info',
+                            iconColor: '#6309CE',
+                            confirmButtonText: 'Accept',
+                            confirmButtonColor: '#6309CE',
+                            customClass: {
+                                popup: 'swal2-custom-font',
+                                icon: 'swal2-icon-info-custom'
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error getting filtered data for Vehicle ' + vehicleId + ':', error);
+                    clearMap();
                     Swal.fire({
-                        text: 'No data found in the specified time frame.',
-                        icon: 'info',
+                        text: 'Error getting filtered data: ' + error,
+                        icon: 'error',
                         iconColor: '#6309CE',
                         confirmButtonText: 'Accept',
                         confirmButtonColor: '#6309CE',
@@ -175,29 +204,12 @@ export function timeFiltering(){
                             icon: 'swal2-icon-info-custom'
                         }
                     });
-                }
-            })
-            .catch(error => {
-                clearMap();
-                
-                // Print warning if error filtering data
-                Swal.fire({
-                    text: 'Error getting filtered data: ' + error,
-                    icon: 'error',
-                    iconColor: '#6309CE',
-                    confirmButtonText: 'Accept',
-                    confirmButtonColor: '#6309CE',
-                    customClass: {
-                        popup: 'swal2-custom-font',
-                        icon: 'swal2-icon-info-custom'
-                    }
                 });
-                console.error('Error getting filtered data: ', error);
-            });
+        });
     });
 }
 
-// Convert date and time into database format
+// Convertir fecha y hora al formato de base de datos
 function convertToDatabaseFormat(dateTimeStr) {
     const [day, month, yearTime] = dateTimeStr.split('-');
     const [year, time] = yearTime.split(' ');

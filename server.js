@@ -124,7 +124,7 @@ app.get('/api/getOwner', (req, res) => {
 });
 
 // Get all data from database
-app.get('/api/getDataForVehicle/:vehicleId', (req, res) => {
+app.get('/api/getRealTimeData/:vehicleId', (req, res) => {
     const tableName = process.env.db_table;
     const vehicleId = req.params.vehicleId;
 
@@ -144,7 +144,7 @@ app.get('/api/filterDataByTime', (req, res) => {
     const { startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
 
-    const query = `SELECT latitude, longitude, date, time
+    const query = `SELECT vehicle_id, latitude, longitude, date, time
         FROM ?? 
         WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?
     `;
@@ -167,7 +167,7 @@ app.get('/api/filterDataByPosition', (req, res) => {
     const tableName = process.env.db_table;
 
     const query = `
-        SELECT latitude, longitude, date, time, vel, rpm, fuel 
+        SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel 
         FROM ?? 
         WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;

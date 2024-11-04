@@ -14,7 +14,7 @@ const urls = {
 };
 
 export function loadLastLocation(vehicleId) {
-    fetch(`/api/getDataForVehicle/${vehicleId}`)
+    fetch(`/api/getRealTimeData/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
@@ -53,7 +53,7 @@ export function loadLastLocation(vehicleId) {
 }
 
 export function fetchLatestData(vehicleId) {
-    fetch(`/api/getDataForVehicle/${vehicleId}`)
+    fetch(`/api/getRealTimeData/${vehicleId}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
