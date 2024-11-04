@@ -78,6 +78,8 @@ export function timeFiltering() {
 
                         // Separar datos en trayectorias
                         data.forEach(point => {
+                            if (point.vehicle_id !== vehicleId) return;  // Ignorar datos que no coincidan con el vehicle_id
+
                             const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                             const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
                             const currentTime = new Date(currentTimeString);
