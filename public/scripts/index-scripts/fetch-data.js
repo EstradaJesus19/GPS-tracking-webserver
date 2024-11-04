@@ -1,5 +1,5 @@
 import { map } from './init.js';
-import { updateFuelGauge, updateSpeedGauge, updateRPMGauge } from './car-variables.js';
+import { updateFuelGauge, updateSpeedGauge, updateRPMGauge, updateVehicleData  } from './car-variables.js';
 
 export const vehiclePaths = {};
 
@@ -7,11 +7,6 @@ const polylineColors = {
     1: '#6309CE',
     2: '#c3aaff'
 };
-
-const latitudeText = document.getElementById('latitude');
-const longitudeText = document.getElementById('longitude');
-const dateText = document.getElementById('date');
-const timeText = document.getElementById('time');
 
 export function loadLastLocation(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
@@ -30,23 +25,29 @@ export function loadLastLocation(vehicleId) {
 
                 vehiclePaths[vehicleId].path.push(initialPosition);
 
+                if (vehicleId === 1) {
+                    polylineColor = '#6309CE';
+                } else if (vehicleId === 2) {
+                    polylineColor = '#c3aaff';
+                }
+
                 if (!vehiclePaths[vehicleId].polyline) {
                     vehiclePaths[vehicleId].polyline = new google.maps.Polyline({
-                        strokeColor: polylineColors[vehicleId] || '#000000', // Color predeterminado si no está definido
+                        strokeColor: polylineColor,
                         strokeOpacity: 1.0,
                         strokeWeight: 5,
                         map: map
                     });
                 }
 
-                updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
+                updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                 updateGauges(latestData);
+                updateVehicleData(latestData); // Nueva llamada
             }
         })
         .catch(error => console.error('Error fetching data:', error));
 }
 
-// Fetch de los datos más recientes para un vehículo específico
 export function fetchLatestData(vehicleId) {
     fetch(`/api/getDataForVehicle/${vehicleId}`)
         .then(response => response.json())
@@ -65,8 +66,9 @@ export function fetchLatestData(vehicleId) {
 
                     vehiclePaths[vehicleId].path.push(position);
                     updatePolyline(vehicleId);
-                    updateMarkerAndInfo(vehicleId, latestData.latitude, latestData.longitude, latestData);
+                    updateMarkerAndInfo(latestData.latitude, latestData.longitude, latestData);
                     updateGauges(latestData);
+                    updateVehicleData(latestData); // Nueva llamada
                 }
             }
         })
@@ -108,16 +110,4 @@ function updateMarkerAndInfo(vehicleId, lat, lng, data) {
             icon: icon
         });
     }
-
-    // Centrar el mapa en el nuevo marcador
-    // map.setCenter(position);
-
-    const date = new Date(data.date);
-    const formattedDate = date.toISOString().split('T')[0];
-
-    // Actualizar información en el DOM
-    // latitudeText.textContent = data.latitude;
-    // longitudeText.textContent = data.longitude;
-    // dateText.textContent = formattedDate;
-    // timeText.textContent = data.time;
 }
