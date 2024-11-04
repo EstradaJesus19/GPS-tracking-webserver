@@ -36,13 +36,7 @@ export function loadLastLocation() {
 
 // Fetch latest data from database
 export function fetchLatestData() {
-    const vehicle1Checked = document.getElementById('vehicle1').checked;
-    const vehicle2Checked = document.getElementById('vehicle2').checked;
-
-    const params = new URLSearchParams();
-    if (vehicle1Checked) params.append('vehicle', '1');
-
-    fetch(`/api/getAllData?${params.toString()}`)
+    fetch('/api/getAllData')
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {

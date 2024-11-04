@@ -88,11 +88,9 @@ function initMap() {
 }
 
 export function mainProcess(){
-    document.addEventListener('DOMContentLoaded', () => {
-        getServerOwner();
-        getApiKey();
-        initVehicleDataContainer();
-    });
+    getServerOwner();
+    getApiKey();
+    initVehicleDataContainer();
 }
 
 window.initMap = initMap;
