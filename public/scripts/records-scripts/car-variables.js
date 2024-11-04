@@ -10,7 +10,6 @@ const fuelContainer = document.getElementById("fuelContainer");
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
-    updateVehicleSelection();
 }
 
 export function manageCarDataVisibility() {
