@@ -128,7 +128,7 @@ app.get('/api/getAllData', (req, res) => {
     const tableName = process.env.db_table;
     
 
-    db.query('SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
+    db.query('SELECT latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
