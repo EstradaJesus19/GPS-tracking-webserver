@@ -297,6 +297,21 @@ main {
     font-size: 16px;
 }
 
+#vehiclePathSelector {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-size: 1em;
+    height: 25px;
+}
+
+#vehiclePathSelector:hover,
+#vehiclePathSelector:focus {
+    box-shadow: 0 0 12px rgba(83, 10, 168, 0.4);
+    border-color: #530aa8;
+}
+
 #pathButtons {
     max-height: none; 
     max-width: 205px;
@@ -368,7 +383,7 @@ main {
     width: 180px;
     padding: 10px;
     border-radius: 10px;
-    display: block;
+    display: none;
     justify-content: center;
     text-align: center;
     background-color: white;
