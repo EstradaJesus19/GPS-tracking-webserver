@@ -1,7 +1,8 @@
 import { fetchLatestData, loadLastLocation, vehiclePaths } from './fetch-data.js';
-import { manageCarDataVisibility, selectVehicles } from './car-variables.js';
+import { manageCarDataVisibility, selectVehicles, handleVehicleChange } from './car-variables.js';
 
 export let map;
+let fetchIntervalId;
 
 const mapElement = document.getElementById('map');
 const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
@@ -44,10 +45,18 @@ function initMap() {
     loadLastLocation(1);
     loadLastLocation(2);
 
-    setInterval(() => {
+    startFetchingData();
+}
+
+export function startFetchingData() {
+    fetchIntervalId = setInterval(() => {
         fetchLatestData(1);
         fetchLatestData(2);
-    }, 100); 
+    }, 100);
+}
+
+export function stopFetchingData() {
+    clearInterval(fetchIntervalId);
 }
 
 function toggleVehicleVisibility(vehicleId, visible) {
@@ -74,7 +83,7 @@ export function mainProcess() {
     getApiKey();
     document.addEventListener("DOMContentLoaded", () => {
         selectVehicles();
-        manageCarDataVisibility(); 
+        manageCarDataVisibility();
     });
 }
 
