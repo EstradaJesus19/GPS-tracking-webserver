@@ -70,9 +70,9 @@ vehicle2Checkbox.addEventListener('change', (event) => {
 });
 
 export function mainProcess() {
-    getServerOwner();
-    getApiKey();
     document.addEventListener("DOMContentLoaded", () => {
+        getServerOwner();
+        getApiKey();
         selectVehicles();
         manageCarDataVisibility(); 
     });
