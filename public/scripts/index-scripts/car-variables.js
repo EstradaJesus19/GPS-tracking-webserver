@@ -75,7 +75,9 @@ export function updateVehicleData(data) {
     vehicleName.textContent = `Vehicle ${data.vehicleId}`;
     latitudeInput.textContent = data.latitude || 'NA';
     longitudeInput.textContent = data.longitude || 'NA';
-    dateInput.textContent = data.date || 'NA';
+    const date = new Date(data.date);
+    const formattedDate = date.toISOString().split('T')[0];
+    dateInput.textContent = formattedDate || 'NA';
     timeInput.textContent = data.time || 'NA';
     updateNavigationButtons();
 }
