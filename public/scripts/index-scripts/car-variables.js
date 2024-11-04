@@ -1,4 +1,4 @@
-import { vehiclePaths, fetchLatestData } from './fetch-data.js';
+import { vehiclePaths, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
 export let currentVehicleId = 1;
@@ -36,16 +36,14 @@ export function manageCarDataVisibility() {
     previousVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId > 1) {
             currentVehicleId--;
-            fetchLatestData(currentVehicleId);
-            updateVehicleDisplay();
+            loadLastLocation(currentVehicleId);
         }
     });
 
     nextVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
-            fetchLatestData(currentVehicleId);
-            updateVehicleDisplay();
+            loadLastLocation(currentVehicleId);
         }
     });
 
