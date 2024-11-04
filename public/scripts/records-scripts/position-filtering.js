@@ -23,47 +23,53 @@ const hiderPosition = document.getElementById('hiderPosition');
 const infoBox = document.getElementById('infoBox');
 const hiderContainerPosition = document.getElementById('hiderContainerPosition');
 
-export function positionFiltering(){
-    toggleSwitch.addEventListener("click", function() {
+// Colores para las polilíneas de cada vehículo
+const polylineColors = {
+    1: '#6309CE',
+    2: '#a80aa8'
+};
+
+// Obtener vehículos seleccionados
+function updateVehicleSelectionForPosition() {
+    const selectedVehicles = [];
+    if (document.getElementById('vehicle1Checkbox').checked) selectedVehicles.push(1);
+    if (document.getElementById('vehicle2Checkbox').checked) selectedVehicles.push(2);
+    return selectedVehicles;
+}
+
+export function positionFiltering() {
+    toggleSwitch.addEventListener("click", function () {
         if (positionFilteringAction) {
             positionFilteringAction = !positionFilteringAction;
             positionOptions.classList.remove("visible");
-            
             hiderContainerPosition.classList.remove("visible");
-            setTimeout(function() {
+            setTimeout(function () {
                 hiderContainerPosition.style.display = 'none';
                 hiderPosition.classList.add("collapsed");
             }, 200);
 
             disableCarVariables();
-
             disableMapClick();
             clearMap();
-
             timeFilterBtn.click();
         } else {
             positionOptions.classList.add("visible");
             positionFilteringAction = !positionFilteringAction;
             positionOptionsVisible = true;
-
             hiderContainerPosition.classList.add("visible");
-            setTimeout(function() {
+            setTimeout(function () {
                 hiderContainerPosition.style.display = 'block';
             }, 200);
-            
-            
             enableMapClick();
 
             infoBox.style.display = "block";
             infoBox.style.opacity = 1;
-
-            setTimeout(function() {
+            setTimeout(function () {
                 infoBox.style.opacity = 0;
             }, 2000);
-
-            setTimeout(function() {
-                infoBox.style.display = "none"; 
-            }, 3000); 
+            setTimeout(function () {
+                infoBox.style.display = "none";
+            }, 3000);
         }
     });
 
@@ -74,31 +80,22 @@ export function positionFiltering(){
         }
     });
 
-    // Link radius input with map circle
     radiusInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             if (circle) {
-                if (radiusInput.value <=500){
+                if (radiusInput.value <= 500) {
                     radiusInput.value = 500;
                 }
                 radius = parseFloat(radiusInput.value);
                 circle.setRadius(radius);
             }
-            
         }
     });
 
-    hiderPosition.addEventListener("click", function() {
-        if (positionOptionsVisible) {
-            positionOptionsVisible = !positionOptionsVisible;
-            positionOptions.classList.remove("visible");
-            hiderPosition.classList.remove("collapsed");
-            
-        } else {
-            positionOptionsVisible = !positionOptionsVisible;
-            positionOptions.classList.add("visible");
-            hiderPosition.classList.add("collapsed");
-        }
+    hiderPosition.addEventListener("click", function () {
+        positionOptionsVisible = !positionOptionsVisible;
+        positionOptions.classList.toggle("visible");
+        hiderPosition.classList.toggle("collapsed");
     });
 
     pathContainerHider();
@@ -157,40 +154,22 @@ function drawCircle(position, radius, isEditable) {
             longitudeInput.textContent = selectedPosition.lng().toFixed(4);
         });
 
-        document.addEventListener('mouseup', function() {
-            isMouseDown = false;
-        });
-    
-        document.addEventListener('mousedown', function() {
-            isMouseDown = true;
-        });
+        document.addEventListener('mouseup', () => isMouseDown = false);
+        document.addEventListener('mousedown', () => isMouseDown = true);
 
         google.maps.event.addListener(circle, 'center_changed', function () {
-            if  (!isMouseDown){
+            if (!isMouseDown) {
                 selectedPosition = circle.getCenter();
                 filterByPosition(radius, selectedPosition, startTime, endTime);
                 latitudeInput.textContent = selectedPosition.lat().toFixed(4);
                 longitudeInput.textContent = selectedPosition.lng().toFixed(4);
             }
         });
-    } else{
-        google.maps.event.addListener(circle, 'radius_changed', function () {
-            radius = Math.round(circle.getRadius());
-            filterByPosition(radius, selectedPosition, startTime, endTime);
-            radiusInput.value = radius;
-        });
-
-        google.maps.event.addListener(circle, 'mouseup', function () {
-            selectedPosition = circle.getCenter();
-            filterByPosition(radius, selectedPosition, startTime, endTime);
-            latitudeInput.textContent = selectedPosition.lat().toFixed(4);
-            longitudeInput.textContent = selectedPosition.lng().toFixed(4);
-        });
     }
 }
 
-function filterByPosition(radius, selectedPosition, startTime, endTime){
-    // Print warning if position or radius aren't selected
+// Filtrar datos por posición y vehículo
+function filterByPosition(radius, selectedPosition, startTime, endTime) {
     if (!selectedPosition || !radius) {
         Swal.fire({
             text: 'Please set a location and define a radius',
@@ -212,68 +191,80 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
         radius: radius
     };
 
-    // Request position filtered data to server
-    fetch(`/api/filterDataByPosition?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length > 0) {
-                const bounds = new google.maps.LatLngBounds();
-                let paths = []; 
-                let currentPath = []; 
-                let currentMetadata = [];
-                let previousTime = null; 
-                let startTimePath = null;
-                let endTimePath = null;
+    const selectedVehicles = updateVehicleSelectionForPosition();
+    const bounds = new google.maps.LatLngBounds();
 
-                // Check received data
-                data.forEach((point, index) => {
-                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+    selectedVehicles.forEach(vehicleId => {
+        fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    let paths = [];
+                    let currentPath = [];
+                    let previousTime = null;
+                    let startTimePath = null;
+                    let endTimePath = null;
 
-                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`; 
-                    const currentTime = new Date(currentTimeString);
-                    
-                    // Compare time between data
-                    if (previousTime) {
-                        const timeDifference = (currentTime - previousTime) / 1000; 
+                    data.forEach(point => {
+                        if (point.vehicle_id !== vehicleId) return;
 
-                        if (timeDifference > 60) {
-                            if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
+                        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                        const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
+                        const currentTime = new Date(currentTimeString);
+
+                        if (previousTime) {
+                            const timeDifference = (currentTime - previousTime) / 1000;
+                            if (timeDifference > 60) {
+                                if (currentPath.length > 0) {
+                                    paths.push({ path: currentPath, startTimePath, endTimePath });
+                                }
+                                currentPath = [];
                             }
-                            currentPath = []; 
-                            currentMetadata = [];
                         }
+
+                        if (!currentPath.length) startTimePath = currentTime;
+                        endTimePath = currentTime;
+                        currentPath.push(latLng);
+                        bounds.extend(latLng);
+                        previousTime = currentTime;
+                    });
+
+                    if (currentPath.length > 0) {
+                        paths.push({ path: currentPath, startTimePath, endTimePath });
                     }
 
-                    if (!currentPath.length) {
-                        startTimePath = currentTime; 
-                    }
-                    endTimePath = currentTime; 
-                    currentPath.push(latLng); 
-                    currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}`);
-                    bounds.extend(latLng); 
-                    previousTime = currentTime; 
-                });
+                    paths.forEach((vehiclePath, index) => {
+                        const polyline = new google.maps.Polyline({
+                            path: vehiclePath.path,
+                            strokeColor: polylineColors[vehicleId] || '#000000',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 5,
+                        });
 
-                if (currentPath.length > 0) {
-                    paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
+                        polyline.setMap(map);
+                    });
+
+                    map.fitBounds(bounds);
+                } else {
+                    Swal.fire({
+                        text: `No data found for Vehicle ${vehicleId} in the specified area.`,
+                        icon: 'info',
+                        iconColor: '#6309CE',
+                        confirmButtonText: 'Accept',
+                        confirmButtonColor: '#6309CE',
+                        customClass: {
+                            popup: 'swal2-custom-font',
+                            icon: 'swal2-icon-info-custom'
+                        }
+                    });
                 }
-                
-                // Create windows for path selecting
-                createPathSelector(paths);
-                selectPath(0, paths);
-                usedPaths = paths;
-
-            } else {
-                usedPaths.length = 0;
-                clearPolylines();
-                clearMarkers();
-                createPathSelector(usedPaths);
-
-                // Print warning that no data was found
+            })
+            .catch(error => {
+                console.error('Error fetching filtered data: ', error);
+                clearMap();
                 Swal.fire({
-                    text: 'No data found in the specified area.',
-                    icon: 'info',
+                    text: 'Error fetching filtered data: ' + error,
+                    icon: 'error',
                     iconColor: '#6309CE',
                     confirmButtonText: 'Accept',
                     confirmButtonColor: '#6309CE',
@@ -282,24 +273,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime){
                         icon: 'swal2-icon-info-custom'
                     }
                 });
-            }
-        })
-        .catch(error => {
-            clearPolylines();
-            clearMarkers();
-
-            // Print warning if error filtering data
-            Swal.fire({
-                text: 'Error fetching filtered data: ' + error,
-                icon: 'error',
-                iconColor: '#6309CE',
-                confirmButtonText: 'Accept',
-                confirmButtonColor: '#6309CE',
-                customClass: {
-                    popup: 'swal2-custom-font',
-                    icon: 'swal2-icon-info-custom'
-                }
             });
-            console.error('Error fetching filtered data: ', error);
-        });
+    });
 }
