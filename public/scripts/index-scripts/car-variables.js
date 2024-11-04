@@ -1,7 +1,7 @@
 import { vehiclePaths } from './fetch-data.js';
 
 let carDataVisible = true;
-let currentVehicleId = 1;
+export let currentVehicleId = 1;
 let totalVehicles = 0;
 
 const speedValueElement = document.getElementById("speedValue");
