@@ -1,5 +1,5 @@
 import { fetchLatestData, loadLastLocation } from './fetch-data.js';
-import { toggleStreetView } from './street-view.js';
+// import { toggleStreetView } from './street-view.js';
 import { initVehicleDataContainer, manageCarDataVisibility } from './car-variables.js';
 
 // Define variables 
@@ -66,23 +66,23 @@ function initMap() {
     polyline.setMap(map);
 
     // Update street view data
-    panorama = new google.maps.StreetViewPanorama(mapElement, {
-        position: { lat: 10.98, lng: -74.81 },
-        pov: { heading: 165, pitch: 0 },
-        zoom: 1,
-        visible: false,
-        fullscreenControl: false
-    });
+    // panorama = new google.maps.StreetViewPanorama(mapElement, {
+    //     position: { lat: 10.98, lng: -74.81 },
+    //     pov: { heading: 165, pitch: 0 },
+    //     zoom: 1,
+    //     visible: false,
+    //     fullscreenControl: false
+    // });
 
-    map.setStreetView(panorama);
+    // map.setStreetView(panorama);
 
-    streetViewButton.addEventListener('click', toggleStreetView);
+    // streetViewButton.addEventListener('click', toggleStreetView);
 
     loadLastLocation();
 
     // Enable street view button
-    streetViewButton.style.display = 'block';
-    streetViewButton.disabled = false;
+    // streetViewButton.style.display = 'block';
+    // streetViewButton.disabled = false;
 
     setInterval(fetchLatestData, 50);
 }
