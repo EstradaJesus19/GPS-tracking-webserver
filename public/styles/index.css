@@ -89,7 +89,7 @@ main {
     position: absolute;
     width: 150px;
     top: 15px;
-    right: 15px;
+    left: 15px;
     z-index: 3;
 }
 
@@ -277,7 +277,7 @@ main {
     position: absolute;
     z-index: 3;
     top: 10px;
-    right: 10px;
+    left: 10px;
     width: 180px;
     padding: 10px;
     border-radius: 10px;
