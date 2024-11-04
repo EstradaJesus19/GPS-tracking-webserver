@@ -97,7 +97,7 @@ function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
 }
 
-function updateGauges(data) {
+export function updateGauges(data) {
     updateSpeedGauge(data.vel);
     updateFuelGauge(data.fuel);
     updateRPMGauge(data.rpm);
