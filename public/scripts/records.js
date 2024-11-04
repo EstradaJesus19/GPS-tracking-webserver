@@ -17,3 +17,7 @@ positionFiltering();
 
 //Car variables
 manageCarDataVisibility();
+
+document.addEventListener("DOMContentLoaded", () => {
+    selectVehicles();
+});
