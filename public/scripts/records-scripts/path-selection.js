@@ -23,7 +23,6 @@ const playPoint = document.getElementById('playPoint');
 const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
-const vehiclePathSelector = document.getElementById('vehiclePathSelector');
 
 const polylineColors = {
     "1": "#6309CE",
@@ -51,16 +50,6 @@ export function pathContainerHider() {
         pathOptionsVisible ? showPathContainer() : hidePathContainer();
     });
 }
-
-// Evento para actualizar el path selector según el vehículo seleccionado
-vehiclePathSelector.addEventListener('change', () => {
-    const selectedVehicle = vehiclePathSelector.value; // Obtén el vehículo seleccionado (1, 2, etc.)
-    const vehiclePaths = usedPaths.filter(path => path.vehicleId === selectedVehicle); // Filtra rutas por vehículo
-
-    createPathSelector(vehiclePaths); // Muestra solo las rutas del vehículo seleccionado
-    currentPathIndex = 0; // Reinicia el índice de la ruta
-    currentPointIndex = 0; // Reinicia el índice del punto
-});
 
 // Create path selector
 export function createPathSelector(paths) {
