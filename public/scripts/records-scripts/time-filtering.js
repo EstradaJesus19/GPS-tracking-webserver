@@ -65,7 +65,7 @@ export function timeFiltering() {
                     let startTimePath = null;
                     let endTimePath = null;
 
-                    console.log('Test');
+                    console.log('data');
 
                     // Separar datos en trayectorias
                     data.forEach(point => {
