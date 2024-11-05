@@ -280,7 +280,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 if (requestsCompleted === selectedVehicles.length) {
                     if (allPaths.length > 0) {
                         usedPaths = allPaths;
-                        // console.log(usedPaths);
+                        console.log(usedPaths);
                         createPathSelector(usedPaths); // Llama a createPathSelector una vez que todos los datos están listos
                         selectPath(0, usedPaths); // Selecciona el primer path al inicio
                     } else {
