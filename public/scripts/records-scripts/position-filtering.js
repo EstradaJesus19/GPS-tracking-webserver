@@ -255,6 +255,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                     }
                 });
             }
+            console.log(usedPaths);
             createPathSelector(usedPaths);
             selectPath(0, usedPaths);
         })
