@@ -255,8 +255,9 @@ main {
     margin-right: 20px;
     margin-top: 10px;
     cursor: pointer;
-    color: #585858;
+    color: #505050;
     font-size: 1.1em;
+    width: 150px;
 }
 
 #vehicleSelector:focus {
