@@ -233,6 +233,10 @@ main {
 }
 
 /*Time inputs and filter button*/
+#timeFilterForm {
+    margin-bottom: 20px;
+}
+
 .timeInputs{
     display: flex;
     flex-direction: row;
