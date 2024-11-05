@@ -107,6 +107,8 @@ export function timeFiltering() {
                         lastPoint = latLng;
                     });
 
+                    console.log(currentPath);
+
                     if (currentPath.length > 0) {
                         if (!paths[selectedVehicle]) paths[selectedVehicle] = [];
                         paths[selectedVehicle].push({ path: currentPath, startTimePath, endTimePath });
