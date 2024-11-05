@@ -250,14 +250,14 @@ main {
     border: 1px solid #cccccc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
-    font-size: 1em;
-    height: 36px;
+    padding: 10px;
     margin-right: 20px;
     margin-top: 10px;
     cursor: pointer;
     color: #505050;
-    font-size: 1.05em;
+    font-size: 1.1em;
     width: 150px;
+    outline: none;
 }
 
 #vehicleSelector:focus {
