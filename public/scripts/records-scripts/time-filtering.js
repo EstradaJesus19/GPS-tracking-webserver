@@ -52,7 +52,6 @@ export function timeFiltering() {
         endTime = convertToDatabaseFormat(endInput.value);
 
         const selectedVehicle = vehicleSelector.value;
-        console.log(selectedVehicle);
         const bounds = new google.maps.LatLngBounds();
 
         // Solicitar datos filtrados por vehículo y por tiempo
@@ -60,6 +59,8 @@ export function timeFiltering() {
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
+                    
+                    console.log(data);
                     let currentPath = [];
                     let previousTime = null;
                     let lastPoint = null;
