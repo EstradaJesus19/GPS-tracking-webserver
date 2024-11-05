@@ -212,13 +212,16 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
     };
 
     const selectedVehicles = updateVehicleSelectionForPosition();
+    let allPaths = []; // Array para recolectar todos los paths de los vehículos
+    let requestsCompleted = 0; // Contador para verificar que se completaron todas las solicitudes
 
     selectedVehicles.forEach(vehicleId => {
         fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
             .then(response => response.json())
             .then(data => {
+                requestsCompleted++; // Incrementa el contador cuando cada fetch termina
+
                 if (data.length > 0) {
-                    const bounds = new google.maps.LatLngBounds();
                     let paths = [];
                     let currentPath = [];
                     let currentMetadata = [];
@@ -230,7 +233,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         if (point.vehicle_id !== vehicleId) return;
 
                         const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-
                         const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
                         const currentTime = new Date(currentTimeString);
 
@@ -250,22 +252,17 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         endTimePath = currentTime;
                         currentPath.push(latLng);
                         currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}|${point.vehicle_id}`);
-                        bounds.extend(latLng);
                         previousTime = currentTime;
                     });
 
                     if (currentPath.length > 0) {
-                        paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
+                        paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                     }
 
-                    usedPaths = paths;
+                    // Agregar paths de este vehículo al array general
+                    allPaths = allPaths.concat(paths);
 
                 } else {
-                    usedPaths.length = 0;
-                    clearPolylines();
-                    clearMarkers();
-                    createPathSelector(usedPaths);
-                    
                     Swal.fire({
                         text: `No data found for Vehicle ${vehicleId} in the specified area.`,
                         icon: 'info',
@@ -277,6 +274,20 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                             icon: 'swal2-icon-info-custom'
                         }
                     });
+                }
+
+                // Verifica si todas las solicitudes han sido completadas
+                if (requestsCompleted === selectedVehicles.length) {
+                    if (allPaths.length > 0) {
+                        usedPaths = allPaths;
+                        createPathSelector(usedPaths); // Llama a createPathSelector una vez que todos los datos están listos
+                        selectPath(0, usedPaths); // Selecciona el primer path al inicio
+                    } else {
+                        usedPaths.length = 0;
+                        clearPolylines();
+                        clearMarkers();
+                        createPathSelector(usedPaths); // Muestra el selector vacío si no hay paths
+                    }
                 }
             })
             .catch(error => {
@@ -295,9 +306,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 });
                 console.error('Error fetching filtered data: ', error);
             });
-
-        createPathSelector(usedPaths);
-        selectPath(0, usedPaths);
     });
 }
+
 
