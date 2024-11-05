@@ -196,6 +196,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
         radius: radius
     };
 
+    usedPaths = [];
     const selectedVehicle = vehicleSelector.value;
 
     fetch(`/api/filterDataByPosition?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
