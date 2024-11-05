@@ -114,7 +114,7 @@ export function timeFiltering() {
 
                     // Dibujar polilíneas
                     const polyline = new google.maps.Polyline({
-                        path: vehiclePath.path,
+                        path: currentPath,
                         strokeColor: polylineColors[selectedVehicle] || '#000000',
                         strokeOpacity: 1.0,
                         strokeWeight: 5,
