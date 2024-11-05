@@ -69,6 +69,9 @@ export function timeFiltering() {
                     data.forEach(point => {
                         if (point.vehicle_id !== selectedVehicle) return;  // Ignorar datos que no coincidan con el vehicle_id
 
+                        
+                        console.log(point);
+
                         const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                         const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
                         const currentTime = new Date(currentTimeString);
@@ -105,8 +108,6 @@ export function timeFiltering() {
                         currentPath.push(latLng);
                         bounds.extend(latLng);
                         lastPoint = latLng;
-
-                        console.log(currentPath);
                         
                     });
 
