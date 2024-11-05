@@ -54,7 +54,10 @@ export function pathContainerHider() {
 
 vehiclePathSelector.addEventListener('change', () => {
     const selectedVehicle = vehiclePathSelector.value; 
-    const vehiclePaths = usedPaths.filter(metadata => metadata.vehicle_id === selectedVehicle); 
+    const vehiclePaths = usedPaths.filter(path => {
+        const metadataVehicleId = path.metadata[0].split('|')[4];
+        return metadataVehicleId === selectedVehicle;
+    });
     console.log(vehiclePaths);
     createPathSelector(vehiclePaths); 
     selectPath(0, vehiclePaths);
