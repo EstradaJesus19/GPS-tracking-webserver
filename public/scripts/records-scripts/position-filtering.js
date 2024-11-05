@@ -259,21 +259,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                     }
                 });
             }
-
-            // Verifica si todas las solicitudes han sido completadas
-            if (requestsCompleted === selectedVehicles.length) {
-                if (allPaths.length > 0) {
-                    usedPaths = allPaths;
-                    console.log(usedPaths);
-                    createPathSelector(usedPaths); // Llama a createPathSelector una vez que todos los datos están listos
-                    selectPath(0, usedPaths); // Selecciona el primer path al inicio
-                } else {
-                    usedPaths.length = 0;
-                    clearPolylines();
-                    clearMarkers();
-                    createPathSelector(usedPaths); // Muestra el selector vacío si no hay paths
-                }
-            }
         })
         .catch(error => {
             clearPolylines();
