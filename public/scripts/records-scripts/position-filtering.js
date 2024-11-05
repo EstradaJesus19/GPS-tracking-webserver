@@ -196,6 +196,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
         radius: radius
     };
 
+    console.log(position);
+
     const selectedVehicle = vehicleSelector.value;
     let allPaths = []; // Array para recolectar todos los paths de los vehículos
 
