@@ -23,7 +23,7 @@ const playPoint = document.getElementById('playPoint');
 const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
-const vehiclePathSelector = document.getElementById('vehiclePathSelector');
+const vehicleSelector = document.getElementById('vehicleSelector');
 
 const polylineColors = {
     "1": "#6309CE",
@@ -139,7 +139,7 @@ export function selectPath(index, paths) {
 
     updatePointData(paths);
 
-    const selectedVehicle = vehiclePathSelector.value;
+    const selectedVehicle = vehicleSelector.value;
     const vehicleColor = polylineColors[selectedVehicle] || '#6309CE';
 
     const polyline = new google.maps.Polyline({
@@ -299,7 +299,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 function updateMarkerPosition(latLng) {
-    const selectedVehicle = vehiclePathSelector.value;
+    const selectedVehicle = vehicleSelector.value;
     const icon = {
         url: urls[selectedVehicle],
         scaledSize: new google.maps.Size(40, 40),
