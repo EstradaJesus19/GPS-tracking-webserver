@@ -201,8 +201,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
     fetch(`/api/filterDataByPosition?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-            requestsCompleted++; // Incrementa el contador cuando cada fetch termina
-
             if (data.length > 0) {
                 let paths = [];
                 let currentPath = [];
