@@ -259,10 +259,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath }); 
                     }
 
-                    // Create windows for path selecting
-                    createPathSelector(paths);
-                    
-                    console.log(paths);
                     selectPath(0, paths);
                     usedPaths = paths;
 
@@ -301,6 +297,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 });
                 console.error('Error fetching filtered data: ', error);
             });
+
+            createPathSelector(paths);
     });
 }
 
