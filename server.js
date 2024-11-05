@@ -141,15 +141,17 @@ app.get('/api/getRealTimeData/:vehicleId', (req, res) => {
 
 // Time filtering query
 app.get('/api/filterDataByTime', (req, res) => {
-    const { startTime, endTime } = req.query; 
+    const { vehicleId, startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
 
-    const query = `SELECT vehicle_id, latitude, longitude, date, time
+    const query = `
+        SELECT vehicle_id, latitude, longitude, date, time
         FROM ?? 
-        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?
+        WHERE vehicle_id = ? 
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ?
     `;
 
-    db.query(query, [tableName, startTime, endTime],
+    db.query(query, [tableName, vehicleId, startTime, endTime],
         (err, results) => {
             if (err) {
                 console.error('Error fetching filtered data:', err);
