@@ -4,7 +4,6 @@ import { circle } from "./position-filtering.js";
 
 // Clear map
 export function clearMap() {
-    console.log('Clearing maps');
     clearCircles();
     clearMarkers();
     clearPolylines();
