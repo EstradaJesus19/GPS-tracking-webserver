@@ -136,7 +136,7 @@ export function timeFiltering() {
                     polylines.push(polyline);
 
                     markers.push(new google.maps.Marker({
-                        position: vehiclePath.path[0],
+                        position: currentPath[0],
                         map: map,
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
@@ -150,7 +150,7 @@ export function timeFiltering() {
                     }));
 
                     markers.push(new google.maps.Marker({
-                        position: vehiclePath.path[vehiclePath.path.length - 1],
+                        position: currentPath[currentPathlength - 1],
                         map: map,
                         icon: {
                             path: google.maps.SymbolPath.CIRCLE,
