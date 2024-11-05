@@ -52,19 +52,6 @@ export function pathContainerHider() {
     });
 }
 
-vehiclePathSelector.addEventListener('change', () => {
-    const selectedVehicle = vehiclePathSelector.value; 
-    const vehiclePaths = usedPaths.filter(path => {
-        const metadataVehicleId = path.metadata[0].split('|')[4];
-        return metadataVehicleId === selectedVehicle;
-    });
-    console.log(vehiclePaths);
-    createPathSelector(vehiclePaths); 
-    selectPath(0, vehiclePaths);
-    currentPathIndex = 0; 
-    currentPointIndex = 0; 
-});
-
 // Create path selector
 export function createPathSelector(paths) {
     pathButtonsContainer.innerHTML = ''; 

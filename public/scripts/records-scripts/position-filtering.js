@@ -22,22 +22,7 @@ const positionOptions = document.getElementById('positionOptions');
 const hiderPosition = document.getElementById('hiderPosition');
 const infoBox = document.getElementById('infoBox');
 const hiderContainerPosition = document.getElementById('hiderContainerPosition');
-const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
-const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
-
-// Colores para las polilíneas de cada vehículo
-const polylineColors = {
-    1: '#6309CE',
-    2: '#a80aa8'
-};
-
-// Obtener vehículos seleccionados
-function updateVehicleSelectionForPosition() {
-    const selectedVehicles = [];
-    if (vehicle1Checkbox.checked) selectedVehicles.push(1);
-    if (vehicle2Checkbox.checked) selectedVehicles.push(2);
-    return selectedVehicles;
-}
+const vehicleSelector = document.getElementById('vehicleSelector');
 
 export function positionFiltering() {
     toggleSwitch.addEventListener("click", function () {
@@ -211,92 +196,60 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
         radius: radius
     };
 
-    const selectedVehicles = updateVehicleSelectionForPosition();
+    const selectedVehicle = vehicleSelector.value;
     let allPaths = []; // Array para recolectar todos los paths de los vehículos
     let requestsCompleted = 0; // Contador para verificar que se completaron todas las solicitudes
 
-    selectedVehicles.forEach(vehicleId => {
-        fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
-            .then(response => response.json())
-            .then(data => {
-                requestsCompleted++; // Incrementa el contador cuando cada fetch termina
+    fetch(`/api/filterDataByPosition?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
+        .then(response => response.json())
+        .then(data => {
+            requestsCompleted++; // Incrementa el contador cuando cada fetch termina
 
-                if (data.length > 0) {
-                    let paths = [];
-                    let currentPath = [];
-                    let currentMetadata = [];
-                    let previousTime = null;
-                    let startTimePath = null;
-                    let endTimePath = null;
+            if (data.length > 0) {
+                let paths = [];
+                let currentPath = [];
+                let currentMetadata = [];
+                let previousTime = null;
+                let startTimePath = null;
+                let endTimePath = null;
 
-                    data.forEach(point => {
-                        if (point.vehicle_id !== vehicleId) return;
+                data.forEach(point => {
+                    if (point.vehicle_id !== selectedVehicle) return;
 
-                        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
-                        const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
-                        const currentTime = new Date(currentTimeString);
+                    const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                    const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
+                    const currentTime = new Date(currentTimeString);
 
-                        if (previousTime) {
-                            const timeDifference = (currentTime - previousTime) / 1000;
-                            if (timeDifference > 60) {
-                                if (currentPath.length > 0) {
-                                    paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
-                                }
-                                currentPath = []; 
-                                currentMetadata = [];
+                    if (previousTime) {
+                        const timeDifference = (currentTime - previousTime) / 1000;
+                        if (timeDifference > 60) {
+                            if (currentPath.length > 0) {
+                                paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                             }
+                            currentPath = []; 
+                            currentMetadata = [];
                         }
-
-                        if (!currentPath.length) startTimePath = currentTime;
-
-                        endTimePath = currentTime;
-                        currentPath.push(latLng);
-                        currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}|${point.vehicle_id}`);
-                        previousTime = currentTime;
-                    });
-
-                    if (currentPath.length > 0) {
-                        paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                     }
 
-                    // Agregar paths de este vehículo al array general
-                    allPaths = allPaths.concat(paths);
+                    if (!currentPath.length) startTimePath = currentTime;
 
-                } else {
-                    Swal.fire({
-                        text: `No data found for Vehicle ${vehicleId} in the specified area.`,
-                        icon: 'info',
-                        iconColor: '#6309CE',
-                        confirmButtonText: 'Accept',
-                        confirmButtonColor: '#6309CE',
-                        customClass: {
-                            popup: 'swal2-custom-font',
-                            icon: 'swal2-icon-info-custom'
-                        }
-                    });
+                    endTimePath = currentTime;
+                    currentPath.push(latLng);
+                    currentMetadata.push(`${point.date.split('T')[0]}T${point.time}|${point.vel}|${point.rpm}|${point.fuel}|${point.vehicle_id}`);
+                    previousTime = currentTime;
+                });
+
+                if (currentPath.length > 0) {
+                    paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                 }
 
-                // Verifica si todas las solicitudes han sido completadas
-                if (requestsCompleted === selectedVehicles.length) {
-                    if (allPaths.length > 0) {
-                        usedPaths = allPaths;
-                        console.log(usedPaths);
-                        createPathSelector(usedPaths); // Llama a createPathSelector una vez que todos los datos están listos
-                        selectPath(0, usedPaths); // Selecciona el primer path al inicio
-                    } else {
-                        usedPaths.length = 0;
-                        clearPolylines();
-                        clearMarkers();
-                        createPathSelector(usedPaths); // Muestra el selector vacío si no hay paths
-                    }
-                }
-            })
-            .catch(error => {
-                clearPolylines();
-                clearMarkers();
+                // Agregar paths de este vehículo al array general
+                allPaths = allPaths.concat(paths);
+
+            } else {
                 Swal.fire({
-                    text: 'Error fetching filtered data: ' + error,
-                    icon: 'error',
+                    text: `No data found for Vehicle ${selectedVehicle} in the specified area.`,
+                    icon: 'info',
                     iconColor: '#6309CE',
                     confirmButtonText: 'Accept',
                     confirmButtonColor: '#6309CE',
@@ -305,9 +258,39 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                         icon: 'swal2-icon-info-custom'
                     }
                 });
-                console.error('Error fetching filtered data: ', error);
+            }
+
+            // Verifica si todas las solicitudes han sido completadas
+            if (requestsCompleted === selectedVehicles.length) {
+                if (allPaths.length > 0) {
+                    usedPaths = allPaths;
+                    console.log(usedPaths);
+                    createPathSelector(usedPaths); // Llama a createPathSelector una vez que todos los datos están listos
+                    selectPath(0, usedPaths); // Selecciona el primer path al inicio
+                } else {
+                    usedPaths.length = 0;
+                    clearPolylines();
+                    clearMarkers();
+                    createPathSelector(usedPaths); // Muestra el selector vacío si no hay paths
+                }
+            }
+        })
+        .catch(error => {
+            clearPolylines();
+            clearMarkers();
+            Swal.fire({
+                text: 'Error fetching filtered data: ' + error,
+                icon: 'error',
+                iconColor: '#6309CE',
+                confirmButtonText: 'Accept',
+                confirmButtonColor: '#6309CE',
+                customClass: {
+                    popup: 'swal2-custom-font',
+                    icon: 'swal2-icon-info-custom'
+                }
             });
-    });
+            console.error('Error fetching filtered data: ', error);
+        });
 }
 
 

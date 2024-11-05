@@ -20,7 +20,7 @@
     </header>
     <main>
         <div class="contentCard">
-            <div class="vehicleSelector">
+            <!-- <div class="vehicleSelector">
                 <button class="vehicleDropdown">
                     Select vehicles
                     <img src="media/arrow-right.svg" class="dropdownIcon" alt="Toggle Arrow">
@@ -29,11 +29,18 @@
                     <label><input type="checkbox" id="vehicle1Checkbox"> Vehicle 1</label>
                     <label><input type="checkbox" id="vehicle2Checkbox"> Vehicle 2</label>
                 </div>
-            </div>
+            </div> -->
             <div class="filterContainer">
                 <form id="timeFilterForm">
                     <h2>Filter historical data</h2>
                     <div class="timeInputs">
+                        <div id="vehicleDataSelector" class="pointDataContainer">
+                            <label for="vehiclePathSelector">Vehicle:</label>
+                            <select name="vehiclePathSelector" id="vehiclePathSelector">
+                                <option value="1">Vehicle 1</option>
+                                <option value="2">Vehicle 2</option>
+                            </select>
+                        </div>
                         <div id="startTimeInput">
                             <label for="startDateTime">From:</label>
                             <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
@@ -107,13 +114,6 @@
                         <div id="radiusContainer" class="positionDataContainer">
                             <label for="radiusInput">Radius:</label>
                             <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
-                        </div>
-                        <div id="vehicleDataSelector" class="pointDataContainer">
-                            <label for="vehiclePathSelector">Vehicle:</label>
-                            <select name="vehiclePathSelector" id="vehiclePathSelector">
-                                <option value="1">Vehicle 1</option>
-                                <option value="2">Vehicle 2</option>
-                            </select>
                         </div>
                     </div>
                     <div class="hiderContainers" id="hiderContainerPosition">
