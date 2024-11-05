@@ -59,8 +59,6 @@ export function timeFiltering() {
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
-                    
-                    console.log(data);
                     let currentPath = [];
                     let previousTime = null;
                     let lastPoint = null;
@@ -107,6 +105,9 @@ export function timeFiltering() {
                         currentPath.push(latLng);
                         bounds.extend(latLng);
                         lastPoint = latLng;
+
+                        console.log(currentPath);
+                        
                     });
 
                     console.log(currentPath);
