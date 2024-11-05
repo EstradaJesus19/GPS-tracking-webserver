@@ -21,6 +21,9 @@ const polylineColors = {
     2: '#a80aa8'
 };
 
+vehicle1Checkbox.addEventListener('change', timeFiltering);
+vehicle2Checkbox.addEventListener('change', timeFiltering);
+
 // Actualizar la selección de vehículos
 function updateVehicleSelectionForHistory() {
     const selectedVehicles = [];
