@@ -165,14 +165,14 @@ app.get('/api/filterDataByTime', (req, res) => {
 
 // Position filtering query
 app.get('/api/filterDataByPosition', (req, res) => {
-    const { vehicleId,startTime, endTime, latitude, longitude, radius } = req.query;
+    const { vehicleId, startTime, endTime, latitude, longitude, radius } = req.query;
     const tableName = process.env.db_table;
 
     const query = `
         SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel 
         FROM ?? 
-        WHERE vehicle_id = ? 
-        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
+        WHERE vehicle_id = ?
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
     `;
 
