@@ -214,7 +214,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 let endTimePath = null;
 
                 data.forEach(point => {
-                    if (point.vehicle_id !== selectedVehicle) return;
+                    if (point.vehicle_id != selectedVehicle) return;
 
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                     const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
