@@ -213,6 +213,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
 
     const selectedVehicles = updateVehicleSelectionForPosition();
 
+    console.log(selectedVehicles);
+
     selectedVehicles.forEach(vehicleId => {
         fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
             .then(response => response.json())
