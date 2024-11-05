@@ -112,6 +112,8 @@ export function timeFiltering() {
                         paths[selectedVehicle].push({ path: currentPath, startTimePath, endTimePath });
                     }
 
+                    console.log(paths);
+
                     // Dibujar polilíneas
                     paths[selectedVehicle].forEach((vehiclePath, index) => {
                         const polyline = new google.maps.Polyline({
