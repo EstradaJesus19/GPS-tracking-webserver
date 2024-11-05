@@ -198,12 +198,10 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
 
     const selectedVehicle = vehicleSelector.value;
     let allPaths = []; // Array para recolectar todos los paths de los vehículos
-    let requestsCompleted = 0; // Contador para verificar que se completaron todas las solicitudes
 
     fetch(`/api/filterDataByPosition?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
-            requestsCompleted++; // Incrementa el contador cuando cada fetch termina
 
             if (data.length > 0) {
                 let paths = [];
