@@ -23,6 +23,7 @@ const playPoint = document.getElementById('playPoint');
 const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
+const vehiclePathSelector = document.getElementById('vehiclePathSelector');
 
 const polylineColors = {
     "1": "#6309CE",
@@ -50,6 +51,15 @@ export function pathContainerHider() {
         pathOptionsVisible ? showPathContainer() : hidePathContainer();
     });
 }
+
+vehiclePathSelector.addEventListener('change', () => {
+    const selectedVehicle = vehiclePathSelector.value; 
+    const vehiclePaths = usedPaths.filter(path => path.vehicleId === selectedVehicle); 
+
+    createPathSelector(vehiclePaths); 
+    currentPathIndex = 0; 
+    currentPointIndex = 0; 
+});
 
 // Create path selector
 export function createPathSelector(paths) {

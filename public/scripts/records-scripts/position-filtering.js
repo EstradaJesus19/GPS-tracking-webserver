@@ -24,7 +24,6 @@ const infoBox = document.getElementById('infoBox');
 const hiderContainerPosition = document.getElementById('hiderContainerPosition');
 const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
 const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
-const vehiclePathSelector = document.getElementById('vehiclePathSelector');
 
 // Colores para las polilíneas de cada vehículo
 const polylineColors = {
@@ -302,11 +301,3 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
     });
 }
 
-vehiclePathSelector.addEventListener('change', () => {
-    const selectedVehicle = vehiclePathSelector.value; 
-    const vehiclePaths = usedPaths.filter(path => path.vehicleId === selectedVehicle); 
-
-    createPathSelector(vehiclePaths); 
-    currentPathIndex = 0; 
-    currentPointIndex = 0; 
-});
