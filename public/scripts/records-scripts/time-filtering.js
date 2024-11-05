@@ -65,6 +65,8 @@ export function timeFiltering() {
                     let startTimePath = null;
                     let endTimePath = null;
 
+                    console.log('Test');
+
                     // Separar datos en trayectorias
                     data.forEach(point => {
                         if (point.vehicle_id !== selectedVehicle) return;  // Ignorar datos que no coincidan con el vehicle_id
