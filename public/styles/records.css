@@ -250,6 +250,7 @@ main {
     border: 1px solid #cccccc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
+    padding: 5px;
     margin-right: 20px;
     margin-top: 10px;
     cursor: pointer;
