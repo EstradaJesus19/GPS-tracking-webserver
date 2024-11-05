@@ -213,13 +213,14 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
 
     const selectedVehicles = updateVehicleSelectionForPosition();
 
+    let paths = [];
+
     selectedVehicles.forEach(vehicleId => {
         fetch(`/api/filterDataByPosition?vehicleId=${vehicleId}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {
                     const bounds = new google.maps.LatLngBounds();
-                    let paths = [];
                     let currentPath = [];
                     let currentMetadata = [];
                     let previousTime = null;
