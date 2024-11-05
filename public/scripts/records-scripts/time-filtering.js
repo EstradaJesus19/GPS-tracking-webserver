@@ -113,55 +113,57 @@ export function timeFiltering() {
                     }
 
                     // Dibujar polilíneas
-                    const polyline = new google.maps.Polyline({
-                        path: currentPath,
-                        strokeColor: polylineColors[selectedVehicle] || '#000000',
-                        strokeOpacity: 1.0,
-                        strokeWeight: 5,
-                        icons: [{
+                    paths[selectedVehicle].forEach((vehiclePath, index) => {
+                        const polyline = new google.maps.Polyline({
+                            path: vehiclePath.path,
+                            strokeColor: polylineColors[selectedVehicle] || '#000000',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 5,
+                            icons: [{
+                                icon: {
+                                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                                    scale: 3,
+                                    strokeColor: polylineColors[selectedVehicle] || '#000000',
+                                    strokeWeight: 2,
+                                    fillColor: polylineColors[selectedVehicle] || '#000000',
+                                    fillOpacity: 1.0,
+                                },
+                                offset: '100%',
+                                repeat: '100px'
+                            }]
+                        });
+
+                        polyline.setMap(map);
+                        polylines.push(polyline);
+
+                        markers.push(new google.maps.Marker({
+                            position: vehiclePath.path[0],
+                            map: map,
                             icon: {
-                                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                                scale: 3,
-                                strokeColor: polylineColors[selectedVehicle] || '#000000',
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 5,
+                                fillColor: "#C3AAff",
+                                fillOpacity: 1,
                                 strokeWeight: 2,
-                                fillColor: polylineColors[selectedVehicle] || '#000000',
-                                fillOpacity: 1.0,
+                                strokeColor: polylineColors[selectedVehicle] || '#000000'
                             },
-                            offset: '100%',
-                            repeat: '100px'
-                        }]
+                            title: `Start of Path ${index + 1} for Vehicle ${selectedVehicle}`
+                        }));
+
+                        markers.push(new google.maps.Marker({
+                            position: vehiclePath.path[vehiclePath.path.length - 1],
+                            map: map,
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                scale: 5,
+                                fillColor: "#C3AAff",
+                                fillOpacity: 1,
+                                strokeWeight: 2,
+                                strokeColor: polylineColors[selectedVehicle] || '#000000'
+                            },
+                            title: `End of Path ${index + 1} for Vehicle ${selectedVehicle}`
+                        }));
                     });
-
-                    polyline.setMap(map);
-                    polylines.push(polyline);
-
-                    markers.push(new google.maps.Marker({
-                        position: currentPath[0],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: polylineColors[selectedVehicle] || '#000000'
-                        },
-                        title: `Start of Path ${index + 1} for Vehicle ${selectedVehicle}`
-                    }));
-
-                    markers.push(new google.maps.Marker({
-                        position: currentPath[currentPathlength - 1],
-                        map: map,
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 5,
-                            fillColor: "#C3AAff",
-                            fillOpacity: 1,
-                            strokeWeight: 2,
-                            strokeColor: polylineColors[selectedVehicle] || '#000000'
-                        },
-                        title: `End of Path ${index + 1} for Vehicle ${selectedVehicle}`
-                    }));
 
                     map.fitBounds(bounds);
                 } else {
