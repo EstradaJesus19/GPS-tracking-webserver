@@ -209,6 +209,9 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 let startTimePath = null;
                 let endTimePath = null;
 
+                
+                console.log(data);
+
                 data.forEach(point => {
                     if (point.vehicle_id !== selectedVehicle) return;
 
@@ -239,7 +242,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                     paths.push({ path: currentPath, metadata: currentMetadata, startTimePath: startTimePath, endTimePath: endTimePath });
                 }
 
-                // Agregar paths de este vehículo al array general
                 usedPaths = usedPaths.concat(paths);
 
             } else {
@@ -255,7 +257,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                     }
                 });
             }
-            console.log(usedPaths);
             createPathSelector(usedPaths);
             selectPath(0, usedPaths);
         })
