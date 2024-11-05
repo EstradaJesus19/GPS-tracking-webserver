@@ -110,14 +110,10 @@ export function timeFiltering() {
                         
                     });
 
-                    console.log(currentPath);
-
                     if (currentPath.length > 0) {
                         if (!paths[selectedVehicle]) paths[selectedVehicle] = [];
                         paths[selectedVehicle].push({ path: currentPath, startTimePath, endTimePath });
                     }
-
-                    console.log(paths);
 
                     // Dibujar polilíneas
                     paths[selectedVehicle].forEach((vehiclePath, index) => {
