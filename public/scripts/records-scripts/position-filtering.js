@@ -197,11 +197,11 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
     };
 
     const selectedVehicle = vehicleSelector.value;
-    let allPaths = []; // Array para recolectar todos los paths de los vehículos
 
     fetch(`/api/filterDataByPosition?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}&latitude=${position.latitude}&longitude=${position.longitude}&radius=${position.radius}`)
         .then(response => response.json())
         .then(data => {
+            requestsCompleted++; // Incrementa el contador cuando cada fetch termina
 
             if (data.length > 0) {
                 let paths = [];
@@ -211,10 +211,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 let startTimePath = null;
                 let endTimePath = null;
 
-                console.log(data);
-
                 data.forEach(point => {
-                    if (point.vehicle_id != selectedVehicle) return;
+                    if (point.vehicle_id !== selectedVehicle) return;
 
                     const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                     const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
@@ -244,7 +242,7 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 }
 
                 // Agregar paths de este vehículo al array general
-                allPaths = allPaths.concat(paths);
+                usedPaths = usedPaths.concat(paths);
 
             } else {
                 Swal.fire({
@@ -259,6 +257,8 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                     }
                 });
             }
+            createPathSelector(usedPaths);
+            selectPath(0, usedPaths);
         })
         .catch(error => {
             clearPolylines();
