@@ -64,12 +64,12 @@ export function timeFiltering() {
                     let lastPoint = null;
                     let startTimePath = null;
                     let endTimePath = null;
-
-                    console.log('');
+                    
+                    console.log(data);
 
                     // Separar datos en trayectorias
                     data.forEach(point => {
-                        // if (point.vehicle_id !== selectedVehicle) return;
+                        if (point.vehicle_id !== selectedVehicle) return;
 
                         const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                         const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
