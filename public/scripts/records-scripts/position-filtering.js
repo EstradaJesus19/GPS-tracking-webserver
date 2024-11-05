@@ -209,9 +209,6 @@ function filterByPosition(radius, selectedPosition, startTime, endTime) {
                 let startTimePath = null;
                 let endTimePath = null;
 
-                
-                console.log(data);
-
                 data.forEach(point => {
                     if (point.vehicle_id != selectedVehicle) return;
 
