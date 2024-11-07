@@ -23,6 +23,17 @@ const playPoint = document.getElementById('playPoint');
 const velocityPoint = document.getElementById('velocityPoint')
 const velocityDisplay = document.getElementById('velocity');
 const playOption = document.getElementById('play');
+const vehicleSelector = document.getElementById('vehicleSelector');
+
+const polylineColors = {
+    "1": "#6309CE",
+    "2": "#a80aa8"
+};
+
+const urls = {
+    1: 'media/marker1.svg',
+    2: 'media/marker2.svg'
+};
 
 function showPathContainer() {
     pathOptions.classList.add("visible");
@@ -36,13 +47,8 @@ function hidePathContainer() {
 
 export function pathContainerHider() {
     hiderPath.addEventListener("click", function() {
-        if (pathOptionsVisible) {
-            pathOptionsVisible = !pathOptionsVisible;
-            hidePathContainer();
-        } else {
-            pathOptionsVisible = !pathOptionsVisible;
-            showPathContainer();
-        }
+        pathOptionsVisible = !pathOptionsVisible;
+        pathOptionsVisible ? showPathContainer() : hidePathContainer();
     });
 }
 
@@ -133,18 +139,21 @@ export function selectPath(index, paths) {
 
     updatePointData(paths);
 
+    const selectedVehicle = vehicleSelector.value;
+    const vehicleColor = polylineColors[selectedVehicle] || '#6309CE';
+
     const polyline = new google.maps.Polyline({
         path: paths[index].path,
-        strokeColor: '#6309CE',
+        strokeColor: vehicleColor,
         strokeOpacity: 1.0,
         strokeWeight: 5,
         icons: [{
             icon: {
                 path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                 scale: 3,
-                strokeColor: '#6309CE',
+                strokeColor: vehicleColor,
                 strokeWeight: 2,
-                fillColor: '#6309CE',
+                fillColor: vehicleColor,
                 fillOpacity: 1.0,
             },
             offset: '100%',
@@ -164,7 +173,7 @@ export function selectPath(index, paths) {
             fillColor: "#C3AAff",
             fillOpacity: 1,
             strokeWeight: 2,
-            strokeColor: "#6309CE"
+            strokeColor: vehicleColor
         },
         title: `Start of path ${index + 1}`
     }));
@@ -178,7 +187,7 @@ export function selectPath(index, paths) {
             fillColor: "#C3AAff",
             fillOpacity: 1,
             strokeWeight: 2,
-            strokeColor: "#6309CE"
+            strokeColor: vehicleColor
         },
         title: `End of path ${index + 1}`
     }));
@@ -290,8 +299,9 @@ document.addEventListener('keydown', (event) => {
 });
 
 function updateMarkerPosition(latLng) {
+    const selectedVehicle = vehicleSelector.value;
     const icon = {
-        url: 'media/favicon.svg',
+        url: urls[selectedVehicle],
         scaledSize: new google.maps.Size(40, 40),
         anchor: new google.maps.Point(20, 35)
     };

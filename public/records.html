@@ -20,10 +20,27 @@
     </header>
     <main>
         <div class="contentCard">
+            <!-- <div class="vehicleSelector">
+                <button class="vehicleDropdown">
+                    Select vehicles
+                    <img src="media/arrow-right.svg" class="dropdownIcon" alt="Toggle Arrow">
+                </button>
+                <div class="dropdownContent">
+                    <label><input type="checkbox" id="vehicle1Checkbox"> Vehicle 1</label>
+                    <label><input type="checkbox" id="vehicle2Checkbox"> Vehicle 2</label>
+                </div>
+            </div> -->
             <div class="filterContainer">
                 <form id="timeFilterForm">
                     <h2>Filter historical data</h2>
                     <div class="timeInputs">
+                        <div id="vehicleDataSelector">
+                            <label for="vehicleSelector">Vehicle:</label>
+                            <select name="vehicleSelector" id="vehicleSelector">
+                                <option value="1">Vehicle 1</option>
+                                <option value="2">Vehicle 2</option>
+                            </select>
+                        </div>
                         <div id="startTimeInput">
                             <label for="startDateTime">From:</label>
                             <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
@@ -36,7 +53,6 @@
                             <button id="timeFilterBtn">Apply filter</button>
                         </div>
                     </div>
-                    
                 </form>
             </div>
             <div class="mapContainer">
@@ -106,31 +122,39 @@
                     </div>
                 </div>
                 <div id="infoBox" class="infoBox">Select area on map</div>
-                <div id="carVariables" class="carVariablesContainer">
-                    <div class="gaugeContainer">
-                        <div class="gaugeLine line1"></div>
-                        <div class="gaugeLine line2"></div>
-                        <div class="gaugeLine line3"></div>
-                        <div class="gaugeLine line4"></div>
-                        <div class="gauge"></div>
-                        <div class="gaugeVelocity">
-                            <span class="speedValue" id="speedValue">0</span>
-                            <span class="speedUnit">km/h</span>
-                        </div>
-                        <div class="gaugeRPM">
-                            <span class="rpmValue" id="rpmValue">0</span>
-                            <span class="rpmUnit">rpm</span>
-                        </div>
+                <div id="vehicleVariables" class="vehicleVariablesContainer">
+                    <div class="vehicleVariablesHeader">
+                        <button id="hiderVariables" class="collapsed">
+                            <img id="arrowIconVariables" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                        <h4 id="vehicleNameGauges">Vehicle info</h4>
                     </div>
-                    <div class="fuelGauge">
-                        <div class="fuelIndicators">
-                            <div class="fuelLevelText top">F</div>
-                            <div class="fuelIcon">
-                                <img src="media/fuel.svg" alt="Fuel icon">
+                    <div id="fuelVelContainer" class="visible">
+                        <div class="gaugeContainer">
+                            <div class="gaugeLine line1"></div>
+                            <div class="gaugeLine line2"></div>
+                            <div class="gaugeLine line3"></div>
+                            <div class="gaugeLine line4"></div>
+                            <div class="gauge"></div>
+                            <div class="gaugeVelocity">
+                                <span class="speedValue" id="speedValue">0</span>
+                                <span class="speedUnit">km/h</span>
                             </div>
-                            <div class="fuelLevelText bottom">E</div>
+                            <div class="gaugeRPM">
+                                <span class="rpmValue" id="rpmValue">0</span>
+                                <span class="rpmUnit">rpm</span>
+                            </div>
                         </div>
-                        <div class="fuelContainer" id="fuelContainer"></div>
+                        <div class="fuelGauge">
+                            <div class="fuelIndicators">
+                                <div class="fuelLevelText top">F</div>
+                                <div class="fuelIcon">
+                                    <img src="media/fuel.svg" alt="Fuel icon">
+                                </div>
+                                <div class="fuelLevelText bottom">E</div>
+                            </div>
+                            <div class="fuelContainer" id="fuelContainer"></div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,24 @@
-const carVariables = document.getElementById('carVariables');
+
+let carGaugesVisible = true;
+
+const vehicleVariables = document.getElementById('vehicleVariables');
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
 const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
+
+export function selectVehicles() {
+    vehicle1Checkbox.checked = true;
+    vehicle2Checkbox.checked = true;
+}
+
+export function manageCarDataVisibility() {
+    hiderVariables.addEventListener("click", function() {
+        carGaugesVisible = !carGaugesVisible;
+        fuelVelContainer.classList.toggle("visible", carGaugesVisible);
+        hiderVariables.classList.toggle("collapsed", carGaugesVisible);
+    });
+}
 
 export function updateSpeedGauge(value) {
     speedValueElement.textContent = value;
@@ -33,9 +49,9 @@ export function updateRPMGauge(value) {
 }
 
 export function enableCarVariables() {
-    carVariables.style.display = 'flex';
+    vehicleVariables.style.display = 'flex';
 }
 
 export function disableCarVariables() {
-    carVariables.style.display = 'none';
+    vehicleVariables.style.display = 'none';
 }

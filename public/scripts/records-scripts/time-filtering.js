@@ -2,24 +2,30 @@ import { clearMap } from './clear-options.js';
 import { map, markers, polylines } from './init.js';
 import { disableCarVariables } from './car-variables.js';
 
-// Define variables
+// Definir variables
 export let startTime = null;
 export let endTime = null;
-let paths = [];
-
+let paths = {};
 
 const startInput = document.getElementById('startDateTime');
 const endInput = document.getElementById('endDateTime');
 const timeFilterBtn = document.getElementById('timeFilterBtn');
 const pathSelectorContainer = document.getElementById('pathSelector');
 const positionControl = document.getElementById('positionControl');
+const vehicleSelector = document.getElementById('vehicleSelector');
 
-//Time filtring
-export function timeFiltering(){
+// Colores para las polilíneas de cada vehículo
+const polylineColors = {
+    1: '#6309CE',
+    2: '#a80aa8'
+};
+
+// Filtrado temporal de rutas históricas
+export function timeFiltering() {
     timeFilterBtn.addEventListener('click', function (e) {
         e.preventDefault();
 
-        // Message if time frame not selected
+        // Mensaje si no se selecciona el marco temporal
         if (!startInput.value || !endInput.value) {
             Swal.fire({
                 text: 'Please set a time frame',
@@ -36,44 +42,41 @@ export function timeFiltering(){
         }
 
         clearMap();
-        paths = [];
+        paths = {};
         disableCarVariables();
-
 
         pathSelectorContainer.style.display = 'none';
         positionControl.style.display = 'block';
 
-
         startTime = convertToDatabaseFormat(startInput.value);
         endTime = convertToDatabaseFormat(endInput.value);
 
-        // Request time filtered data to server
-        fetch(`/api/filterDataByTime?startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
+        const selectedVehicle = vehicleSelector.value;
+        const bounds = new google.maps.LatLngBounds();
+
+        // Solicitar datos filtrados por vehículo y por tiempo
+        fetch(`/api/filterDataByTime?vehicleId=${selectedVehicle}&startTime=${encodeURIComponent(startTime)}&endTime=${encodeURIComponent(endTime)}`)
             .then(response => response.json())
             .then(data => {
-                
-                // Process data and update map
                 if (data.length > 0) {
-                    const bounds = new google.maps.LatLngBounds();
                     let currentPath = [];
                     let previousTime = null;
                     let lastPoint = null;
                     let startTimePath = null;
                     let endTimePath = null;
 
-                    // Separate data in paths
                     data.forEach(point => {
-                        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
+                        if (point.vehicle_id != selectedVehicle) return;
 
+                        const latLng = { lat: parseFloat(point.latitude), lng: parseFloat(point.longitude) };
                         const currentTimeString = `${point.date.split('T')[0]}T${point.time}`;
                         const currentTime = new Date(currentTimeString);
 
-                        // Inicialize comparation variables
                         let timeDifference = 0;
                         let distance = 0;
 
                         if (previousTime) {
-                            timeDifference = (currentTime - previousTime) / 1000; 
+                            timeDifference = (currentTime - previousTime) / 1000;
                         }
 
                         if (lastPoint) {
@@ -83,44 +86,46 @@ export function timeFiltering(){
                             );
                         }
 
-                        // Crate new path if time differences > 60 or distance > 1000
+                        // Crear nueva trayectoria si la diferencia de tiempo > 60 segundos o la distancia > 1000 metros
                         if (timeDifference > 60 || distance > 1000) {
                             if (currentPath.length > 0) {
-                                paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                                if (!paths[selectedVehicle]) paths[selectedVehicle] = [];
+                                paths[selectedVehicle].push({ path: currentPath, startTimePath, endTimePath });
                             }
                             currentPath = [];
                         }
 
                         if (!currentPath.length) {
-                            startTimePath = currentTime; 
+                            startTimePath = currentTime;
                         }
 
-                        endTimePath = currentTime; 
-                        previousTime = currentTime; 
-                        currentPath.push(latLng); 
-                        bounds.extend(latLng); 
-                        lastPoint = latLng;         
+                        endTimePath = currentTime;
+                        previousTime = currentTime;
+                        currentPath.push(latLng);
+                        bounds.extend(latLng);
+                        lastPoint = latLng;
+                        
                     });
 
-                    // Add data to paths
                     if (currentPath.length > 0) {
-                        paths.push({ path: currentPath, startTimePath: startTimePath, endTimePath: endTimePath });
+                        if (!paths[selectedVehicle]) paths[selectedVehicle] = [];
+                        paths[selectedVehicle].push({ path: currentPath, startTimePath, endTimePath });
                     }
 
-                    // Print polylines
-                    paths.forEach((path, index) => {
+                    // Dibujar polilíneas
+                    paths[selectedVehicle].forEach((vehiclePath, index) => {
                         const polyline = new google.maps.Polyline({
-                            path: paths[index].path,
-                            strokeColor: '#6309CE',
+                            path: vehiclePath.path,
+                            strokeColor: polylineColors[selectedVehicle] || '#000000',
                             strokeOpacity: 1.0,
                             strokeWeight: 5,
                             icons: [{
                                 icon: {
                                     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
                                     scale: 3,
-                                    strokeColor: '#6309CE',
+                                    strokeColor: polylineColors[selectedVehicle] || '#000000',
                                     strokeWeight: 2,
-                                    fillColor: '#6309CE',
+                                    fillColor: polylineColors[selectedVehicle] || '#000000',
                                     fillOpacity: 1.0,
                                 },
                                 offset: '100%',
@@ -132,7 +137,7 @@ export function timeFiltering(){
                         polylines.push(polyline);
 
                         markers.push(new google.maps.Marker({
-                            position: paths[index].path[0], 
+                            position: vehiclePath.path[0],
                             map: map,
                             icon: {
                                 path: google.maps.SymbolPath.CIRCLE,
@@ -140,13 +145,13 @@ export function timeFiltering(){
                                 fillColor: "#C3AAff",
                                 fillOpacity: 1,
                                 strokeWeight: 2,
-                                strokeColor: "#6309CE"
+                                strokeColor: polylineColors[selectedVehicle] || '#000000'
                             },
-                            title: `Start of Path ${index + 1}`
+                            title: `Start of Path ${index + 1} for Vehicle ${selectedVehicle}`
                         }));
 
                         markers.push(new google.maps.Marker({
-                            position: paths[index].path[path.length - 1], 
+                            position: vehiclePath.path[vehiclePath.path.length - 1],
                             map: map,
                             icon: {
                                 path: google.maps.SymbolPath.CIRCLE,
@@ -154,18 +159,17 @@ export function timeFiltering(){
                                 fillColor: "#C3AAff",
                                 fillOpacity: 1,
                                 strokeWeight: 2,
-                                strokeColor: "#6309CE"
+                                strokeColor: polylineColors[selectedVehicle] || '#000000'
                             },
-                            title: `End of Path ${index + 1}`
+                            title: `End of Path ${index + 1} for Vehicle ${selectedVehicle}`
                         }));
                     });
 
                     map.fitBounds(bounds);
-
                 } else {
-                    // Print warning if no data was found
+                    // Advertencia si no se encuentran datos
                     Swal.fire({
-                        text: 'No data found in the specified time frame.',
+                        text: `No data found for Vehicle ${selectedVehicle} in the specified time frame.`,
                         icon: 'info',
                         iconColor: '#6309CE',
                         confirmButtonText: 'Accept',
@@ -178,9 +182,8 @@ export function timeFiltering(){
                 }
             })
             .catch(error => {
+                console.error('Error getting filtered data for Vehicle ' + selectedVehicle + ':', error);
                 clearMap();
-                
-                // Print warning if error filtering data
                 Swal.fire({
                     text: 'Error getting filtered data: ' + error,
                     icon: 'error',
@@ -192,12 +195,11 @@ export function timeFiltering(){
                         icon: 'swal2-icon-info-custom'
                     }
                 });
-                console.error('Error getting filtered data: ', error);
             });
     });
 }
 
-// Convert date and time into database format
+// Convertir fecha y hora al formato de base de datos
 function convertToDatabaseFormat(dateTimeStr) {
     const [day, month, yearTime] = dateTimeStr.split('-');
     const [year, time] = yearTime.split(' ');

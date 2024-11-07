@@ -16,7 +16,7 @@ require('dotenv').config();
 
 // Define data structure
 let data = {
-    id_autos: ' ',
+    vehicle_id: ' ',
     latitude: 'N/A',
     longitude: 'N/A',
     date: 'N/A',
@@ -69,7 +69,7 @@ udpServer.on('message', (msg) => {
 
     if (match) {
         data = {
-            id_autos: match[1] || ' ',
+            vehicle_id: match[1] || ' ',
             latitude: match[2] || 'N/A',
             longitude: match[3] || 'N/A',
             date: match[4] || 'N/A',
@@ -84,8 +84,8 @@ udpServer.on('message', (msg) => {
         // Insert received data into database
         if (process.env.server_owner === 'Orlando Arroyo') {
             db.query(
-                `INSERT INTO ?? (id_autos, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-                [tableName, data.id_autos, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
+                `INSERT INTO ?? (vehicle_id, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [tableName, data.vehicle_id, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
                 (err) => {
                     if (err) {
                         console.error('Error inserting into database:', err);
@@ -94,10 +94,7 @@ udpServer.on('message', (msg) => {
                     }
                 }
             );
-        } else {
-            console.log('Insertion skipped: server_owner does not match "Orlando Arroyo".');
         }
-
 
         // Send data through web socket
         wss.clients.forEach((client) => {
@@ -127,11 +124,11 @@ app.get('/api/getOwner', (req, res) => {
 });
 
 // Get all data from database
-app.get('/api/getAllData', (req, res) => {
+app.get('/api/getRealTimeData/:vehicleId', (req, res) => {
     const tableName = process.env.db_table;
-    
+    const vehicleId = req.params.vehicleId;
 
-    db.query('SELECT latitude, longitude, date, time, vel, rpm, fuel FROM ??', [tableName], (err, results) => {
+    db.query('SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ?? WHERE vehicle_id = ?', [tableName, vehicleId], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
@@ -141,17 +138,20 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+
 // Time filtering query
 app.get('/api/filterDataByTime', (req, res) => {
-    const { startTime, endTime } = req.query; 
+    const { vehicleId, startTime, endTime } = req.query; 
     const tableName = process.env.db_table;
 
-    const query = `SELECT latitude, longitude, date, time
+    const query = `
+        SELECT vehicle_id, latitude, longitude, date, time
         FROM ?? 
-        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ?
+        WHERE vehicle_id = ? 
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ?
     `;
 
-    db.query(query, [tableName, startTime, endTime],
+    db.query(query, [tableName, vehicleId, startTime, endTime],
         (err, results) => {
             if (err) {
                 console.error('Error fetching filtered data:', err);
@@ -165,17 +165,18 @@ app.get('/api/filterDataByTime', (req, res) => {
 
 // Position filtering query
 app.get('/api/filterDataByPosition', (req, res) => {
-    const { startTime, endTime, latitude, longitude, radius } = req.query;
+    const { vehicleId, startTime, endTime, latitude, longitude, radius } = req.query;
     const tableName = process.env.db_table;
 
     const query = `
-        SELECT latitude, longitude, date, time, vel, rpm, fuel 
+        SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel 
         FROM ?? 
-        WHERE CONCAT(date, ' ', time) BETWEEN ? AND ? 
+        WHERE vehicle_id = ?
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ? 
         AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
     `;
 
-    db.query(query, [tableName, startTime, endTime, longitude, latitude, radius], (err, results) => {
+    db.query(query, [tableName, vehicleId, startTime, endTime, longitude, latitude, radius], (err, results) => {
         if (err) {
             console.error('Error fetching data by position:', err);
             res.status(500).json({ error: 'Error fetching data by position' });

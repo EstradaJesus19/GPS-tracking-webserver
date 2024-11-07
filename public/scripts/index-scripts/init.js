@@ -1,17 +1,13 @@
-import { fetchLatestData, loadLastLocation } from './fetch-data.js';
-import { toggleStreetView } from './street-view.js';
+import { fetchLatestData, loadLastLocation, vehiclePaths } from './fetch-data.js';
+import { manageCarDataVisibility, selectVehicles } from './car-variables.js';
 
-// Define variables 
 export let map;
-export let panorama;
-export let polyline;
 
-// Rename document objects
 const mapElement = document.getElementById('map');
-const streetViewButton = document.getElementById('streetViewButton');
+const vehicle1Checkbox = document.getElementById('vehicle1Checkbox');
+const vehicle2Checkbox = document.getElementById('vehicle2Checkbox');
 
-// Get server owner and print it in the web page tittle
-export function getServerOwner(){
+export function getServerOwner() {
     fetch('/api/getOwner')
         .then(response => response.json())
         .then(data => {
@@ -20,7 +16,6 @@ export function getServerOwner(){
         .catch(error => console.error('Error fetching owner:', error));
 }
 
-// Get APIKEY and load map API
 function getApiKey() {
     fetch('/api/getApiKey')
         .then(response => response.json())
@@ -32,7 +27,6 @@ function getApiKey() {
         });
 }
 
-// Load Google Maps API    
 function loadGoogleMapsApi(apiKey) {
     const script = document.createElement('script');
     script.async = true;
@@ -40,55 +34,48 @@ function loadGoogleMapsApi(apiKey) {
     document.head.appendChild(script);
 }
 
-// Init map
 function initMap() {
-    // Build initial map
     map = new google.maps.Map(mapElement, {
         center: { lat: 10.98, lng: -74.81 },
         zoom: 13,
-        fullscreenControl: false,
-        streetViewControl: false,
-        zoomControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-        rotateControl: false,
         disableDefaultUI: true
     });
 
-    // Build polyline
-    polyline = new google.maps.Polyline({
-        strokeColor: '#6309CE',
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-    });
+    loadLastLocation(1);
+    loadLastLocation(2);
 
-    polyline.setMap(map);
-
-    // Update street view data
-    panorama = new google.maps.StreetViewPanorama(mapElement, {
-        position: { lat: 10.98, lng: -74.81 },
-        pov: { heading: 165, pitch: 0 },
-        zoom: 1,
-        visible: false,
-        fullscreenControl: false
-    });
-
-    map.setStreetView(panorama);
-
-    streetViewButton.addEventListener('click', toggleStreetView);
-
-    loadLastLocation();
-
-    // Enable street view button
-    streetViewButton.style.display = 'block';
-    streetViewButton.disabled = false;
-
-    setInterval(fetchLatestData, 100);
+    setInterval(() => {
+        fetchLatestData(1);
+        fetchLatestData(2);
+    }, 5000); 
 }
 
-export function mainProcess(){
+function toggleVehicleVisibility(vehicleId, visible) {
+    if (vehiclePaths[vehicleId]) {
+        if (vehiclePaths[vehicleId].polyline) {
+            vehiclePaths[vehicleId].polyline.setMap(visible ? map : null);
+        }
+        if (vehiclePaths[vehicleId].marker) {
+            vehiclePaths[vehicleId].marker.setMap(visible ? map : null);
+        }
+    }
+}
+
+vehicle1Checkbox.addEventListener('change', (event) => {
+    toggleVehicleVisibility(1, event.target.checked);
+});
+
+vehicle2Checkbox.addEventListener('change', (event) => {
+    toggleVehicleVisibility(2, event.target.checked);
+});
+
+export function mainProcess() {
     getServerOwner();
     getApiKey();
+    document.addEventListener("DOMContentLoaded", () => {
+        selectVehicles();
+        manageCarDataVisibility(); 
+    });
 }
 
 window.initMap = initMap;
