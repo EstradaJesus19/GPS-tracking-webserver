@@ -123,12 +123,13 @@ function adjustMapView() {
         const vehicleId = selectedVehicles[0];
         const position = vehiclePaths[vehicleId].marker.getPosition();
         map.setCenter(position);
-    } else if (selectedVehicles.length > 1) {
-        const bounds = new google.maps.LatLngBounds();
-        selectedVehicles.forEach(vehicleId => {
-            const position = vehiclePaths[vehicleId].marker.getPosition();
-            bounds.extend(position);
-        });
-        map.fitBounds(bounds);
-    }
+    }    
+    // else if (selectedVehicles.length > 1) {
+    //     const bounds = new google.maps.LatLngBounds();
+    //     selectedVehicles.forEach(vehicleId => {
+    //         const position = vehiclePaths[vehicleId].marker.getPosition();
+    //         bounds.extend(position);
+    //     });
+    //     map.fitBounds(bounds);
+    // }
 }
