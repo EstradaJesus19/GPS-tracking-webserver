@@ -2,7 +2,6 @@ import { map } from './init.js';
 import { updateVehicleData, currentVehicleId } from './car-variables.js';
 
 export const vehiclePaths = {};
-export const lastVehicleData = {};
 
 const polylineColors = {
     1: '#6309CE',
@@ -46,8 +45,6 @@ export function loadLastLocation(vehicleId) {
                 if (vehicleId === currentVehicleId) {
                     updateVehicleData(latestData);
                 }
-                
-                lastVehicleData[vehicleId] = data;
 
                 adjustMapView();
             }

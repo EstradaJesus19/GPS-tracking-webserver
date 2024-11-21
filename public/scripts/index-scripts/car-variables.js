@@ -1,4 +1,4 @@
-import { vehiclePaths, lastVehicleData, loadLastLocation } from './fetch-data.js';
+import { vehiclePaths, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
 let carGaugesVisible = true;
@@ -39,16 +39,10 @@ const hiderVariables = document.getElementById('hiderVariables');
 const fuelVelContainer = document.getElementById('fuelVelContainer');
 const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 
-export async function selectVehicles() {
+export function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
-    try {
-        await loadLastLocation(1);
-        await loadLastLocation(2);
-        updateVehicleSelection();
-    } catch (error) {
-        console.error('Error durante la selección de vehículos:', error);
-    }
+    updateVehicleSelection();
 }
 
 export function manageCarDataVisibility() {
@@ -67,14 +61,14 @@ export function manageCarDataVisibility() {
     previousVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId > 1) {
             currentVehicleId--;
-            updateVehicleData(lastVehicleData[currentVehicleId]);
+            loadLastLocation(currentVehicleId);
         }
     });
 
     nextVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
-            updateVehicleData(lastVehicleData[currentVehicleId]);
+            loadLastLocation(currentVehicleId);
         }
     });
 
@@ -113,7 +107,7 @@ function updateVehicleSelection() {
     
     if (totalVehicles > 0) {
         currentVehicleId = selectedVehicles[0];
-        updateVehicleData(lastVehicleData[currentVehicleId]);
+        loadLastLocation(currentVehicleId);
     } else {
         showDefaultValues();
         currentVehicleId = 0;
