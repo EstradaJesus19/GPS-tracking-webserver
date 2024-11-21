@@ -12,6 +12,7 @@ export function selectVehicles() {
     vehicle2Checkbox.checked = true;
 }
 
+
 export function manageCarDataVisibility() {
     hiderVariables.addEventListener("click", function() {
         carGaugesVisible = !carGaugesVisible;
