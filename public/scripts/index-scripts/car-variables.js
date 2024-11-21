@@ -11,8 +11,8 @@ const dashboardColor = {
 };
 
 const fuelIconSVG = {
-    1: 'media/fuel1.svg"',
-    2: 'media/fuel2.svg"'
+    1: 'media/fuel1.svg',
+    2: 'media/fuel2.svg'
 };
 
 const speedValueElement = document.getElementById("speedValue");
