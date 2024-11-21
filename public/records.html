@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Records</title>
+    <link rel="icon" href="media/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tippy.js@6/themes/light.css">
+    <link rel="stylesheet" href="styles/records.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="media/TrackIt.svg" alt="TrackIt_logo" id="logo"></a>
+        <nav>
+            <ul id="menu">
+                <li><a href="index.html">Real time</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="contentCard">
+            <!-- <div class="vehicleSelector">
+                <button class="vehicleDropdown">
+                    Select vehicles
+                    <img src="media/arrow-right.svg" class="dropdownIcon" alt="Toggle Arrow">
+                </button>
+                <div class="dropdownContent">
+                    <label><input type="checkbox" id="vehicle1Checkbox"> Vehicle 1</label>
+                    <label><input type="checkbox" id="vehicle2Checkbox"> Vehicle 2</label>
+                </div>
+            </div> -->
+            <div class="filterContainer">
+                <form id="timeFilterForm">
+                    <h2>Filter historical data</h2>
+                    <div class="timeInputs">
+                        <div id="vehicleDataSelector">
+                            <label for="vehicleSelector">Vehicle:</label>
+                            <select name="vehicleSelector" id="vehicleSelector">
+                                <option value="1">Vehicle 1</option>
+                                <option value="2">Vehicle 2</option>
+                            </select>
+                        </div>
+                        <div id="startTimeInput">
+                            <label for="startDateTime">From:</label>
+                            <input type="text" id="startDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
+                        </div>
+                        <div id="endtTimeInput">
+                            <label for="endDateTime">To:</label>
+                            <input type="text" id="endDateTime" placeholder="dd-mm-yyyy --:--" class="flatpickrDateTime" maxlength="16">
+                        </div>
+                        <div id="filterButtonContainer">
+                            <button id="timeFilterBtn">Apply filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="mapContainer">
+                <div id="map"></div>
+                <div id="pathSelector" class="pathSelectors">
+                    <div class="hiderContainers">
+                        <button id="hiderPath" class="collapsed">
+                            <img id="arrowIconPath" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                    <div id="pathOptions" class="visible">
+                        <div class="pathHeader">
+                            <h4>Point selector</h4>
+                        </div>
+                        <div id="dateContainer" class="pointDataContainer">
+                            <label for="pointDate">Date:</label>
+                            <span class="fixedData" id="pointDate">NA</span>
+                        </div>
+                        <div id="timeContainer" class="pointDataContainer">
+                            <label for="pointTime">Time:</label>
+                            <span class="fixedData" id="pointTime">NA</span>
+                        </div>
+                        <div id="pointControls">
+                            <button id="previousPoint" class="pathControlButton">
+                                <img id="previous" src="media/previous-point.svg" alt="Previous point">
+                            </button>
+                            <button id="playPoint" class="pathControlButton">
+                                <img id="play" src="media/play.svg" alt="Play point">
+                            </button>
+                            <button id="velocityPoint" class="pathControlButton">
+                                <a id="velocity">x1</a>
+                            </button>
+                            <button id="nextPoint" class="pathControlButton">
+                                <img id="next" src="media/next-point.svg" alt="Next point">
+                            </button>
+                        </div>
+                    </div>
+                    <h4>Select a path</h4>
+                    <div id="pathButtons"></div>
+                </div>
+                <div id="positionControl" class="positionControls">
+                    <div class="positionHeader">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider round"></span>
+                        </label>
+                        <h4>Position filtering</h4>
+                    </div>
+                    <div id="positionOptions">
+                        <div id="latitudeContainer" class="positionDataContainer">
+                            <label for="latitudeInput">Latitude:</label>
+                            <span class="fixedData" id="latitudeInput">NA</span>
+                        </div>
+                        <div id="longitudeContainer" class="positionDataContainer">
+                            <label for="longitudeInput">Longitude:</label>
+                            <span class="fixedData" id="longitudeInput">NA</span>
+                        </div>
+                        <div id="radiusContainer" class="positionDataContainer">
+                            <label for="radiusInput">Radius:</label>
+                            <input type="number" class="positionData" id="radiusInput" maxlength="8" min="500" step="50" value="500">
+                        </div>
+                    </div>
+                    <div class="hiderContainers" id="hiderContainerPosition">
+                        <button id="hiderPosition" class="collapsed">
+                            <img id="arrowIconPosition" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                    </div>
+                </div>
+                <div id="infoBox" class="infoBox">Select area on map</div>
+                <div id="vehicleVariables" class="vehicleVariablesContainer">
+                    <div class="vehicleVariablesHeader">
+                        <button id="hiderVariables" class="collapsed">
+                            <img id="arrowIconVariables" src="media/arrow-right.svg" alt="Toggle Arrow" width="20" height="20">
+                        </button>
+                        <h4 id="vehicleNameGauges">Vehicle info</h4>
+                    </div>
+                    <div id="fuelVelContainer" class="visible">
+                        <div class="gaugeContainer">
+                            <div class="gaugeLine line1"></div>
+                            <div class="gaugeLine line2"></div>
+                            <div class="gaugeLine line3"></div>
+                            <div class="gaugeLine line4"></div>
+                            <div class="gauge"></div>
+                            <div class="gaugeVelocity">
+                                <span class="speedValue" id="speedValue">0</span>
+                                <span class="speedUnit">km/h</span>
+                            </div>
+                            <div class="gaugeRPM">
+                                <span class="rpmValue" id="rpmValue">0</span>
+                                <span class="rpmUnit">rpm</span>
+                            </div>
+                        </div>
+                        <div class="fuelGauge">
+                            <div class="fuelIndicators">
+                                <div class="fuelLevelText top">F</div>
+                                <div class="fuelIcon">
+                                    <img src="media/fuel.svg" alt="Fuel icon">
+                                </div>
+                                <div class="fuelLevelText bottom">E</div>
+                            </div>
+                            <div class="fuelContainer" id="fuelContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        flatpickr(".flatpickrDateTime", {
+            enableTime: true,
+            dateFormat: "d-m-Y H:i",
+            time_24hr: true,
+            allowInput: false
+        });
+    </script>
+    <script src="scripts/records.js" type="module"></script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+// Define constansts and call libraries
 const dgram = require('dgram');
 const express = require('express');
 const http = require('http');
@@ -13,14 +14,19 @@ const udpPort = 60001;
 
 require('dotenv').config();
 
+// Define data structure
 let data = {
+    vehicle_id: ' ',
     latitude: 'N/A',
     longitude: 'N/A',
     date: 'N/A',
     time: 'N/A',
-    provider: 'N/A'
+    vel: '0',
+    rpm: '0',
+    fuel: '0'
 };
 
+// Connect to MySQL database
 const db = mysql.createConnection({
     host: process.env.db_host,
     user: process.env.db_user,
@@ -36,6 +42,7 @@ db.connect((err) => {
     console.log('Connected to MySQL');
 });
 
+// Define WebSocket server
 const credentials = {
     key: fs.readFileSync( process.env.https_key ),
     cert: fs.readFileSync( process.env.https_cert )
@@ -52,33 +59,44 @@ wss.on('connection', (ws) => {
     });
 });
 
+// Create UDP server and sniffer
 const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg) => {
     const message = msg.toString();
-    const regex = /Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Provider: (.+)/;
+    const regex = /Auto: ([^,]+), Lat: ([^,]+), Lon: ([^,]+), Date: ([^,]+), Time: ([^,]+), Vel: ([^,]+), RPM: ([^,]+), Fuel: ([^,]+)/;
     const match = message.match(regex);
 
     if (match) {
         data = {
-            latitude: match[1] || 'N/A',
-            longitude: match[2] || 'N/A',
-            date: match[3] || 'N/A',
-            time: match[4] || 'N/A',
-            provider: match[5] || 'N/A'
+            vehicle_id: match[1] || ' ',
+            latitude: match[2] || 'N/A',
+            longitude: match[3] || 'N/A',
+            date: match[4] || 'N/A',
+            time: match[5] || 'N/A',
+            vel: match[6] || '0',
+            rpm: match[7] || '0',
+            fuel: match[8] || '0'
         };
 
-        db.query('INSERT INTO location_data (latitude, longitude, date, time, provider) VALUES (?, ?, ?, ?, ?)', 
-            [data.latitude, data.longitude, data.date, data.time, data.provider], 
-            (err) => {
-                if (err) {
-                    console.error('Error inserting into database:', err);
-                } else {
-                    console.log('Data inserted into database:', data);
-                }
-            }
-        );
+        const tableName = process.env.db_table; 
 
+        // Insert received data into database
+        if (process.env.server_owner === 'Orlando Arroyo') {
+            db.query(
+                `INSERT INTO ?? (vehicle_id, latitude, longitude, date, time, vel, rpm, fuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+                [tableName, data.vehicle_id, data.latitude, data.longitude, data.date, data.time, data.vel, data.rpm, data.fuel], 
+                (err) => {
+                    if (err) {
+                        console.error('Error inserting into database:', err);
+                    } else {
+                        console.log('Data inserted into database:', data);
+                    }
+                }
+            );
+        }
+
+        // Send data through web socket
         wss.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(data));
@@ -89,20 +107,28 @@ udpServer.on('message', (msg) => {
     }
 });
 
+// Close UDP server
 udpServer.bind(udpPort);
 
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Get and send API key
 app.get('/api/getApiKey', (req, res) => {
     res.json({ apiKey: process.env.api_key });
 });
 
+// Get and send server owner
 app.get('/api/getOwner', (req, res) => {
     res.json({ owner: process.env.server_owner });
 });
 
-app.get('/api/getAllData', (req, res) => {
-    db.query('SELECT latitude, longitude, date, time, provider FROM location_data', (err, results) => {
+// Get all data from database
+app.get('/api/getRealTimeData/:vehicleId', (req, res) => {
+    const tableName = process.env.db_table;
+    const vehicleId = req.params.vehicleId;
+
+    db.query('SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel FROM ?? WHERE vehicle_id = ?', [tableName, vehicleId], (err, results) => {
         if (err) {
             console.error('Error fetching data:', err);
             res.status(500).json({ error: 'Error fetching data' });
@@ -112,6 +138,56 @@ app.get('/api/getAllData', (req, res) => {
     });
 });
 
+
+// Time filtering query
+app.get('/api/filterDataByTime', (req, res) => {
+    const { vehicleId, startTime, endTime } = req.query; 
+    const tableName = process.env.db_table;
+
+    const query = `
+        SELECT vehicle_id, latitude, longitude, date, time
+        FROM ?? 
+        WHERE vehicle_id = ? 
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ?
+    `;
+
+    db.query(query, [tableName, vehicleId, startTime, endTime],
+        (err, results) => {
+            if (err) {
+                console.error('Error fetching filtered data:', err);
+                res.status(500).json({ error: 'Error fetching filtered data' });
+            } else {
+                res.json(results);
+            }
+        }
+    );
+});
+
+// Position filtering query
+app.get('/api/filterDataByPosition', (req, res) => {
+    const { vehicleId, startTime, endTime, latitude, longitude, radius } = req.query;
+    const tableName = process.env.db_table;
+
+    const query = `
+        SELECT vehicle_id, latitude, longitude, date, time, vel, rpm, fuel 
+        FROM ?? 
+        WHERE vehicle_id = ?
+        AND CONCAT(date, ' ', time) BETWEEN ? AND ? 
+        AND ST_Distance_Sphere(point(longitude, latitude), point(?, ?)) <= ?;
+    `;
+
+    db.query(query, [tableName, vehicleId, startTime, endTime, longitude, latitude, radius], (err, results) => {
+        if (err) {
+            console.error('Error fetching data by position:', err);
+            res.status(500).json({ error: 'Error fetching data by position' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+
+// Enable HTTP and HTTPS servers
 httpsServer.listen(httpsPort, '0.0.0.0', () => {
     console.log(`HTTPS Server running at https://localhost:${httpsPort}`);
 });
