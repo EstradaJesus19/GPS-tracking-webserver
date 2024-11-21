@@ -42,7 +42,8 @@ const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
-    loadLastLocation(currentVehicleId);
+    loadLastLocation(1);
+    loadLastLocation(2);
 }
 
 export function manageCarDataVisibility() {

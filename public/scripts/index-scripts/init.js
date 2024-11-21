@@ -41,8 +41,8 @@ function initMap() {
         disableDefaultUI: true
     });
 
-    loadLastLocation(1);
-    loadLastLocation(2);
+    // loadLastLocation(1);
+    // loadLastLocation(2);
 
     setInterval(() => {
         fetchLatestData(1);
