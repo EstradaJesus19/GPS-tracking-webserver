@@ -5,8 +5,16 @@ let carGaugesVisible = true;
 export let currentVehicleId = 1;
 let totalVehicles = 0;
 
+const dashboardColor = {
+    1: '#6309CE',
+    2: '#a80aa8'
+};
+
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
+const gaugeVelocity = document.querySelector(".gaugeVelocity");
+const gaugeRPM = document.querySelector(".gaugeRPM");
+const fuelLevelText = document.querySelector(".fuelLevelText");
 const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
 const vehicleName = document.getElementById("vehicleName");
@@ -47,6 +55,7 @@ export function manageCarDataVisibility() {
         if (currentVehicleId > 1) {
             currentVehicleId--;
             loadLastLocation(currentVehicleId);
+            changeDashboardColors(currentVehicleId);
         }
     });
 
@@ -54,12 +63,36 @@ export function manageCarDataVisibility() {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
             loadLastLocation(currentVehicleId);
+            changeDashboardColors();
         }
     });
 
     vehicle1Checkbox.addEventListener('change', updateVehicleSelection);
     vehicle2Checkbox.addEventListener('change', updateVehicleSelection);
 }
+
+// function changeDashboardColors() {
+//     gaugeContainer.style.background = `conic-gradient(
+//         from -90deg at bottom,
+//         ${dashboardColor[currentVehicleId]} 0deg,
+//         ${dashboardColor[currentVehicleId]} ${angle}deg,
+//         #dfdfdf ${angle}deg,
+//         #dfdfdf 180deg
+//     )`;
+
+//     gaugeVelocity.style.color = dashboardColor[currentVehicleId];
+
+//     fuelContainer.style.background = `linear-gradient(
+//         to top,
+//         ${dashboardColor[currentVehicleId]} ${newValue}%,
+//         #dfdfdf 0%
+//     )`;
+    
+//     fuelLevelText.style.color = dashboardColor[currentVehicleId];
+    
+//     gaugeRPM.style.color = dashboardColor[currentVehicleId];
+// }
+
 
 function updateVehicleSelection() {
     const selectedVehicles = [];
@@ -126,24 +159,29 @@ function updateSpeedGauge(value) {
 
     gaugeContainer.style.background = `conic-gradient(
         from -90deg at bottom,
-        #530aa8 0deg,
-        #530aa8 ${angle}deg,
+        ${dashboardColor[currentVehicleId]} 0deg,
+        ${dashboardColor[currentVehicleId]} ${angle}deg,
         #dfdfdf ${angle}deg,
         #dfdfdf 180deg
     )`;
+
+    gaugeVelocity.style.color = dashboardColor[currentVehicleId];
 }
 
 function updateFuelGauge(value) {
     const newValue = parseInt(value, 10);
     fuelContainer.style.background = `linear-gradient(
         to top,
-        #530aa8 ${newValue}%,
+        ${dashboardColor[currentVehicleId]} ${newValue}%,
         #dfdfdf 0%
     )`;
+    
+    fuelLevelText.style.color = dashboardColor[currentVehicleId];
 }
 
 function updateRPMGauge(value) {
     rpmValueElement.textContent = value;
+    gaugeRPM.style.color = dashboardColor[currentVehicleId];
 }
 
 export function updateGauges(data) {
