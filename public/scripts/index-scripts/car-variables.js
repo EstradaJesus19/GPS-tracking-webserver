@@ -131,7 +131,7 @@ function updateButtonsVisibility(icon) {
 }
 
 export function updateVehicleData(data) {
-    console(data);
+    console.log(data);
     vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
     vehicleNameGauges.textContent = `Vehicle ${data.vehicle_id} info`;
     latitudeInput.textContent = data.latitude || 'NA';
