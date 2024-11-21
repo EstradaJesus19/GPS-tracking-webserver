@@ -42,9 +42,13 @@ const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 export async function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
-    await loadLastLocation(1);
-    await loadLastLocation(2);
-    updateVehicleSelection();
+    try {
+        await loadLastLocation(1);
+        await loadLastLocation(2);
+        updateVehicleSelection();
+    } catch (error) {
+        console.error('Error durante la selección de vehículos:', error);
+    }
 }
 
 export function manageCarDataVisibility() {
