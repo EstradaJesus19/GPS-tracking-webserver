@@ -73,7 +73,6 @@ export function mainProcess() {
     getServerOwner();
     getApiKey();
     document.addEventListener("DOMContentLoaded", () => {
-        selectVehicles();
         manageCarDataVisibility(); 
     });
 }
