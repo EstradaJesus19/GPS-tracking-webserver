@@ -63,6 +63,7 @@ export function manageCarDataVisibility() {
             currentVehicleId--;
             updateVehicleData(lastVehicleData[currentVehicleId]);
         }
+        console.log('Car changed');
     });
 
     nextVehicleIcon.addEventListener("click", () => {
@@ -70,6 +71,7 @@ export function manageCarDataVisibility() {
             currentVehicleId++;
             updateVehicleData(lastVehicleData[currentVehicleId]);
         }
+        console.log('Car changed');
     });
 
     vehicle1Checkbox.addEventListener('change', updateVehicleSelection);
