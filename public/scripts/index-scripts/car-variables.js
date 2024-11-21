@@ -1,4 +1,4 @@
-import { vehiclePaths, lastVehicleData } from './fetch-data.js';
+import { vehiclePaths, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
 let carGaugesVisible = true;
@@ -61,17 +61,17 @@ export function manageCarDataVisibility() {
     previousVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId > 1) {
             currentVehicleId--;
-            updateVehicleData(lastVehicleData[currentVehicleId]);
+            loadLastLocation(currentVehicleId);
+            changeDashboardColors(currentVehicleId);
         }
-        console.log('Car changed');
     });
 
     nextVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
-            updateVehicleData(lastVehicleData[currentVehicleId]);
+            loadLastLocation(currentVehicleId);
+            changeDashboardColors();
         }
-        console.log('Car changed');
     });
 
     vehicle1Checkbox.addEventListener('change', updateVehicleSelection);
@@ -109,7 +109,7 @@ function updateVehicleSelection() {
     
     if (totalVehicles > 0) {
         currentVehicleId = selectedVehicles[0];
-        updateVehicleData(lastVehicleData[currentVehicleId]);
+        loadLastLocation(currentVehicleId);
     } else {
         showDefaultValues();
         currentVehicleId = 0;
@@ -133,7 +133,6 @@ function updateButtonsVisibility(icon) {
 }
 
 export function updateVehicleData(data) {
-    console.log(data);
     vehicleName.textContent = `Vehicle ${data.vehicle_id}`;
     vehicleNameGauges.textContent = `Vehicle ${data.vehicle_id} info`;
     latitudeInput.textContent = data.latitude || 'NA';
