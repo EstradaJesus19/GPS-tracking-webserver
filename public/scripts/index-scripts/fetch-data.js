@@ -2,7 +2,7 @@ import { map } from './init.js';
 import { updateVehicleData, currentVehicleId } from './car-variables.js';
 
 export const vehiclePaths = {};
-export let lastVehicleData = {};
+export const lastVehicleData = {};
 
 const polylineColors = {
     1: '#6309CE',
