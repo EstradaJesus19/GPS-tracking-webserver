@@ -1,4 +1,4 @@
-import { vehiclePaths, loadLastLocation } from './fetch-data.js';
+import { vehiclePaths, lastVehicleData } from './fetch-data.js';
 
 let carDataVisible = true;
 let carGaugesVisible = true;
@@ -61,16 +61,14 @@ export function manageCarDataVisibility() {
     previousVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId > 1) {
             currentVehicleId--;
-            loadLastLocation(currentVehicleId);
-            changeDashboardColors(currentVehicleId);
+            updateVehicleData(lastVehicleData[currentVehicleId]);
         }
     });
 
     nextVehicleIcon.addEventListener("click", () => {
         if (currentVehicleId < totalVehicles) {
             currentVehicleId++;
-            loadLastLocation(currentVehicleId);
-            changeDashboardColors();
+            updateVehicleData(lastVehicleData[currentVehicleId]);
         }
     });
 
@@ -109,7 +107,7 @@ function updateVehicleSelection() {
     
     if (totalVehicles > 0) {
         currentVehicleId = selectedVehicles[0];
-        loadLastLocation(currentVehicleId);
+        updateVehicleData(lastVehicleData[currentVehicleId]);
     } else {
         showDefaultValues();
         currentVehicleId = 0;
