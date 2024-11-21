@@ -39,11 +39,11 @@ const hiderVariables = document.getElementById('hiderVariables');
 const fuelVelContainer = document.getElementById('fuelVelContainer');
 const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 
-export function selectVehicles() {
+export async function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
-    loadLastLocation(1);
-    loadLastLocation(2);
+    await loadLastLocation(1);
+    await loadLastLocation(2);
     updateVehicleSelection();
 }
 
