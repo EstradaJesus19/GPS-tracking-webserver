@@ -44,6 +44,7 @@ export function selectVehicles() {
     vehicle2Checkbox.checked = true;
     loadLastLocation(1);
     loadLastLocation(2);
+    updateVehicleSelection();
 }
 
 export function manageCarDataVisibility() {
