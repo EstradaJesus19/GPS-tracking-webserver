@@ -589,7 +589,7 @@ main {
 .fuelContainer {
     width: 50px;
     height: 100px;
-    background: linear-gradient(to top, #6309CE 0%, #dfdfdf 0%);
+    background: linear-gradient(to top, #530aa8 0%, #dfdfdf 0%);
     clip-path: path("M 0,0 L 38,0 A 10,10 90 0 1 46,12 L 30,90 A 10,10 90 0 1 20,100 L 0,100");
     border-radius: 10px;
     overflow: hidden;

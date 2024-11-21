@@ -7,14 +7,21 @@ let totalVehicles = 0;
 
 const dashboardColor = {
     1: '#6309CE',
-    2: '#a80aa8'
+    2: '#A80AA8'
+};
+
+const fuelIconSVG = {
+    1: '#media/fuel1.svg"',
+    2: '#media/fuel2.svg"'
 };
 
 const speedValueElement = document.getElementById("speedValue");
 const gaugeContainer = document.querySelector(".gaugeContainer");
 const gaugeVelocity = document.querySelector(".gaugeVelocity");
 const gaugeRPM = document.querySelector(".gaugeRPM");
-const fuelLevelText = document.querySelector(".fuelLevelText");
+const fuelLevelTextTop = document.querySelector(".fuelLevelText.top");
+const fuelLevelTextBottom = document.querySelector(".fuelLevelText.bottom");
+const fuelIcon = document.getElementById("fuelIcon");
 const rpmValueElement = document.getElementById("rpmValue");
 const fuelContainer = document.getElementById("fuelContainer");
 const vehicleName = document.getElementById("vehicleName");
@@ -176,7 +183,9 @@ function updateFuelGauge(value) {
         #dfdfdf 0%
     )`;
     
-    fuelLevelText.style.color = dashboardColor[currentVehicleId];
+    fuelLevelTextTop.style.color = dashboardColor[currentVehicleId];
+    fuelLevelTextBottom.style.color = dashboardColor[currentVehicleId];
+    fuelIcon.src = fuelIconSVG[currentVehicleId];
 }
 
 function updateRPMGauge(value) {
