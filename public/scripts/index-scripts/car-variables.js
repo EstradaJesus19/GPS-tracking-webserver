@@ -1,4 +1,4 @@
-import { vehiclePaths, lastVehicleData } from './fetch-data.js';
+import { vehiclePaths, lastVehicleData, loadLastLocation } from './fetch-data.js';
 
 let carDataVisible = true;
 let carGaugesVisible = true;
@@ -42,6 +42,7 @@ const vehicleNameGauges = document.getElementById('vehicleNameGauges');
 export function selectVehicles() {
     vehicle1Checkbox.checked = true;
     vehicle2Checkbox.checked = true;
+    loadLastLocation(currentVehicleId);
     updateVehicleSelection();
 }
 
