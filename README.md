@@ -22,9 +22,8 @@ TrackIT is a Node.js-based server designed to manage the locations of a vehicle.
 
 ### Real-time Tracking
 
-1. Open a web browser and navigate to [http://trackit01.ddns.net](http://trackit01.ddns.net), [http://trackit02.ddns.net](http://trackit02.ddns.net) or [http://trackit03.ddns.net](http://trackit03.ddns.net).
-2. The map will display the vehicle's current location. You can toggle between map view and street view using the provided buttons.
-3. The webpage will automatically refresh with new location data in real-time and show the path built since the last page refresh.
+1. The map will display the vehicle's current location. You can toggle between map view and street view using the provided buttons.
+2. The webpage will automatically refresh with new location data in real-time and show the path built since the last page refresh.
 
 ### Historical Data Review
 
